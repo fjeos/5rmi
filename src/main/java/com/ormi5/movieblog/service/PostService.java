@@ -1,5 +1,7 @@
 package com.ormi5.movieblog.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 
 import com.ormi5.movieblog.dto.PostDto;
@@ -15,36 +17,10 @@ public class PostService {
 	}
 
 	public PostDto createPost(PostDto postDto) {
-		Post post = convertToPostEntity(postDto);
+		Post post = PostDto.toEntity(postDto);
 
-		postRepository.save(post);
+		Post savePost = postRepository.save(post);
 
-		return convertToPostDto(post);
-	}
-
-	private static Post convertToPostEntity(PostDto postDto) {
-		return Post.builder()
-			.postId(postDto.getPostId())
-			.userId(postDto.getUserId())
-			.author(postDto.getAuthor())
-			.title(postDto.getTitle())
-			.content(postDto.getContent())
-			.isShared(postDto.getIsShared())
-			.createAt(postDto.getCreateAt())
-			.updateAt(postDto.getUpdateAt())
-			.build();
-	}
-
-	private static PostDto convertToPostDto(Post post) {
-		return PostDto.builder()
-			.postId(post.getPostId())
-			.userId(post.getUserId())
-			.author(post.getAuthor())
-			.title(post.getTitle())
-			.content(post.getContent())
-			.isShared(post.getIsShared())
-			.createAt(post.getCreateAt())
-			.updateAt(post.getUpdateAt())
-			.build();
+		return PostDto.toDto(savePost);
 	}
 }
