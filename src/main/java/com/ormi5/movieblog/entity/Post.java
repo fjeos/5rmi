@@ -10,10 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "post")
@@ -42,8 +42,8 @@ public class Post {
 	private int likesCount;
 
 	@Column(name = "create_at")
-	private LocalDateTime createdAt;
+	private LocalDateTime createAt;
 
 	@Column(name = "update_at")
-	private LocalDateTime updatedAt;
+	private LocalDateTime updateAt;
 }

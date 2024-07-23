@@ -7,5 +7,4 @@ import com.ormi5.movieblog.entity.Post;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-
 }

@@ -10,6 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDto {
@@ -18,8 +19,8 @@ public class PostDto {
 	private String author;
 	private String title;
 	private String content;
-	private boolean isShared;
+	private Boolean isShared;
 	private int likesCount;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
+	private LocalDateTime createAt;
+	private LocalDateTime updateAt;
 }
