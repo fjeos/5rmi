@@ -1,5 +1,6 @@
-package com.ormi5.movieblog;
+package com.ormi5.movieblog.postcontroller;
 
+import com.ormi5.movieblog.post.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +17,8 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public Optional<PostDTO> getPostById(Long id) {
+    public Optional<PostDto> getPostById(Long id) {
         return postRepository.findById(id)
-                .map(PostDTO::toPostDTO);
+                .map(PostDto::toPostDTO);
     }
 }

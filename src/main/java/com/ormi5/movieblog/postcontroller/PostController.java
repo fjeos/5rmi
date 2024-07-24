@@ -1,5 +1,6 @@
-package com.ormi5.movieblog;
+package com.ormi5.movieblog.postcontroller;
 
+import com.ormi5.movieblog.post.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<PostDTO>> getPostById(@PathVariable("id") Long id) {
+    public ResponseEntity<Optional<PostDto>> getPostById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(postService.getPostById(id));
     }
 
