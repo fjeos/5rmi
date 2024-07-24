@@ -39,4 +39,11 @@ public class PostController {
         boolean deleted = postService.deletePost(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+  
+  	@PostMapping // YS: 어노테이션 꼭 붙일 것
+    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+      PostDto createdPost = postService.createPost(postDto);
+
+      return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+    }
 }
