@@ -1,28 +1,26 @@
 package com.ormi5.movieblog.post;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDTO {
-	private Long postId;
-	private Long userId;
+	private Integer postId;
+	private Integer userId;
 	private String author;
 	private String title;
 	private String content;
 	private Boolean isShared;
-	private int likesCount;
-	private LocalDateTime createAt;
-	private LocalDateTime updateAt;
+	private Integer likesCount;
+	private Instant createAt;
+	private Instant updateAt;
 
 	// Entity를 DTO로 변환
 	public static PostDTO toDTO(Post post) {
@@ -49,8 +47,8 @@ public class PostDTO {
 			.content(postDTO.getContent())
 			.isShared(postDTO.getIsShared())
 			.likesCount(postDTO.getLikesCount())
-			.createAt(LocalDateTime.now())
-			.updateAt(LocalDateTime.now())
+			.createAt(Instant.now())
+			.updateAt(Instant.now())
 			.build();
 	}
 }
