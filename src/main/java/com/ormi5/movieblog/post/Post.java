@@ -19,10 +19,10 @@ public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "post_id", nullable = false)
-	private Integer postId;
+	private Long postId;
 
 	@Column(name = "user_id", nullable = false)
-	private Integer userId;
+	private Long userId;
 
 	@Column(name = "author", nullable = false)
 	private String author;
@@ -37,7 +37,7 @@ public class Post {
 	private Boolean isShared = false;
 
 	@Column(name = "likes_count", nullable = false)
-	private Integer likesCount;
+	private int likesCount;
 
 	@Column(name = "create_at", nullable = false)
 	private Instant createAt;

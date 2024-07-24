@@ -12,13 +12,13 @@ import java.time.Instant;
 @Value
 @Builder
 public class PostDto implements Serializable {
-    Integer id;
-    Integer userId;
+    Long id;
+    Long userId;
     String author;
     String title;
     String content;
     Boolean isShared;
-    Integer likesCount;
+    int likesCount;
     Instant createAt;
     Instant updateAt;
 
