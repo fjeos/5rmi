@@ -2,12 +2,10 @@ package com.ormi5.movieblog.post;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.Instant;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "post")
 public class Post {
