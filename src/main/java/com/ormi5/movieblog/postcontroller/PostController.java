@@ -1,4 +1,4 @@
-package com.ormi5.movieblog.controller;
+package com.ormi5.movieblog.postcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ormi5.movieblog.service.PostService;
-import com.ormi5.movieblog.dto.PostDTO;
+import com.ormi5.movieblog.post.PostDTO;
 
 @RestController
 @RequestMapping("/api/post")

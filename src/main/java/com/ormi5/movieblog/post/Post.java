@@ -1,4 +1,4 @@
-package com.ormi5.movieblog.entity;
+package com.ormi5.movieblog.post;
 
 import java.time.LocalDateTime;
 

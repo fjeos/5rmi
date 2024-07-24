@@ -1,8 +1,6 @@
-package com.ormi5.movieblog.dto;
+package com.ormi5.movieblog.post;
 
 import java.time.LocalDateTime;
-
-import com.ormi5.movieblog.entity.Post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

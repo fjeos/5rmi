@@ -1,10 +1,9 @@
-package com.ormi5.movieblog.service;
+package com.ormi5.movieblog.postcontroller;
 
 import org.springframework.stereotype.Service;
 
-import com.ormi5.movieblog.dto.PostDTO;
-import com.ormi5.movieblog.entity.Post;
-import com.ormi5.movieblog.repository.PostRepository;
+import com.ormi5.movieblog.post.PostDTO;
+import com.ormi5.movieblog.post.Post;
 
 @Service
 public class PostService {
