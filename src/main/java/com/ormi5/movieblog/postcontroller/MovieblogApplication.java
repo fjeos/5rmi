@@ -1,4 +1,4 @@
-package com.ormi5.movieblog;
+package com.ormi5.movieblog.postcontroller;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

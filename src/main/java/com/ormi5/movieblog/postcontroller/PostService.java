@@ -1,8 +1,10 @@
-package com.ormi5.movieblog;
+package com.ormi5.movieblog.postcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.ormi5.movieblog.post.Post;
+import com.ormi5.movieblog.post.PostDto;
 
 import java.time.LocalDateTime;
 
@@ -17,17 +19,17 @@ public class PostService {
     }
 
     @Transactional
-    public Post updatePost(Long postId, PostUpdateDto postUpdateDto) {
+    public Post updatePost(Long postId, PostDto postDto) {
         Post post = postRepository.findById(postId).orElse(null);
         if (post != null) {
-            if (postUpdateDto.getTitle() != null) {
-                post.setTitle(postUpdateDto.getTitle());
+            if (postDto.getTitle() != null) {
+                post.setTitle(postDto.getTitle());
             }
-            if (postUpdateDto.getContent() != null) {
-                post.setContent(postUpdateDto.getContent());
+            if (postDto.getContent() != null) {
+                post.setContent(postDto.getContent());
             }
-            if (postUpdateDto.getIsShared() != null) {
-                post.setIsShared(postUpdateDto.getIsShared());
+            if (postDto.getIsShared() != null) {
+                post.setIsShared(postDto.getIsShared());
             }
             post.setUpdateAt(LocalDateTime.now());
             return postRepository.save(post);
