@@ -5,10 +5,6 @@ import com.ormi5.movieblog.post.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -24,7 +20,7 @@ public class PostController {
 		this.postService = postService;
 	}
 
-	@PostMapping // YS: 어노테이션 꼭 붙일 것
+	@PostMapping
 	public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
 		PostDto createdPost = postService.createPost(postDto);
 
@@ -32,14 +28,9 @@ public class PostController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<PostDto>> getAllBoardPosts() {
-		List<PostDto> postDtos = postService.getAllBoardPosts();
+	public ResponseEntity<List<PostDto>> getAllPosts() {
+		List<PostDto> postDtos = postService.getAllPosts();
 		return ResponseEntity.ok(postDtos);
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<Optional<PostDto>> getBoardPostById(@PathVariable("id") int id) {
-		return ResponseEntity.ok(postService.getPostById(id));
 	}
 
 	@GetMapping("/{id}")

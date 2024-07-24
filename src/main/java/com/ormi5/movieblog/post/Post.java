@@ -24,9 +24,6 @@ public class Post {
 	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
-	@Column(name = "author", nullable = false)
-	private String author;
-
 	@Column(name = "title", nullable = false)
 	private String title;
 
@@ -44,4 +41,11 @@ public class Post {
 
 	@Column(name = "update_at")
 	private Instant updateAt;
+
+	public void updatePost(PostDto postDto) {
+		this.title = postDto.getTitle();
+		this.content = postDto.getContent();
+		this.updateAt = Instant.now();
+	}
+
 }
