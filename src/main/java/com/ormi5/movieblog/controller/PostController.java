@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ormi5.movieblog.service.PostService;
-import com.ormi5.movieblog.dto.PostDto;
+import com.ormi5.movieblog.dto.PostDTO;
 
 @RestController
 @RequestMapping("/api/post")
@@ -22,8 +22,8 @@ public class PostController {
 	}
 
 	@PostMapping // 어노테이션 꼭 붙일 것
-	public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
-		PostDto createdPost = postService.createPost(postDto);
+	public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
+		PostDTO createdPost = postService.createPost(postDTO);
 
 		return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
 	}

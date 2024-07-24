@@ -15,7 +15,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDto {
+public class PostDTO {
 	private Long postId;
 	private Long userId;
 	private String author;
@@ -27,8 +27,8 @@ public class PostDto {
 	private LocalDateTime updateAt;
 
 	// Entity를 DTO로 변환
-	public static PostDto toDto(Post post) {
-		return PostDto.builder()
+	public static PostDTO toDTO(Post post) {
+		return PostDTO.builder()
 			.postId(post.getPostId())
 			.userId(post.getUserId())
 			.author(post.getAuthor())
@@ -42,15 +42,15 @@ public class PostDto {
 	}
 
 	// DTO를 Entity로 변환
-	public static Post toEntity(PostDto postDto) {
+	public static Post toEntity(PostDTO postDTO) {
 		return Post.builder()
-			.postId(postDto.getPostId())
-			.userId(postDto.getUserId())
-			.author(postDto.getAuthor())
-			.title(postDto.getTitle())
-			.content(postDto.getContent())
-			.isShared(postDto.getIsShared())
-			.likesCount(postDto.getLikesCount())
+			.postId(postDTO.getPostId())
+			.userId(postDTO.getUserId())
+			.author(postDTO.getAuthor())
+			.title(postDTO.getTitle())
+			.content(postDTO.getContent())
+			.isShared(postDTO.getIsShared())
+			.likesCount(postDTO.getLikesCount())
 			.createAt(LocalDateTime.now())
 			.updateAt(LocalDateTime.now())
 			.build();
