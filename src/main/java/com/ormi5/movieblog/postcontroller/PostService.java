@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class PostService {
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
 
     @Autowired
     public PostService(PostRepository postRepository){
@@ -20,5 +20,14 @@ public class PostService {
     public Optional<PostDto> getPostById(Long id) {
         return postRepository.findById(id)
                 .map(PostDto::toPostDTO);
+      
+    @Transactional
+    public boolean deletePost(int id) {
+        return  postRepository.findById(id)
+                .map(post -> {
+                    postRepository.delete(post);
+                    return true;
+                })
+                .orElse(false);
     }
 }

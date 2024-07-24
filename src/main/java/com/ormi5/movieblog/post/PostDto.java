@@ -1,13 +1,17 @@
 package com.ormi5.movieblog.post;
 
 import lombok.*;
+import lombok.Value;
 
 import java.io.Serializable;
 import java.time.Instant;
 
-
 @Value
 @Builder
+/**
+ * DTO for {@link Post}
+ */
+@Value
 public class PostDto implements Serializable {
     Integer id;
     Integer userId;

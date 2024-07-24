@@ -2,6 +2,7 @@ package com.ormi5.movieblog.post;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.Getter;
 
 import java.time.Instant;
 
@@ -40,4 +41,3 @@ public class Post {
 
     @Column(name = "update_at")
     private Instant updateAt;
-}
