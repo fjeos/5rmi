@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ormi5.movieblog.post.Post;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Integer> {
 }

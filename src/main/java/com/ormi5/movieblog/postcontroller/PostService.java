@@ -2,7 +2,7 @@ package com.ormi5.movieblog.postcontroller;
 
 import org.springframework.stereotype.Service;
 
-import com.ormi5.movieblog.post.PostDTO;
+import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.post.Post;
 
 @Service
@@ -13,11 +13,11 @@ public class PostService {
 		this.postRepository = postRepository;
 	}
 
-	public PostDTO createPost(PostDTO postDTO) {
-		Post post = PostDTO.toEntity(postDTO);
+	public PostDto createPost(PostDto postDto) {
+		Post post = PostDto.toEntity(postDto);
 
 		Post savePost = postRepository.save(post);
 
-		return PostDTO.toDTO(savePost);
+		return PostDto.toDto(savePost);
 	}
 }

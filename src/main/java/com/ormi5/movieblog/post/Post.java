@@ -9,11 +9,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Entity
 @Table(name = "post")
 public class Post {
 	@Id

@@ -1,5 +1,6 @@
 package com.ormi5.movieblog.post;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 import lombok.AllArgsConstructor;
@@ -11,21 +12,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDTO {
-	private Integer postId;
-	private Integer userId;
-	private String author;
-	private String title;
-	private String content;
-	private Boolean isShared;
-	private Integer likesCount;
-	private Instant createAt;
-	private Instant updateAt;
+public class PostDto implements Serializable {
+	Integer id;
+	Integer userId;
+	String author;
+	String title;
+	String content;
+	Boolean isShared;
+	Integer likesCount;
+	Instant createAt;
+	Instant updateAt;
 
 	// Entity를 DTO로 변환
-	public static PostDTO toDTO(Post post) {
-		return PostDTO.builder()
-			.postId(post.getPostId())
+	public static PostDto toDto(Post post) {
+		return PostDto.builder()
+			.id(post.getPostId())
 			.userId(post.getUserId())
 			.author(post.getAuthor())
 			.title(post.getTitle())
@@ -38,15 +39,15 @@ public class PostDTO {
 	}
 
 	// DTO를 Entity로 변환
-	public static Post toEntity(PostDTO postDTO) {
+	public static Post toEntity(PostDto postDto) {
 		return Post.builder()
-			.postId(postDTO.getPostId())
-			.userId(postDTO.getUserId())
-			.author(postDTO.getAuthor())
-			.title(postDTO.getTitle())
-			.content(postDTO.getContent())
-			.isShared(postDTO.getIsShared())
-			.likesCount(postDTO.getLikesCount())
+			.postId(postDto.getId())
+			.userId(postDto.getUserId())
+			.author(postDto.getAuthor())
+			.title(postDto.getTitle())
+			.content(postDto.getContent())
+			.isShared(postDto.getIsShared())
+			.likesCount(postDto.getLikesCount())
 			.createAt(Instant.now())
 			.updateAt(Instant.now())
 			.build();
