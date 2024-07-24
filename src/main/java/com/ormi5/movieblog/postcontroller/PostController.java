@@ -59,4 +59,9 @@ public class PostController {
         PostDto postDto = boardPostService.getBoardPostById(id);
         return ResponseEntity.ok(postDto);
     }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostDto postDto) {
+        return ResponseEntity.ok(postService.updatePost(postId, postDto));
+    }
 }

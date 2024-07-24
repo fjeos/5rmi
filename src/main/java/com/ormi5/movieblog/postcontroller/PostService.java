@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,6 +51,25 @@ public class PostService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    @Transactional
+    public Post updatePost(Long postId, PostDto postDto) {
+        Post post = postRepository.findById(postId).orElse(null);
+        if (post != null) {
+            if (postDto.getTitle() != null) {
+                post.setTitle(postDto.getTitle());
+            }
+            if (postDto.getContent() != null) {
+                post.setContent(postDto.getContent());
+            }
+            if (postDto.getIsShared() != null) {
+                post.setIsShared(postDto.getIsShared());
+            }
+            post.setUpdateAt(LocalDateTime.now());
+            return postRepository.save(post);
+        }
+        return null;
     }
       
 //      private Post createPostFromDto(PostDto postDto) {
