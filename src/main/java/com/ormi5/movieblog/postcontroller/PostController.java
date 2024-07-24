@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -45,5 +46,17 @@ public class PostController {
       PostDto createdPost = postService.createPost(postDto);
 
       return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+    }
+  
+    @GetMapping
+    public ResponseEntity<List<PostDto>> getAllBoardPosts() {
+        List<PostDto> postDtos = boardPostService.getAllBoardPosts();
+        return ResponseEntity.ok(postDtos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getBoardPostById(@PathVariable("id") Integer id) {
+        PostDto postDto = boardPostService.getBoardPostById(id);
+        return ResponseEntity.ok(postDto);
     }
 }
