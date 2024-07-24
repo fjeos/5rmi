@@ -1,13 +1,17 @@
 package com.ormi5.movieblog.post;
 
 import jakarta.persistence.*;
+import lombok.*;
 import lombok.Getter;
 
 import java.time.Instant;
 
 @Getter
+@Builder
 @Entity
 @Table(name = "post")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +39,5 @@ public class Post {
     @Column(name = "create_at", nullable = false)
     private Instant createAt;
 
-    @Column(name = "update_at", nullable = false)
+    @Column(name = "update_at")
     private Instant updateAt;
-
-}
