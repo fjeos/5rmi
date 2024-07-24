@@ -1,55 +1,51 @@
 package com.ormi5.movieblog.post;
 
+import lombok.*;
+import lombok.Value;
+
 import java.io.Serializable;
 import java.time.Instant;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+/**
+ * DTO for {@link Post}
+ */
+@Value
 public class PostDto implements Serializable {
-	Integer id;
-	Integer userId;
-	String author;
-	String title;
-	String content;
-	Boolean isShared;
-	Integer likesCount;
-	Instant createAt;
-	Instant updateAt;
+    Integer id;
+    Integer userId;
+    String author;
+    String title;
+    String content;
+    Boolean isShared;
+    Integer likesCount;
+    Instant createAt;
+    Instant updateAt;
 
-	// Entity를 DTO로 변환
-	public static PostDto toDto(Post post) {
-		return PostDto.builder()
-			.id(post.getPostId())
-			.userId(post.getUserId())
-			.author(post.getAuthor())
-			.title(post.getTitle())
-			.content(post.getContent())
-			.isShared(post.getIsShared())
-			.likesCount(post.getLikesCount())
-			.createAt(post.getCreateAt())
-			.updateAt(post.getUpdateAt())
-			.build();
-	}
+    public static PostDto toPostDTO(Post post) {
+        return PostDto.builder()
+                .id(post.getPostId())
+                .userId(post.getUserId())
+                .author(post.getAuthor())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .isShared(post.getIsShared())
+                .likesCount(post.getLikesCount())
+                .createAt(post.getCreateAt())
+                .updateAt(post.getUpdateAt())
+                .build();
+    }
 
-	// DTO를 Entity로 변환
-	public static Post toEntity(PostDto postDto) {
-		return Post.builder()
-			.postId(postDto.getId())
-			.userId(postDto.getUserId())
-			.author(postDto.getAuthor())
-			.title(postDto.getTitle())
-			.content(postDto.getContent())
-			.isShared(postDto.getIsShared())
-			.likesCount(postDto.getLikesCount())
-			.createAt(Instant.now())
-			.updateAt(Instant.now())
-			.build();
-	}
+    public static Post toPostEntity(PostDto postDTO) {
+        return Post.builder()
+                .postId(postDTO.getId())
+                .title(postDTO.getTitle())
+                .content(postDTO.getContent())
+                .isShared(postDTO.getIsShared())
+                .likesCount(postDTO.getLikesCount())
+                .createAt(postDTO.getCreateAt())
+                .updateAt(postDTO.getUpdateAt())
+                .build();
+    }
 }
