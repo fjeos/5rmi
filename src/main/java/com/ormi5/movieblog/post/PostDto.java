@@ -1,4 +1,4 @@
-package com.ormi5.movieblog;
+package com.ormi5.movieblog.post;
 
 import lombok.Value;
 
