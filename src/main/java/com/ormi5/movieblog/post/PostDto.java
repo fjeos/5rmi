@@ -1,24 +1,22 @@
 package com.ormi5.movieblog.post;
 
-import com.ormi5.movieblog.comment.CommentDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.io.Serializable;
+import java.time.Instant;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
-public class PostDto {
-    private Long id;
-    private String title;
-    private String content;
-    private String author;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private List<CommentDto> comments;
+/**
+ * DTO for {@link Post}
+ */
+@Value
+public class PostDto implements Serializable {
+    Integer id;
+    Integer userId;
+    String author;
+    String title;
+    String content;
+    Boolean isShared;
+    Integer likesCount;
+    Instant createAt;
+    Instant updateAt;
 }

@@ -1,35 +1,42 @@
 package com.ormi5.movieblog.post;
 
-import com.ormi5.movieblog.comment.Comment;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
 @Getter
+@Entity
+@Table(name = "post")
 public class Post {
-    private Long id;
-    private String title;
-    private String content;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id", nullable = false)
+    private Integer postId;
+
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
+
+    @Column(name = "author", nullable = false)
     private String author;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private List<Comment> comments = new ArrayList<>();
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setBoardPost(this);
-    }
+    @Column(name = "title", nullable = false)
+    private String title;
 
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
-        comment.setBoardPost(null);
-    }
+    @Column(name = "content", nullable = false)
+    private String content;
+
+    @Column(name = "is_shared", nullable = false)
+    private Boolean isShared = false;
+
+    @Column(name = "likes_count", nullable = false)
+    private Integer likesCount;
+
+    @Column(name = "create_at", nullable = false)
+    private Instant createAt;
+
+    @Column(name = "update_at", nullable = false)
+    private Instant updateAt;
+
 }

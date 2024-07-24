@@ -1,90 +1,101 @@
 package com.ormi5.movieblog.postcontroller;
 
-import com.ormi5.movieblog.comment.Comment;
-import com.ormi5.movieblog.comment.CommentDto;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
+import com.ormi5.movieblog.post.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import jakarta.transaction.Transactional;
+
+import java.lang.reflect.Field;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class PostService {
-    private final List<Post> boardPosts = new ArrayList<>();
-    private Long nextPostId = 1L;
 
-    public PostDto createBoardPost(PostDto postDto) {
-        Post boardPost = convertToBoardPostEntity(postDto);
-        boardPost.setId(nextPostId++);
-        boardPost.setCreatedAt(LocalDateTime.now());
-        boardPosts.add(boardPost);
-        return convertToBoardPostDto(boardPost);
+    private final PostRepository postRepository;
+
+    @Autowired
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
+    @Transactional
+    public PostDto createBoardPost(PostDto postDto) {
+        Post post = createPostFromDto(postDto);
+        Post savedPost = postRepository.save(post);
+        return convertToDto(savedPost);
+    }
+
+    @Transactional
     public List<PostDto> getAllBoardPosts() {
-        return boardPosts.stream()
-                .map(this::convertToBoardPostDto)
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    public PostDto getBoardPostById(Long id) {
-        return boardPosts.stream()
-                .filter(post -> post.getId().equals(id))
-                .map(this::convertToBoardPostDto)
-                .findFirst()
+    @Transactional
+    public PostDto getBoardPostById(Integer id) {
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다.: " + id));
+        return convertToDto(post);
     }
 
-    private PostDto convertToBoardPostDto(Post boardPost) {
-        PostDto postDto = new PostDto();
-        postDto.setId(boardPost.getId());
-        postDto.setTitle(boardPost.getTitle());
-        postDto.setContent(boardPost.getContent());
-        postDto.setAuthor(boardPost.getAuthor());
-        postDto.setCreatedAt(boardPost.getCreatedAt());
-        postDto.setUpdatedAt(boardPost.getUpdatedAt());
-        if (boardPost.getComments() != null) {
-            postDto.setComments(
-                    boardPost.getComments().stream()
-                            .map(this::convertToCommentDto)
-                            .collect(Collectors.toList())
-            );
+    private Post createPostFromDto(PostDto postDto) {
+        Post post = new Post();
+        try {
+            Field userIdField = Post.class.getDeclaredField("userId");
+            userIdField.setAccessible(true);
+            userIdField.set(post, postDto.getUserId());
+
+            Field authorField = Post.class.getDeclaredField("author");
+            authorField.setAccessible(true);
+            authorField.set(post, postDto.getAuthor());
+
+            Field titleField = Post.class.getDeclaredField("title");
+            titleField.setAccessible(true);
+            titleField.set(post, postDto.getTitle());
+
+            Field contentField = Post.class.getDeclaredField("content");
+            contentField.setAccessible(true);
+            contentField.set(post, postDto.getContent());
+
+            Field isSharedField = Post.class.getDeclaredField("isShared");
+            isSharedField.setAccessible(true);
+            isSharedField.set(post, postDto.getIsShared());
+
+            Field likesCountField = Post.class.getDeclaredField("likesCount");
+            likesCountField.setAccessible(true);
+            likesCountField.set(post, postDto.getLikesCount());
+
+            Field createAtField = Post.class.getDeclaredField("createAt");
+            createAtField.setAccessible(true);
+            createAtField.set(post, Instant.now());
+
+            Field updateAtField = Post.class.getDeclaredField("updateAt");
+            updateAtField.setAccessible(true);
+            updateAtField.set(post, Instant.now());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
-        return postDto;
+        return post;
     }
 
-    private Post convertToBoardPostEntity(PostDto postDto) {
-        Post boardPost = new Post();
-        boardPost.setTitle(postDto.getTitle());
-        boardPost.setContent(postDto.getContent());
-        boardPost.setAuthor(postDto.getAuthor());
-        if (postDto.getComments() != null) {
-            postDto.getComments().forEach(commentDto -> {
-                Comment comment = convertToCommentEntity(commentDto);
-                comment.setBoardPost(boardPost);
-                boardPost.addComment(comment);
-            });
-        }
-        return boardPost;
-    }
-
-    private CommentDto convertToCommentDto(Comment comment) {
-        CommentDto commentDto = new CommentDto();
-        commentDto.setId(comment.getId());
-        commentDto.setContent(comment.getContent());
-        commentDto.setAuthor(comment.getAuthor());
-        commentDto.setCreatedAt(comment.getCreatedAt());
-        return commentDto;
-    }
-
-    private Comment convertToCommentEntity(CommentDto commentDto) {
-        Comment comment = new Comment();
-        comment.setContent(commentDto.getContent());
-        comment.setAuthor(commentDto.getAuthor());
-        comment.setCreatedAt(commentDto.getCreatedAt());
-        return comment;
+    private PostDto convertToDto(Post post) {
+        return new PostDto(
+                post.getPostId(),
+                post.getUserId(),
+                post.getAuthor(),
+                post.getTitle(),
+                post.getContent(),
+                post.getIsShared(),
+                post.getLikesCount(),
+                post.getCreateAt(),
+                post.getUpdateAt()
+        );
     }
 }
