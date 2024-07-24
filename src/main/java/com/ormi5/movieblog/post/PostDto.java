@@ -6,12 +6,11 @@ import lombok.Value;
 import java.io.Serializable;
 import java.time.Instant;
 
-@Value
-@Builder
 /**
  * DTO for {@link Post}
  */
 @Value
+@Builder
 public class PostDto implements Serializable {
     Integer id;
     Integer userId;
@@ -23,7 +22,7 @@ public class PostDto implements Serializable {
     Instant createAt;
     Instant updateAt;
 
-    public static PostDto toPostDTO(Post post) {
+    public static PostDto toDTO(Post post) {
         return PostDto.builder()
                 .id(post.getPostId())
                 .userId(post.getUserId())
@@ -37,7 +36,7 @@ public class PostDto implements Serializable {
                 .build();
     }
 
-    public static Post toPostEntity(PostDto postDTO) {
+    public static Post toEntity(PostDto postDTO) {
         return Post.builder()
                 .postId(postDTO.getId())
                 .title(postDTO.getTitle())

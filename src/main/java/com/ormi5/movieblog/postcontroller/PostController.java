@@ -2,6 +2,7 @@ package com.ormi5.movieblog.postcontroller;
 
 import com.ormi5.movieblog.post.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +37,7 @@ public class PostController {
      * @return result ResponseEntity
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Optional<PostDto>> getPostById(@PathVariable("id") int id) {
+    public ResponseEntity<Optional<PostDto>> deletePostById(@PathVariable("id") Long id) {
         boolean deleted = postService.deletePost(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
@@ -50,14 +51,13 @@ public class PostController {
   
     @GetMapping
     public ResponseEntity<List<PostDto>> getAllBoardPosts() {
-        List<PostDto> postDtos = boardPostService.getAllBoardPosts();
+        List<PostDto> postDtos = postService.getAllBoardPosts();
         return ResponseEntity.ok(postDtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getBoardPostById(@PathVariable("id") Integer id) {
-        PostDto postDto = boardPostService.getBoardPostById(id);
-        return ResponseEntity.ok(postDto);
+    public ResponseEntity<Optional<PostDto>> getBoardPostById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(postService.getPostById(id));
     }
 
     @PutMapping("/{postId}")

@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.lang.reflect.Field;
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
@@ -22,35 +20,31 @@ public class PostService {
     public PostService(PostRepository postRepository){
         this.postRepository = postRepository;
     }
-  
+
     @Transactional
     public List<PostDto> getAllBoardPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream()
-                .map(this::convertToDto)
+                .map(PostDto::toDTO)
                 .collect(Collectors.toList());
     }
-
-    public Optional<PostDto> getPostById(Long id) {
-        return postRepository.findById(id)
-                .map(PostDto::toPostDTO);
       
     public PostDto createPost(PostDto postDto) {
       Post post = PostDto.toEntity(postDto);
 
       Post savePost = postRepository.save(post);
 
-      return PostDto.toDto(savePost);
+      return PostDto.toDTO(savePost);
     }
       
     @Transactional
-    public boolean deletePost(int id) {
-        return  postRepository.findById(id)
-                .map(post -> {
-                    postRepository.delete(post);
-                    return true;
-                })
-                .orElse(false);
+    public boolean deletePost (Long id){
+            return postRepository.findById(id)
+                    .map(post -> {
+                        postRepository.delete(post);
+                        return true;
+                    })
+                    .orElse(false);
     }
 
     @Transactional
@@ -70,6 +64,12 @@ public class PostService {
             return postRepository.save(post);
         }
         return null;
+    }
+
+
+    public Optional<PostDto> getPostById(Long id) {
+        return postRepository.findById(id)
+                .map(PostDto::toDTO);
     }
       
 //      private Post createPostFromDto(PostDto postDto) {
