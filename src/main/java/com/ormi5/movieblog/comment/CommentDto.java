@@ -1,15 +1,11 @@
 package com.ormi5.movieblog.comment;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.ormi5.movieblog.post.Post;
 
+import lombok.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
-
-import com.ormi5.movieblog.post.Post;
 
 @Getter
 @Builder
@@ -27,7 +23,6 @@ public class CommentDto {
 	public static CommentDto toDto(Comment comment) {
 		return CommentDto.builder()
 			.id(comment.getCommentId())
-			// .postId(comment.getPostID())
 			.postId(comment.getPost().getPostId())
 			.userId(comment.getUserId())
 			.author(comment.getAuthor())
