@@ -1,17 +1,22 @@
 package com.ormi5.movieblog.commentcontroller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.ormi5.movieblog.comment.Comment;
 import com.ormi5.movieblog.comment.CommentDto;
 import com.ormi5.movieblog.post.Post;
+import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.postcontroller.PostRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
 	private final CommentRepository commentRepository;
-	private final PostRepository postRepository; // PostRepository를 추가하여 Post를 참조합니다.
+	private final PostRepository postRepository;
 
 	@Autowired
 	public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
@@ -32,6 +37,36 @@ public class CommentService {
 		return CommentDto.toDto(savedComment);
 	}
 
+	public List<CommentDto> getAllComments() {
+		List<Comment> comments = commentRepository.findAll();
+
+		return comments.stream()
+			.map(CommentDto::toDto)
+			.collect(Collectors.toList());
+	}
+
+	/*public List<CommentDto> getCommentsByPostId(Long postId) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
+
+		List<Comment> comments = commentRepository.findByPost(post);
+
+		return comments.stream()
+			.map(CommentDto::toDto)
+			.collect(Collectors.toList());
+	}*/
+
+	public List<CommentDto> getCommentsByPostId(PostDto postDto) {
+		Post post = postRepository.findById(postDto.getId())
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
+
+		List<Comment> comments = commentRepository.findByPost(post);
+
+		return comments.stream()
+			.map(CommentDto::toDto)
+			.collect(Collectors.toList());
+	}
+
 	/**
 	 * 댓글 수정
 	 * @param commentDto 수정할 내용이 담겨있는 dto
@@ -40,7 +75,7 @@ public class CommentService {
 	@Transactional
 	public CommentDto updateComment(CommentDto commentDto) {
 		Comment comment = commentRepository.findById(commentDto.getId())
-				.orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));// commentId를 검증합니다.
+			.orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
 		comment.updateComment(commentDto);
 		return CommentDto.toDto(comment);
 	}
