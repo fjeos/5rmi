@@ -14,19 +14,6 @@ public class CommentService {
 	private final CommentRepository commentRepository;
 	private final PostRepository postRepository; // PostRepository를 추가하여 Post를 참조합니다.
 
-	/*@Autowired
-	public CommentService(CommentRepository commentRepository) {
-		this.commentRepository = commentRepository;
-	}*/
-
-	/*public CommentDto createComment(CommentDto commentDto) {
-		Comment comment = CommentDto.toEntity(commentDto);
-
-		Comment saveComment = commentRepository.save(comment);
-
-		return CommentDto.toDto(saveComment);
-	}*/
-
 	@Autowired
 	public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
 		this.commentRepository = commentRepository;
@@ -43,5 +30,18 @@ public class CommentService {
 		Comment savedComment = commentRepository.save(comment);
 
 		return CommentDto.toDto(savedComment);
+	}
+
+	/**
+	 * 댓글 수정
+	 * @param commentDto 수정할 내용이 담겨있는 dto
+	 * @author nayoung
+	 */
+	@Transactional
+	public CommentDto updateComment(CommentDto commentDto) {
+		Comment comment = commentRepository.findById(commentDto.getId())
+				.orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));// commentId를 검증합니다.
+		comment.updateComment(commentDto);
+		return CommentDto.toDto(comment);
 	}
 }
