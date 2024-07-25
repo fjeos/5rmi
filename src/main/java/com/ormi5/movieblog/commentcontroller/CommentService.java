@@ -1,45 +1,84 @@
 package com.ormi5.movieblog.commentcontroller;
 
+import com.ormi5.movieblog.comment.Comment;
+import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.post.Post;
+import com.ormi5.movieblog.post.PostDto;
+import com.ormi5.movieblog.postcontroller.PostRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ormi5.movieblog.comment.Comment;
-import com.ormi5.movieblog.comment.CommentDto;
-import com.ormi5.movieblog.post.Post;
-import com.ormi5.movieblog.postcontroller.PostRepository;
-
 @Service
 public class CommentService {
+	private final CommentRepository commentRepository;
+	private final PostRepository postRepository;
 
-    private final CommentRepository commentRepository;
-	private final PostRepository postRepository; // PostRepository를 추가하여 Post를 참조합니다.
-    
 	@Autowired
 	public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
 		this.commentRepository = commentRepository;
 		this.postRepository = postRepository;
 	}
+  
+  @Transactional
+  public CommentDto createComment(CommentDto commentDto) {
+      Post post = postRepository.findById(commentDto.getPostId())
+              .orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
 
-    public void deleteComment(Long commentId, Long userId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다"));
+      Comment comment = CommentDto.toEntity(commentDto, post);
 
-        if (!comment.getUserId().equals(userId)) {
-            throw new RuntimeException("댓글을 삭제할 권한이 없습니다");
-        }
+      Comment savedComment = commentRepository.save(comment);
 
-        commentRepository.delete(comment);
-    }
-    @Transactional // 트랜잭션 관리를 위한 어노테이션을 추가합니다.
-    public CommentDto createComment(CommentDto commentDto) {
-        Post post = postRepository.findById(commentDto.getPostId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid post ID")); // postId를 검증합니다.
+      return CommentDto.toDto(savedComment);
+  }
+  
+  @Transactional
+	public List<CommentDto> getAllComments() {
+		List<Comment> comments = commentRepository.findAll();
 
-        Comment comment = CommentDto.toEntity(commentDto, post);
+		return comments.stream()
+			.map(CommentDto::toDto)
+			.collect(Collectors.toList());
+	}
 
-        Comment savedComment = commentRepository.save(comment);
+  @Transactional
+	public List<CommentDto> getCommentsByPostId(PostDto postDto) {
+		Post post = postRepository.findById(postDto.getId())
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
 
-        return CommentDto.toDto(savedComment);
-    }
+		List<Comment> comments = commentRepository.findByPost(post);
+
+		return comments.stream()
+			.map(CommentDto::toDto)
+			.collect(Collectors.toList());
+	}
+
+	/**
+	 * 댓글 수정
+	 * @param commentDto 수정할 내용이 담겨있는 dto
+	 * @author nayoung
+	 */
+	@Transactional
+	public CommentDto updateComment(CommentDto commentDto) {
+		Comment comment = commentRepository.findById(commentDto.getId())
+			.orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
+		comment.updateComment(commentDto);
+		return CommentDto.toDto(comment);
+	}
+  
+  @Transactional
+  public void deleteComment(Long commentId, Long userId) {
+      Comment comment = commentRepository.findById(commentId)
+              .orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다"));
+
+      if (!comment.getUserId().equals(userId)) {
+          throw new RuntimeException("댓글을 삭제할 권한이 없습니다");
+      }
+
+      commentRepository.delete(comment);
+  }
 }
