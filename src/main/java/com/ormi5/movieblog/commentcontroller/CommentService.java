@@ -23,20 +23,20 @@ public class CommentService {
 		this.commentRepository = commentRepository;
 		this.postRepository = postRepository;
 	}
+  
+  @Transactional
+  public CommentDto createComment(CommentDto commentDto) {
+      Post post = postRepository.findById(commentDto.getPostId())
+              .orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
 
-	public CommentDto createComment(CommentDto commentDto) {
-		Long postId = commentDto.getPostId();
+      Comment comment = CommentDto.toEntity(commentDto, post);
 
-		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
+      Comment savedComment = commentRepository.save(comment);
 
-		Comment comment = CommentDto.toEntity(commentDto, post);
-
-		Comment savedComment = commentRepository.save(comment);
-
-		return CommentDto.toDto(savedComment);
-	}
-
+      return CommentDto.toDto(savedComment);
+  }
+  
+  @Transactional
 	public List<CommentDto> getAllComments() {
 		List<Comment> comments = commentRepository.findAll();
 
@@ -45,17 +45,7 @@ public class CommentService {
 			.collect(Collectors.toList());
 	}
 
-	/*public List<CommentDto> getCommentsByPostId(Long postId) {
-		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
-
-		List<Comment> comments = commentRepository.findByPost(post);
-
-		return comments.stream()
-			.map(CommentDto::toDto)
-			.collect(Collectors.toList());
-	}*/
-
+  @Transactional
 	public List<CommentDto> getCommentsByPostId(PostDto postDto) {
 		Post post = postRepository.findById(postDto.getId())
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
@@ -79,4 +69,16 @@ public class CommentService {
 		comment.updateComment(commentDto);
 		return CommentDto.toDto(comment);
 	}
+  
+  @Transactional
+  public void deleteComment(Long commentId, Long userId) {
+      Comment comment = commentRepository.findById(commentId)
+              .orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다"));
+
+      if (!comment.getUserId().equals(userId)) {
+          throw new RuntimeException("댓글을 삭제할 권한이 없습니다");
+      }
+
+      commentRepository.delete(comment);
+  }
 }
