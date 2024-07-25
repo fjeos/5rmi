@@ -11,23 +11,25 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-@Entity
-@Builder
-@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Builder
+@Entity
 @Table(name = "comment")
+
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id", nullable = false)
     private Long commentId;
 
+    @Column(name = "post_id", nullable = false)
+    private Long postId;
+
     @Column(name = "user_id", nullable = false)
     private Long userId;
-
-    @Column(name = "author", nullable = false)
-    private String author;
 
     @Column(name = "content", nullable = false)
     private String content;

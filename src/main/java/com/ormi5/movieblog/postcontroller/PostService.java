@@ -39,24 +39,25 @@ public class PostService {
 			.collect(Collectors.toList());
 	}
 
-	public Optional<PostDto> getPostById(int id) {
+	public Optional<PostDto> getPostById(Long id) {
 		return postRepository.findById(id)
 			.map(PostDto::toDTO);
 	}
 
 	@Transactional
-	public Post updatePost(int postId, PostDto postDto) {
+	public Post updatePost(Long postId, PostDto postDto) {
 		Post post = postRepository.findById(postId).orElse(null);
 
 		if (post != null) {
 			post.updatePost(postDto);
 		}
 
-		return null;
+		// return null;
+		return postRepository.save(post); // 수정된 엔티티 저장
 	}
 
 	@Transactional
-	public boolean deletePost(int id) {
+	public boolean deletePost(Long id) {
 		return postRepository.findById(id)
 			.map(post -> {
 				postRepository.delete(post);
