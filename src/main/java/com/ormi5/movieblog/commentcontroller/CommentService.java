@@ -1,17 +1,17 @@
 package com.ormi5.movieblog.commentcontroller;
 
+import com.ormi5.movieblog.comment.Comment;
+import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.post.Post;
+import com.ormi5.movieblog.post.PostDto;
+import com.ormi5.movieblog.postcontroller.PostRepository;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.ormi5.movieblog.comment.Comment;
-import com.ormi5.movieblog.comment.CommentDto;
-import com.ormi5.movieblog.post.Post;
-import com.ormi5.movieblog.postcontroller.PostRepository;
 
 @Service
 public class CommentService {
@@ -45,8 +45,19 @@ public class CommentService {
 			.collect(Collectors.toList());
 	}
 
-	public List<CommentDto> getCommentsByPostId(Long postId) {
+	/*public List<CommentDto> getCommentsByPostId(Long postId) {
 		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
+
+		List<Comment> comments = commentRepository.findByPost(post);
+
+		return comments.stream()
+			.map(CommentDto::toDto)
+			.collect(Collectors.toList());
+	}*/
+
+	public List<CommentDto> getCommentsByPostId(PostDto postDto) {
+		Post post = postRepository.findById(postDto.getId())
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
 
 		List<Comment> comments = commentRepository.findByPost(post);

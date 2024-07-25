@@ -1,21 +1,15 @@
 package com.ormi5.movieblog.commentcontroller;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.ormi5.movieblog.comment.Comment;
 import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.post.PostDto;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -32,23 +26,30 @@ public class CommentController {
 	}
 
 	@PostMapping
-	public ResponseEntity<CommentDto> addComment(@RequestBody CommentDto commentDto) {
+	public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto) {
 		CommentDto createComment = commentService.createComment(commentDto);
 
 		return new ResponseEntity<>(createComment, HttpStatus.CREATED);
 	}
 
-	@GetMapping
+	@GetMapping("/list")
 	public ResponseEntity<List<CommentDto>> getAllComments() {
 		List<CommentDto> commentDtoList = commentService.getAllComments();
 
 		return ResponseEntity.ok(commentDtoList);
-		// return new ResponseEntity<>(commentDtoList, HttpStatus.OK);
 	}
 
-	@GetMapping("/{postId}")
+	/*@GetMapping("/{postId}")
 	public ResponseEntity<List<CommentDto>> getCommentByPostId(@PathVariable Long postId) {
 		List<CommentDto> commentDtoList = commentService.getCommentsByPostId(postId);
+
+		return ResponseEntity.ok(commentDtoList);
+	}*/
+	
+	// URL 없이 조회
+	@GetMapping
+	public ResponseEntity<List<CommentDto>> getCommentByPostId(@RequestBody PostDto postDto) {
+		List<CommentDto> commentDtoList = commentService.getCommentsByPostId(postDto);
 
 		return ResponseEntity.ok(commentDtoList);
 	}
