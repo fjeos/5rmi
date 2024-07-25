@@ -3,9 +3,11 @@ package com.ormi5.movieblog.comment;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.Instant;
-
 import com.ormi5.movieblog.post.Post;
+
+import lombok.*;
+import java.io.Serializable;
+import java.time.Instant;
 
 @Getter
 @Builder
