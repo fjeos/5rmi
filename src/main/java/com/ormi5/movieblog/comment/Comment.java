@@ -1,21 +1,51 @@
 package com.ormi5.movieblog.comment;
 
 import com.ormi5.movieblog.post.Post;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
+@Entity
+@Table(name = "comment")
 public class Comment {
-    private Long id;
-    private String content;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id", nullable = false)
+    private Long commentId;
+    /*@Column(name = "post_id", nullable = false)
+    private Long postId;*/
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+    @Column(name = "author", nullable = false)
     private String author;
-    private LocalDateTime createdAt;
-    private Post boardPost;
+    @Column(name = "content", nullable = false)
+    private String content;
+    @Column(name = "likes", nullable = false)
+    private int likes;
+    @Column(name = "dislikes", nullable = false)
+    private int dislikes;
+    @Column(name = "create_at", nullable = false)
+    private Instant createAt;
+    @Column(name = "update_at")
+    private Instant updateAt;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 }
