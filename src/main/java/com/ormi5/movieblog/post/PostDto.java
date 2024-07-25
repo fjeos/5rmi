@@ -1,7 +1,6 @@
 package com.ormi5.movieblog.post;
 
 import lombok.*;
-
 import java.io.Serializable;
 import java.time.Instant;
 

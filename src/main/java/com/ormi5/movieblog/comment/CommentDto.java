@@ -1,19 +1,38 @@
 package com.ormi5.movieblog.comment;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import java.io.Serializable;
+import java.time.Instant;
 
-import java.time.LocalDateTime;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
 @Getter
-public class CommentDto {
+@Builder
+public class CommentDto implements Serializable {
     private Long id;
+    private Long postId;
+    private Long userId;
     private String content;
-    private String author;
-    private LocalDateTime createdAt;
+    private Instant createAt;
+    private Instant updateAt;
+
+    public static CommentDto toDTO(Comment comment) {
+        return CommentDto.builder()
+                .id(comment.getCommentId())
+                .postId(comment.getPostId())
+                .userId(comment.getUserId())
+                .content(comment.getContent())
+                .createAt(comment.getCreateAt())
+                .updateAt(comment.getUpdateAt())
+                .build();
+    }
+
+    public static Comment toEntity(CommentDto commentDTO) {
+        return Comment.builder()
+                .commentId(commentDTO.getId())
+                .postId(commentDTO.getPostId())
+                .userId(commentDTO.getUserId())
+                .content(commentDTO.getContent())
+                .createAt(Instant.now())
+                .updateAt(Instant.now())
+                .build();
+    }
 }
