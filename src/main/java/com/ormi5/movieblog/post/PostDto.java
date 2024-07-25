@@ -1,9 +1,13 @@
 package com.ormi5.movieblog.post;
 
+import com.ormi5.movieblog.comment.Comment;
+
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
+
 
 /**
  * DTO for {@link Post}
@@ -19,6 +23,7 @@ public class PostDto implements Serializable {
 	private int likesCount;
 	private Instant createAt;
 	private Instant updateAt;
+	private List<Comment> comments;
 
 	public static PostDto toDTO(Post post) {
 		return PostDto.builder()
@@ -28,6 +33,7 @@ public class PostDto implements Serializable {
 			.content(post.getContent())
 			.isShared(post.getIsShared())
 			.likesCount(post.getLikesCount())
+			.comments(post.getComments())
 			.createAt(post.getCreateAt())
 			.updateAt(post.getUpdateAt())
 			.build();
@@ -41,6 +47,7 @@ public class PostDto implements Serializable {
 			.content(postDTO.getContent())
 			.isShared(postDTO.getIsShared())
 			.likesCount(postDTO.getLikesCount())
+			.comments(postDTO.comments)
 			.createAt(Instant.now())
 			.updateAt(Instant.now())
 			.build();
