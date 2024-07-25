@@ -31,4 +31,17 @@ public class CommentService {
 
 		return CommentDto.toDto(savedComment);
 	}
+
+	/**
+	 * 댓글 수정
+	 * @param commentDto 수정할 내용이 담겨있는 dto
+	 * @author nayoung
+	 */
+	@Transactional
+	public CommentDto updateComment(CommentDto commentDto) {
+		Comment comment = commentRepository.findById(commentDto.getId())
+				.orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));// commentId를 검증합니다.
+		comment.updateComment(commentDto);
+		return CommentDto.toDto(comment);
+	}
 }

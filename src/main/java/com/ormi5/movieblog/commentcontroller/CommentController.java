@@ -19,35 +19,43 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/comments")
 public class CommentController {
-	private final CommentService commentService;
-  private final CommentRepository commentRepository;
-	
-  public CommentController(CommentService commentService) {
-		this.commentService = commentService;
-	}
- 
-  @Autowired
-  public CommentController(CommentRepository commentRepository) {
-      this.commentRepository = commentRepository;
-  }
+    private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
-	@PostMapping
-	public ResponseEntity<CommentDto> addComment(@RequestBody CommentDto commentDto) {
-		CommentDto createComment = commentService.createComment(commentDto);
+    @Autowired
+    public CommentController(CommentService commentService, CommentRepository commentRepository) {
+        this.commentService = commentService;
+        this.commentRepository = commentRepository;
+    }
 
-		return new ResponseEntity<>(createComment, HttpStatus.CREATED);
-	}
-  
-  @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteComment(@PathVariable Long id, @RequestBody DeleteCommentDto deleteCommentDto) {
-      Comment comment = commentRepository.findById(id)
-              .orElseThrow(() -> new RuntimeException("Comment not found"));
+    @PostMapping
+    public ResponseEntity<CommentDto> addComment(@RequestBody CommentDto commentDto) {
+        CommentDto createComment = commentService.createComment(commentDto);
 
-      if (!comment.getUserId().equals(deleteCommentDto.getUserId())) {
-          return ResponseEntity.badRequest().body("User not authorized to delete this comment");
-      }
+        return new ResponseEntity<>(createComment, HttpStatus.CREATED);
+    }
 
-      commentRepository.delete(comment);
-      return ResponseEntity.ok().build();
-  }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id, @RequestBody DeleteCommentDto deleteCommentDto) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        if (!comment.getUserId().equals(deleteCommentDto.getUserId())) {
+            return ResponseEntity.badRequest().body("User not authorized to delete this comment");
+        }
+
+        commentRepository.delete(comment);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 댓글 수정 controller
+     * @param commentDto 수정할 내용이 담겨있는 dto
+     * @return 수정한 내용을 반영한 dto
+     * @author nayoung
+     */
+    @PutMapping
+    public ResponseEntity<CommentDto> updateComment(@RequestBody CommentDto commentDto) {
+        return ResponseEntity.ok(commentService.updateComment(commentDto));
+    }
 }
