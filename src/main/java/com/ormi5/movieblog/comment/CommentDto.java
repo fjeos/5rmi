@@ -22,8 +22,8 @@ public class CommentDto {
 	public static CommentDto toDto(Comment comment) {
 		return CommentDto.builder()
 			.id(comment.getCommentId())
-			// .postId(comment.getPostID())
 			.postId(comment.getPost().getPostId())
+			// .postId(comment.getPostID())
 			.userId(comment.getUserId())
 			.content(comment.getContent())
 			.likes(comment.getLikes())

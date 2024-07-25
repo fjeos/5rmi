@@ -19,9 +19,11 @@ public class CommentService {
 		this.postRepository = postRepository;
 	}
 
-	public CommentDto createComment(CommentDto commentDto, Long postId) {
+	public CommentDto createComment(CommentDto commentDto) {
+		Long postId = commentDto.getPostId();
+
 		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다.")); // postId를 검증합니다.
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
 
 		Comment comment = CommentDto.toEntity(commentDto, post);
 

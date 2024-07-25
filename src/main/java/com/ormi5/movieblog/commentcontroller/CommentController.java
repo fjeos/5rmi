@@ -19,9 +19,9 @@ public class CommentController {
 		this.commentService = commentService;
 	}
 
-	@PostMapping("/{postId}")
-	public ResponseEntity<CommentDto> addComment(@PathVariable Long postId, @RequestBody CommentDto commentDto) {
-		CommentDto createComment = commentService.createComment(commentDto, postId);
+	@PostMapping
+	public ResponseEntity<CommentDto> addComment(@RequestBody CommentDto commentDto) {
+		CommentDto createComment = commentService.createComment(commentDto);
 
 		return new ResponseEntity<>(createComment, HttpStatus.CREATED);
 	}
