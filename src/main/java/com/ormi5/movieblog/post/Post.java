@@ -1,6 +1,9 @@
 package com.ormi5.movieblog.post;
 
 import java.time.Instant;
+import java.util.List;
+
+import com.ormi5.movieblog.comment.Comment;
 
 import jakarta.persistence.*;
 
@@ -42,10 +45,12 @@ public class Post {
 	@Column(name = "update_at")
 	private Instant updateAt;
 
+	@OneToMany(mappedBy = "post")
+	private List<Comment> comments;
+
 	public void updatePost(PostDto postDto) {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
 		this.updateAt = Instant.now();
 	}
-
 }
