@@ -3,10 +3,10 @@ package com.ormi5.movieblog.post;
 import com.ormi5.movieblog.comment.Comment;
 
 import lombok.*;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
-
 
 /**
  * DTO for {@link Post}

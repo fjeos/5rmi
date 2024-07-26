@@ -36,7 +36,7 @@ public class Comment {
 
 	@Column(name = "create_at", nullable = false)
 	private Instant createAt;
-	
+
 	@Column(name = "update_at")
 	private Instant updateAt;
 
