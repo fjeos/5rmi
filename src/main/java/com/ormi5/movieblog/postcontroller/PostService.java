@@ -27,7 +27,7 @@ public class PostService {
 
 		Post savePost = postRepository.save(post);
 
-		return PostDto.toDTO(savePost);
+		return PostDto.toDto(savePost);
 	}
 
 	@Transactional
@@ -35,13 +35,24 @@ public class PostService {
 		List<Post> posts = postRepository.findAll();
 
 		return posts.stream()
-			.map(PostDto::toDTO)
+			.map(PostDto::toDto)
 			.collect(Collectors.toList());
 	}
 
+	@Transactional
 	public Optional<PostDto> getPostById(Long id) {
 		return postRepository.findById(id)
-			.map(PostDto::toDTO);
+			.map(PostDto::toDto);
+	}
+
+	@Transactional
+	public List<PostDto> getPostsByUserId(Long userId) {
+		return postRepository.findByUserId(userId) // UserID에 해당하는 유저의
+			.stream()
+			.filter(Post::getIsShared) // 공개 상태의 게시글만 조회
+			// .filter(post -> post.getIsShared())
+			.map(PostDto::toDto)
+			.toList();
 	}
 
 	@Transactional
@@ -52,7 +63,6 @@ public class PostService {
 			post.updatePost(postDto);
 		}
 
-		// return null;
 		return postRepository.save(post); // 수정된 엔티티 저장
 	}
 
@@ -65,5 +75,4 @@ public class PostService {
 			})
 			.orElse(false);
 	}
-
 }

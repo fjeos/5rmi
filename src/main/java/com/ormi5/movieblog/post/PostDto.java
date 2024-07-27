@@ -24,7 +24,7 @@ public class PostDto implements Serializable {
 	private Instant updateAt;
 	private List<Comment> comments;
 
-	public static PostDto toDTO(Post post) {
+	public static PostDto toDto(Post post) {
 		return PostDto.builder()
 			.id(post.getPostId())
 			.userId(post.getUserId())
@@ -32,9 +32,9 @@ public class PostDto implements Serializable {
 			.content(post.getContent())
 			.isShared(post.getIsShared())
 			.likesCount(post.getLikesCount())
-			.comments(post.getComments())
 			.createAt(post.getCreateAt())
 			.updateAt(post.getUpdateAt())
+			.comments(post.getComments())
 			.build();
 	}
 
@@ -51,5 +51,4 @@ public class PostDto implements Serializable {
 			.updateAt(Instant.now())
 			.build();
 	}
-
 }

@@ -27,15 +27,24 @@ public class PostController {
 		return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
 	}
 
-	@GetMapping
+	@GetMapping("/list")
 	public ResponseEntity<List<PostDto>> getAllPosts() {
 		List<PostDto> postDtos = postService.getAllPosts();
 		return ResponseEntity.ok(postDtos);
 	}
 
+	// PostId로 찾기
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<PostDto>> getPostById(@PathVariable("id") Long id) {
 		return ResponseEntity.ok(postService.getPostById(id));
+	}
+
+	// UserId로 찾기
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Long userId) {
+		List<PostDto> postDtoList = postService.getPostsByUserId(userId);
+
+		return ResponseEntity.ok(postDtoList);
 	}
 
 	@PutMapping("/{postId}")
@@ -56,5 +65,4 @@ public class PostController {
 		boolean deleted = postService.deletePost(id);
 		return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
 	}
-
 }
