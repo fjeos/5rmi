@@ -1,6 +1,5 @@
 package com.ormi5.movieblog.commentcontroller;
 
-import com.ormi5.movieblog.comment.Comment;
 import com.ormi5.movieblog.comment.CommentDto;
 import com.ormi5.movieblog.post.PostDto;
 
@@ -16,12 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/comments")
 public class CommentController {
 	private final CommentService commentService;
-	private final CommentRepository commentRepository;
 
 	@Autowired
-	public CommentController(CommentService commentService, CommentRepository commentRepository) {
+	public CommentController(CommentService commentService) {
 		this.commentService = commentService;
-		this.commentRepository = commentRepository;
 	}
 
 	@PostMapping
