@@ -21,6 +21,13 @@ public class CommentController {
 		this.commentService = commentService;
 	}
 
+	/**
+	 * 새로운 댓글 생성
+	 *
+	 * @author yuseok
+	 * @param commentDto 댓글 DTO
+	 * @return 생성된 댓글 DTO
+	 */
 	@PostMapping
 	public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto) {
 		CommentDto createComment = commentService.createComment(commentDto);
@@ -28,6 +35,7 @@ public class CommentController {
 		return new ResponseEntity<>(createComment, HttpStatus.CREATED);
 	}
 
+	// 모든 댓글 조회
 	@GetMapping("/list")
 	public ResponseEntity<List<CommentDto>> getAllComments() {
 		List<CommentDto> commentDtoList = commentService.getAllComments();
@@ -35,10 +43,17 @@ public class CommentController {
 		return ResponseEntity.ok(commentDtoList);
 	}
 
+	/**
+	 * 게시물 ID에 해당하는 댓글 리스트 가져오기
+	 *
+	 * @author yuseok
+	 * @param postDto 게시물 DTO
+	 * @return 댓글 DTO 리스트, 없으면 빈 리스트 []
+	 */
 	@GetMapping
 	public ResponseEntity<List<CommentDto>> getCommentByPostId(@RequestBody PostDto postDto) {
 		List<CommentDto> commentDtoList = commentService.getCommentsByPostId(postDto);
-
+		System.out.println(commentDtoList);
 		return ResponseEntity.ok(commentDtoList);
 	}
 

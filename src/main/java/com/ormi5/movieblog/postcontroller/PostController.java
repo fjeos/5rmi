@@ -20,6 +20,13 @@ public class PostController {
 		this.postService = postService;
 	}
 
+	/**
+	 * 게시글 생성 메서드
+	 *
+	 * @author yuseok
+	 * @param postDto 생성할 게시글 정보가 담긴 DTO
+	 * @return 생성된 게시글 정보가 담긴 DTO
+	 */
 	@PostMapping
 	public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
 		PostDto createdPost = postService.createPost(postDto);
@@ -27,21 +34,36 @@ public class PostController {
 		return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
 	}
 
+	// 모든 게시글을 조회하는 메서드
 	@GetMapping("/list")
 	public ResponseEntity<List<PostDto>> getAllPosts() {
 		List<PostDto> postDtos = postService.getAllPosts();
 		return ResponseEntity.ok(postDtos);
 	}
 
-	// PostId로 찾기
+	/**
+	 * 특정 게시글 조회: 게시글의 ID를 받아 해당 게시글 조회
+	 *
+	 * @author yuseok
+	 * @param id 조회할 게시글의 ID
+	 * @return 조회된 게시글 정보, 없다면 Optional.empty
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<PostDto>> getPostById(@PathVariable("id") Long id) {
+		System.out.println(postService.getPostById(id));
 		return ResponseEntity.ok(postService.getPostById(id));
 	}
 
-	// UserId로 찾기
+	/**
+	 * 특정 유저의 게시글 조회: 유저의 ID를 받아 게시글 조회
+	 *
+	 * @author yuseok
+	 * @param userId 원하는 유저의 User ID
+	 * @return 조회된 게시글 정보, 없다면 빈 리스트 []
+	 */
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Long userId) {
+		System.out.println(postService.getPostsByUserId(userId));
 		List<PostDto> postDtoList = postService.getPostsByUserId(userId);
 
 		return ResponseEntity.ok(postDtoList);
