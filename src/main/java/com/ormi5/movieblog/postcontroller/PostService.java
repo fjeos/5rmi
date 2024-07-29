@@ -55,6 +55,16 @@ public class PostService {
 			.toList();
 	}
 
+	/**
+	 * 공개 여부와 관계없이 userId의 유저가 작성한 모든 게시글을 조회하는 메서드
+	 * @param userId 작성자
+	 * @return userId의 유저가 작성한 게시글 List
+	 */
+	@Transactional
+	public List<Post> getUserPosts(Long userId) {
+		return postRepository.findByUserId(userId);
+	}
+
 	@Transactional
 	public Post updatePost(Long postId, PostDto postDto) {
 		Post post = postRepository.findById(postId).orElse(null);
