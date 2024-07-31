@@ -67,11 +67,12 @@ public class PostService {
 	public List<PostDto> getPostsByContainingTitleCaseSensitive(String keyword) {
 		return postRepository.findByTitleContaining(keyword)
 			.stream()
-			.filter(Post::getIsShared)
+			.filter(post -> post.getIsShared() && post.getTitle().contains(keyword))
 			.map(PostDto::toDto)
 			.collect(Collectors.toList());
 	}
 
+	@Transactional
 	public List<PostDto> getPostsByContainingTitleCaseInsensitive(String keyword) {
 		return postRepository.findByTitleContainingIgnoreCase(keyword)
 			.stream()

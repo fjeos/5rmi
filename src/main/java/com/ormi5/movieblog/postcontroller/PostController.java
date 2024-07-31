@@ -91,10 +91,10 @@ public class PostController {
 	 */
 	@GetMapping("/title/containing/case-sensitive") // case sensitive: 대소문자 구분
 	public ResponseEntity<List<PostDto>> getPostByContainingTitleCaseSensitive(@RequestParam String keyword) {
-		/* 현재 데이터베이스의 정렬 설정이 'utf8mb4_0900_ai_ci'
-			즉, 대소문자를 구분하지 않는(ci) 상태이기에 대소문자 구분없이 검색되는 상태
-		1. 현재처럼 대소문자 구분없이 갈 것인지 → 이 메서드 삭제
-		2. DB에서 설정을 변경해 대소문자 구분하여 조회할 것인지 → 이 메서드 유지
+		/*
+		현재 데이터베이스의 정렬 설정이 'utf8mb4_0900_ai_ci'
+		즉, 대소문자를 구분하지 않는(ci) 상태이기에 대소문자 구분없이 검색되는 상태 (대소문자 구분: cs)
+		DB에서 설정을 변경하기는 위험해서 PostService에서 contains()를 사용해 대소문자 구분
 		*/
 		List<PostDto> postDtoList = postService.getPostsByContainingTitleCaseSensitive(keyword);
 
