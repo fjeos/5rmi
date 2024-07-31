@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+
 @Service
 @Transactional(readOnly = true)
 public class UserService {
@@ -23,8 +25,23 @@ public class UserService {
 		return userRepository.findByUsername(username);
 	}
 
+	@Transactional
 	public User save(UserDto userDto) {
 		User user = userDto.toEntity();
+		return userRepository.save(user);
+	}
+
+	@Transactional
+	public User addUser(UserDto userDto) {
+		User user = User.builder()
+				.email(userDto.getEmail())
+				.username(userDto.getUsername())
+				.password(passwordEncoder.encode(userDto.getPassword()))
+				.level(1)
+				.signupDate(Instant.now())
+				.isStop(false)
+				.build();
+
 		return userRepository.save(user);
 	}
 }
