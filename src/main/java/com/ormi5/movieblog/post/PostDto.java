@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -20,8 +21,8 @@ public class PostDto implements Serializable {
 	private String content;
 	private Boolean isShared;
 	private int likesCount;
-	private Instant createAt;
-	private Instant updateAt;
+	private LocalDateTime createAt;
+	private LocalDateTime updateAt;
 	private List<Comment> comments;
 
 	public static PostDto toDto(Post post) {
@@ -49,8 +50,8 @@ public class PostDto implements Serializable {
 			.likesCount(Math.max(postDTO.getLikesCount(), 0))
 			// .likesCount(postDTO.getLikesCount() >=0 ? postDTO.getLikesCount() : 0)
 			/* postDTO.getId()의 값이 null이라는 건 게시글을 생성한다는 뜻 */
-			.createAt(postDTO.getId() == null ? Instant.now() : postDTO.getCreateAt())
-			.updateAt(postDTO.getId() == null ? null : Instant.now())
+			.createAt(postDTO.getId() == null ? LocalDateTime.now() : postDTO.getCreateAt())
+			.updateAt(postDTO.getId() == null ? null : LocalDateTime.now())
 			.comments(postDTO.comments)
 			.build();
 	}

@@ -1,6 +1,7 @@
 package com.ormi5.movieblog.post;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.ormi5.movieblog.comment.Comment;
@@ -44,10 +45,10 @@ public class Post {
 
 	@Builder.Default
 	@Column(name = "create_at", nullable = false, updatable = false) // updatable가 false면 초기화 이후 수정 불가 (읽기 전용 필드)
-	private Instant createAt = Instant.now();
+	private LocalDateTime createAt = LocalDateTime.now();
 
 	@Column(name = "update_at")
-	private Instant updateAt;
+	private LocalDateTime updateAt;
 
 	@OneToMany(mappedBy = "post")
 	private List<Comment> comments;
@@ -55,6 +56,6 @@ public class Post {
 	public void updatePost(PostDto postDto) {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
-		this.updateAt = Instant.now();
+		this.updateAt = LocalDateTime.now();
 	}
 }
