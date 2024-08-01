@@ -3,13 +3,17 @@ package com.ormi5.movieblog.loginservice;
 import com.ormi5.movieblog.user.User;
 import com.ormi5.movieblog.user.UserDto;
 import com.ormi5.movieblog.usercontroller.UserService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.security.Principal;
 
 @Controller
@@ -22,15 +26,8 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @GetMapping("/home")
-    public String home(Model model, Principal principal) {
-        UserDetails userDetails = loginService.loadUserByUsername(principal.getName());
-        model.addAttribute("userdetail", userDetails);
-        return "home";
-    }
-
     @GetMapping("/login")
-    public String login(Model model, LoginRequest loginRequest) {
+    public String login(Model model, LoginRequest loginRequest){
         if(loginRequest == null) {
             loginRequest = new LoginRequest();
         }
@@ -40,7 +37,7 @@ public class LoginController {
     }
 
     @GetMapping("/register")
-    public String register(Model model) {
+    public String register(Model model){
         model.addAttribute("user", new User());
         return "register";
     }
@@ -52,7 +49,13 @@ public class LoginController {
             model.addAttribute("userexist", user);
             return "register";
         }
+        User emailuser = userService.findByEmail(userDto.getEmail());
+        if (emailuser != null) {
+            model.addAttribute("emailexist", emailuser);
+            return "register";
+        }
         userService.addUser(userDto);
-        return "redirect:/register?success";
+
+        return "redirect:/login?success";
     }
 }

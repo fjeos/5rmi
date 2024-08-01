@@ -93,6 +93,12 @@
             </div>
         </div>
 
+        <div th:if="${param.success}">
+            <div class="success-message">
+                <p>Registration Successful!</p>
+            </div>
+        </div>
+
         <h2>Login</h2>
         <form th:action="@{/login}" method="post" role="form" th:object="${user}">
 

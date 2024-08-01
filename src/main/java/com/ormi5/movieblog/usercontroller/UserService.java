@@ -25,6 +25,10 @@ public class UserService {
 		return userRepository.findByUsername(username);
 	}
 
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
 	@Transactional
 	public User save(UserDto userDto) {
 		User user = userDto.toEntity();

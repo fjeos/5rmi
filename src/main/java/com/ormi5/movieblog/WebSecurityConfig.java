@@ -31,13 +31,14 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
-                )
-                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/home")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/hello")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/posts")).authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/posts", true)
+                        .defaultSuccessUrl("/hello", true)
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
