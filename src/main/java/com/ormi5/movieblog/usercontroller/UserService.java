@@ -1,13 +1,17 @@
 package com.ormi5.movieblog.usercontroller;
 
+import com.ormi5.movieblog.post.Post;
+import com.ormi5.movieblog.post.ProfilePostResponseDto;
+import com.ormi5.movieblog.postcontroller.PostService;
+import com.ormi5.movieblog.user.ProfileResponseDto;
 import com.ormi5.movieblog.user.User;
-import com.ormi5.movieblog.user.UserDto;
-import com.ormi5.movieblog.usercontroller.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import com.ormi5.movieblog.user.UserDto;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.Instant;
 
 @Service
@@ -15,10 +19,12 @@ import java.time.Instant;
 public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final PostService postService;
 
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository, PostService postService, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.postService = postService;
     }
 
 	public User findByUsername(String username) {
@@ -47,5 +53,27 @@ public class UserService {
 				.build();
 
 		return userRepository.save(user);
+	}
+
+
+	/**
+	 * 유저의 프로필 정보를 조회하는 메서드
+	 * @param userId 프로필 정보를 가져올 유저
+	 * @return 프로필 페이지에 나타낼 정보를 담은 Dto
+	 */
+	public ProfileResponseDto getUserProfile(Long userId) {
+
+		User findUser = userRepository.findById(userId)
+				.orElseThrow(() -> new IllegalArgumentException("회원 정보가 존재하지 않습니다."));
+
+        List<Post> userPosts = postService.getUserPosts(userId);
+
+		return ProfileResponseDto.builder()
+				.level(findUser.getLevel())
+				.username(findUser.getUsername())
+				.reviewCount(userPosts.size())
+				.signupDate(findUser.getSignupDate())
+				.postList(userPosts.stream().map(ProfilePostResponseDto::toDto).toList())
+				.build();
 	}
 }
