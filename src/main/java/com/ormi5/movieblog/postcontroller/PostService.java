@@ -23,7 +23,7 @@ public class PostService {
 
 	@Transactional
 	public PostDto createPost(PostDto postDto) {
-		Post post = PostDto.toEntity(postDto);
+		Post post = postDto.toEntity();
 
 		Post savePost = postRepository.save(post);
 

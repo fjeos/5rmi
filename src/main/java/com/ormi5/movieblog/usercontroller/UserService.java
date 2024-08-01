@@ -44,6 +44,7 @@ public class UserService {
 				.level(1)
 				.signupDate(Instant.now())
 				.isStop(false)
+				.op(false)
 				.build();
 
 		return userRepository.save(user);
