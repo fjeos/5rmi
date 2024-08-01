@@ -28,14 +28,16 @@ public class Comment {
 	@Column(name = "content", nullable = false)
 	private String content;
 
+	@Builder.Default
 	@Column(name = "likes", nullable = false)
-	private int likes;
+	private int likes = 0;
 
+	@Builder.Default
 	@Column(name = "dislikes", nullable = false)
-	private int dislikes;
+	private int dislikes = 0;
 
 	@Column(name = "create_at", nullable = false)
-	private Instant createAt;
+	private Instant createAt = Instant.now();
 
 	@Column(name = "update_at")
 	private Instant updateAt;

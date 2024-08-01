@@ -32,22 +32,15 @@ public class CommentDto {
 	}
 
 	public static Comment toEntity(CommentDto commentDto, Post post) {
-		Comment.CommentBuilder commentBuilder
-			= Comment.builder()
+		return Comment.builder()
 			.commentId(commentDto.getId())
 			.post(post)
 			.userId(commentDto.getUserId())
 			.content(commentDto.getContent())
-			.likes(commentDto.getLikes())
-			.dislikes(commentDto.getDislikes())
-			.updateAt(Instant.now());
-
-		if (commentDto.getCreateAt() == null) { // null값은 생성되지 않았음을 의미 (새 댓글 생성)
-			commentBuilder.createAt(Instant.now()); // 현재 시간으로 설정
-		} else { // // 기존 댓글을 사용(수정)하는 상황
-			commentBuilder.createAt(commentDto.getCreateAt()); // createAt은 댓글이 생성 시의 값 유지
-		}
-
-		return commentBuilder.build();
+			.likes(Math.max(commentDto.getLikes(), 0))
+			.dislikes(Math.max(commentDto.getDislikes(), 0))
+			.createAt(commentDto.getId() == null ? Instant.now() : commentDto.getCreateAt())
+			.updateAt(commentDto.getId() == null ? null : Instant.now())
+			.build();
 	}
 }
