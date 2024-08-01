@@ -69,10 +69,10 @@ public class UserService {
         List<Post> userPosts = postService.getUserPosts(userId);
 
 		return ProfileResponseDto.builder()
-				//.level(findUser.getLevel())
-				//.username(findUser.getUsername())
+				.level(findUser.getLevel())
+				.username(findUser.getUsername())
 				.reviewCount(userPosts.size())
-				//.signUp(findUser.getSingUpDate())
+				.signupDate(findUser.getSignupDate())
 				.postList(userPosts.stream().map(ProfilePostResponseDto::toDto).toList())
 				.build();
 	}

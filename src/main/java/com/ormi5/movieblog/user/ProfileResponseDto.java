@@ -4,6 +4,7 @@ import com.ormi5.movieblog.post.ProfilePostResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class ProfileResponseDto {
     private String username;
     private int level;
     private int reviewCount;
-    private LocalDateTime signUpDate;
+    private Instant signupDate;
     private List<ProfilePostResponseDto> postList;
 
 }
