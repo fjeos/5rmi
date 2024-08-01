@@ -9,7 +9,7 @@ import java.time.Instant;
 @Getter
 @Builder
 public class CommentDto {
-	private Long id;
+	private Long commentId;
 	private Long postId;
 	private Long userId;
 	private String content;
@@ -20,7 +20,7 @@ public class CommentDto {
 
 	public static CommentDto toDto(Comment comment) {
 		return CommentDto.builder()
-			.id(comment.getCommentId())
+			.commentId(comment.getCommentId())
 			.postId(comment.getPost().getPostId())
 			.userId(comment.getUserId())
 			.content(comment.getContent())
@@ -33,14 +33,14 @@ public class CommentDto {
 
 	public static Comment toEntity(CommentDto commentDto, Post post) {
 		return Comment.builder()
-			.commentId(commentDto.getId())
+			.commentId(commentDto.getCommentId())
 			.post(post)
 			.userId(commentDto.getUserId())
 			.content(commentDto.getContent())
 			.likes(Math.max(commentDto.getLikes(), 0))
 			.dislikes(Math.max(commentDto.getDislikes(), 0))
-			.createAt(commentDto.getId() == null ? Instant.now() : commentDto.getCreateAt())
-			.updateAt(commentDto.getId() == null ? null : Instant.now())
+			.createAt(commentDto.getCommentId() == null ? Instant.now() : commentDto.getCreateAt())
+			.updateAt(commentDto.getCommentId() == null ? null : Instant.now())
 			.build();
 	}
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Builder
 public class PostDto implements Serializable {
-	private Long id;
+	private Long postId;
 	private Long userId;
 	private String title;
 	private String content;
@@ -26,7 +26,7 @@ public class PostDto implements Serializable {
 
 	public static PostDto toDto(Post post) {
 		return PostDto.builder()
-			.id(post.getPostId())
+			.postId(post.getPostId())
 			.userId(post.getUserId())
 			.title(post.getTitle())
 			.content(post.getContent())
@@ -40,17 +40,14 @@ public class PostDto implements Serializable {
 
 	public static Post toEntity(PostDto postDTO) {
 		return Post.builder()
-			.postId(postDTO.getId())
+			.postId(postDTO.getPostId())
 			.userId(postDTO.getUserId())
 			.title(postDTO.getTitle())
 			.content(postDTO.getContent())
 			.isShared(postDTO.getIsShared() != null && postDTO.getIsShared())
-			// .isShared(postDTO.getIsShared() == null ? false : postDTO.getIsShared())
 			.likesCount(Math.max(postDTO.getLikesCount(), 0))
-			// .likesCount(postDTO.getLikesCount() >=0 ? postDTO.getLikesCount() : 0)
-			/* postDTO.getId()의 값이 null이라는 건 게시글을 생성한다는 뜻 */
-			.createAt(postDTO.getId() == null ? Instant.now() : postDTO.getCreateAt())
-			.updateAt(postDTO.getId() == null ? null : Instant.now())
+			.createAt(postDTO.getPostId() == null ? Instant.now() : postDTO.getCreateAt())
+			.updateAt(postDTO.getPostId() == null ? null : Instant.now())
 			.comments(postDTO.comments)
 			.build();
 	}

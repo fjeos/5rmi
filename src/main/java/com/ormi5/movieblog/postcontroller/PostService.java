@@ -50,7 +50,6 @@ public class PostService {
 		return postRepository.findByUserId(userId) // UserID에 해당하는 유저의
 			.stream()
 			.filter(Post::getIsShared) // 공개 상태의 게시글만 조회
-			// .filter(post -> post.getIsShared())
 			.map(PostDto::toDto)
 			.toList();
 	}
@@ -63,6 +62,33 @@ public class PostService {
 	@Transactional
 	public List<Post> getUserPosts(Long userId) {
 		return postRepository.findByUserId(userId);
+	}
+
+	@Transactional
+	public List<PostDto> getPostsByTitle(String title) {
+		return postRepository.findByTitle(title)
+			.stream()
+			.filter(Post::getIsShared)
+			.map(PostDto::toDto)
+			.toList();
+	}
+
+	@Transactional
+	public List<PostDto> getPostsByContainingTitleCaseSensitive(String keyword) {
+		return postRepository.findByTitleContaining(keyword)
+			.stream()
+			.filter(post -> post.getIsShared() && post.getTitle().contains(keyword))
+			.map(PostDto::toDto)
+			.collect(Collectors.toList());
+	}
+
+	@Transactional
+	public List<PostDto> getPostsByContainingTitleCaseInsensitive(String keyword) {
+		return postRepository.findByTitleContainingIgnoreCase(keyword)
+			.stream()
+			.filter(Post::getIsShared)
+			.map(PostDto::toDto)
+			.collect(Collectors.toList());
 	}
 
 	@Transactional
