@@ -71,11 +71,11 @@ public class CommentController {
 	@DeleteMapping
 	public ResponseEntity<?> deleteComment(@RequestBody Map<String, Long> request) {
 		try {
-			Long commentId = request.get("id");
+			Long commentId = request.get("commentId");
 			Long userId = request.get("userId");
 
 			if (commentId == null || userId == null) {
-				return ResponseEntity.badRequest().body("'id'와 'userId' 모두 필요합니다");
+				return ResponseEntity.badRequest().body("'commentId'와 'userId' 모두 필요합니다");
 			}
 
 			commentService.deleteComment(commentId, userId);

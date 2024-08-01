@@ -59,7 +59,7 @@ public class PostController {
 	}
 
 	/**
-	 * 특정 유저의 게시글 조회: 유저의 ID를 받아 게시글 조회
+	 * 특정 유저의 게시글 조회: 유저의 ID를 받아 게시글 조회 (검색)
 	 *
 	 * @author yuseok
 	 * @param userId 원하는 유저의 User ID
@@ -67,8 +67,54 @@ public class PostController {
 	 */
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Long userId) {
-		System.out.println(postService.getPostsByUserId(userId));
 		List<PostDto> postDtoList = postService.getPostsByUserId(userId);
+
+		return ResponseEntity.ok(postDtoList);
+	}
+
+	/**
+	 * 제목과 일치하는 게시글 찾기
+	 *
+	 * @author yuseok
+	 * @param title 검색할 제목
+	 * @return 검색어와 일치하는 게시물 DTO 목록, 없으면 빈 리스트 []
+	 */
+	@GetMapping("/title")
+	public ResponseEntity<List<PostDto>> getPostByTitle(@RequestParam String title) {
+		List<PostDto> postDtoList = postService.getPostsByTitle(title);
+
+		return ResponseEntity.ok(postDtoList);
+	}
+
+	/**
+	 * 제목에 키워드를 포함하는 게시글을 대소문자를 구분하여 찾기
+	 *
+	 * @author yuseok
+	 * @param keyword 검색할 키워드
+	 * @return 제목에 키워드를 포함하는 게시물 DTO 목록, 없으면 빈 리스트 []
+	 */
+	@GetMapping("/title/containing/case-sensitive") // case sensitive: 대소문자 구분
+	public ResponseEntity<List<PostDto>> getPostByContainingTitleCaseSensitive(@RequestParam String keyword) {
+		/*
+		현재 데이터베이스의 정렬 설정이 'utf8mb4_0900_ai_ci'
+		즉, 대소문자를 구분하지 않는(ci) 상태이기에 대소문자 구분없이 검색되는 상태 (대소문자 구분: cs)
+		DB에서 설정을 변경하기는 위험해서 PostService에서 contains()를 사용해 대소문자 구분
+		*/
+		List<PostDto> postDtoList = postService.getPostsByContainingTitleCaseSensitive(keyword);
+
+		return ResponseEntity.ok(postDtoList);
+	}
+
+	/**
+	 * 제목에 키워드를 포함하는 게시글을 대소문자 구분없이 찾기
+	 *
+	 * @author yuseok
+	 * @param keyword 검색할 키워드
+	 * @return 제목에 키워드를 포함하는 게시물 DTO 리스트, 없으면 빈 리스트 []
+	 */
+	@GetMapping("/title/containing/case-insensitive")
+	public ResponseEntity<List<PostDto>> getPostByContainingTitleCaseInsensitive(@RequestParam String keyword) {
+		List<PostDto> postDtoList = postService.getPostsByContainingTitleCaseInsensitive(keyword);
 
 		return ResponseEntity.ok(postDtoList);
 	}

@@ -34,9 +34,8 @@ public class Post {
 	@Column(name = "content", nullable = false)
 	private String content;
 
-	@Builder.Default // @Builder.Default: 빌더 사용 시에도 기본값 적용
+	@Builder.Default
 	@Column(name = "is_shared", nullable = false)
-	// @Column(name = "is_shared", nullable = false, columnDefinition = "boolean default true") // 데이터베이스 레벨에서 기본값 설정
 	private Boolean isShared = false;
 
 	@Builder.Default
@@ -44,11 +43,11 @@ public class Post {
 	private int likesCount = 0;
 
 	@Builder.Default
-	@Column(name = "create_at", nullable = false, updatable = false) // updatable가 false면 초기화 이후 수정 불가 (읽기 전용 필드)
-	private LocalDateTime createAt = LocalDateTime.now();
+	@Column(name = "create_at", nullable = false, updatable = false) // 읽기 전용 필드
+	private Instant createAt = Instant.now();
 
 	@Column(name = "update_at")
-	private LocalDateTime updateAt;
+	private Instant updateAt;
 
 	@OneToMany(mappedBy = "post")
 	private List<Comment> comments;
@@ -56,6 +55,6 @@ public class Post {
 	public void updatePost(PostDto postDto) {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
-		this.updateAt = LocalDateTime.now();
+		this.updateAt = Instant.now();
 	}
 }
