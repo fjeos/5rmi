@@ -9,7 +9,7 @@
 <div class="post-detail">
     <h2 th:text="${post.title}"></h2>
     <p class="post-meta">
-        작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+        작성일: <span th:text="${post.createAt}"></span>
     </p>
     <div class="post-content" th:text="${post.content}"></div>
     <hr>
@@ -23,7 +23,7 @@
             <span class="post-comment" th:text="${comment.content}"></span>
         </p>
         <p class="post-comment">
-            작성 시각: <span class="post-comment" th:text="${#temporals.format(comment.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+            작성 시각: <span class="post-comment" th:text="${comment.createAt}"></span>
         </p>
         <p class="post-comment">
             좋아요: <span class="post-comment" th:text="${comment.likes}"></span>
@@ -33,8 +33,8 @@
     <hr>
     <div class="post-actions">
         <a th:href="@{/posts}">목록으로</a>
-        <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="edit-btn">수정</a>
-        <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post" class="delete-form">
+        <a th:href="@{/posts/{id}/edit(id=${post.postId})}" class="edit-btn">수정</a>
+        <form th:action="@{/posts/{id}/delete(id=${post.postId})}" method="post" class="delete-form">
             <button type="submit">삭제</button>
     </form>
     </div>
