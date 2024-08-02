@@ -3,11 +3,11 @@ package com.ormi5.movieblog.postcontroller;
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.post.Post;
 
+import com.ormi5.movieblog.post.PostUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,9 +40,10 @@ public class PostService {
 	}
 
 	@Transactional
-	public Optional<PostDto> getPostById(Long id) {
+	public PostDto getPostById(Long id) {
 		return postRepository.findById(id)
-			.map(PostDto::toDto);
+			.map(PostDto::toDto)
+				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 	}
 
 	@Transactional
@@ -92,14 +93,12 @@ public class PostService {
 	}
 
 	@Transactional
-	public Post updatePost(Long postId, PostDto postDto) {
-		Post post = postRepository.findById(postId).orElse(null);
+	public void updatePost(Long postId, PostUpdateDto postDto) {
+		Post post = postRepository.findById(postId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 
-		if (post != null) {
-			post.updatePost(postDto);
-		}
+		post.updatePost(postDto);
 
-		return postRepository.save(post); // 수정된 엔티티 저장
 	}
 
 	@Transactional

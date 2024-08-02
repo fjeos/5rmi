@@ -1,16 +1,20 @@
 package com.ormi5.movieblog.postcontroller;
 
+import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
+import com.ormi5.movieblog.post.PostUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/posts")
 public class PostController {
 	private final PostService postService;
@@ -49,7 +53,7 @@ public class PostController {
 	 * @return 조회된 게시글 정보, 없다면 Optional.empty
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<PostDto>> getPostById(@PathVariable("id") Long id) {
+	public ResponseEntity<PostDto> getPostById(@PathVariable("id") Long id) {
 		System.out.println(postService.getPostById(id));
 		return ResponseEntity.ok(postService.getPostById(id));
 	}
@@ -115,9 +119,29 @@ public class PostController {
 		return ResponseEntity.ok(postDtoList);
 	}
 
-	@PutMapping("/{postId}")
-	public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostDto postDto) {
-		return ResponseEntity.ok(postService.updatePost(postId, postDto));
+	/**
+	 * post 수정 form을 불러오는 메서드
+	 * @param postId 수정할 게시글 Id
+	 * @param model 게시글 정보를 담은 model
+	 * @return 수정 form
+	 */
+	@GetMapping("/{postId}/edit")
+	public String editForm(@PathVariable("postId") Long postId, Model model) {
+		PostDto post = postService.getPostById(postId);
+		model.addAttribute("post", post);
+		return "post/edit";
+	}
+
+	/**
+	 * 게시글 수정 요청이 들어왔을 때 실행되는 메서드
+	 * @param postId 수정할 게시글 Id
+	 * @param updatePost 수정 정보가 담긴 Dto
+	 * @return 기존 게시글 상세보기 페이지
+	 */
+	@PostMapping("/{postId}/edit")
+	public String edit(@PathVariable("postId") Long postId, @ModelAttribute PostUpdateDto updatePost) {
+		postService.updatePost(postId, updatePost);
+		return "redirect:/posts/{postId}";
 	}
 
 	/**
