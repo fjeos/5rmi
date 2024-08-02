@@ -48,14 +48,16 @@ public class PostController {
 	/**
 	 * 특정 게시글 조회: 게시글의 ID를 받아 해당 게시글 조회
 	 *
-	 * @author yuseok
-	 * @param id 조회할 게시글의 ID
-	 * @return 조회된 게시글 정보, 없다면 Optional.empty
+	 * @author yuseok, nayoung
+	 * @param postId 조회할 게시글의 ID
+	 * @return String, post/detail 링크로 이동
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<PostDto> getPostById(@PathVariable("id") Long id) {
-		System.out.println(postService.getPostById(id));
-		return ResponseEntity.ok(postService.getPostById(id));
+	public String getPostById(@PathVariable("id") Long postId, Model model) {
+		PostDto post = postService.getPostById(postId);
+		model.addAttribute("post", post);
+
+		return "post/detail";
 	}
 
 	/**

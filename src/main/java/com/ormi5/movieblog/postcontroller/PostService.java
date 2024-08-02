@@ -39,11 +39,12 @@ public class PostService {
 			.collect(Collectors.toList());
 	}
 
-	@Transactional
+
+	@Transactional(readOnly = true)
 	public PostDto getPostById(Long id) {
 		return postRepository.findById(id)
-			.map(PostDto::toDto)
-				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+				.map(PostDto::toDto)
+				.orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 	}
 
 	@Transactional
