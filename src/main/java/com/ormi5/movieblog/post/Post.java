@@ -52,7 +52,7 @@ public class Post {
 	@OneToMany(mappedBy = "post")
 	private List<Comment> comments;
 
-	public void updatePost(PostDto postDto) {
+	public void updatePost(PostUpdateDto postDto) {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
 		this.updateAt = Instant.now();
