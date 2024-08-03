@@ -57,4 +57,7 @@ public class Post {
 		this.content = postDto.getContent();
 		this.updateAt = Instant.now();
 	}
+	public void increaseLike() {
+		this.likesCount++;
+	}
 }

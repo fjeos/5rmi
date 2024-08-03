@@ -126,6 +126,7 @@ public class PostController {
 	 * @param postId 수정할 게시글 Id
 	 * @param model 게시글 정보를 담은 model
 	 * @return 수정 form
+	 * @author nayoung
 	 */
 	@GetMapping("/{postId}/edit")
 	public String editForm(@PathVariable("postId") Long postId, Model model) {
@@ -139,10 +140,25 @@ public class PostController {
 	 * @param postId 수정할 게시글 Id
 	 * @param updatePost 수정 정보가 담긴 Dto
 	 * @return 기존 게시글 상세보기 페이지
+	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/edit")
 	public String edit(@PathVariable("postId") Long postId, @ModelAttribute PostUpdateDto updatePost) {
 		postService.updatePost(postId, updatePost);
+		return "redirect:/posts/{postId}";
+	}
+
+	/**
+	 * 게시글의 좋아요를 증가시키는 컨트롤러
+	 * @param postId 게시글 Id
+	 * @param model 게시글의 나머지 정보
+	 * @return 기존 게시글 화면으로 redirect
+	 * @author nayoung
+	 */
+	@PostMapping("/{postId}/like")
+	public String increaseLike(@PathVariable("postId") Long postId, Model model) {
+		postService.increaseLike(postId, model);
+		model.addAttribute(model);
 		return "redirect:/posts/{postId}";
 	}
 
