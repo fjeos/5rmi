@@ -75,4 +75,14 @@ public class PostService {
 			})
 			.orElse(false);
 	}
+
+	@Transactional
+	public List<PostDto> getPostByKeyword(String searchKeyword){
+		return postRepository.findByTitleContaining(searchKeyword)
+				.stream()
+				.filter(Post::getIsShared)
+				.map(PostDto::toDto)
+				.toList();
+	}
+
 }

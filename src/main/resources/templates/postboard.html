@@ -13,12 +13,14 @@
 
 <!--/*@thymesVar id="user" type="com.ormi5.movieblog.user.User"*/-->
 <div th:object="${user}">
-    <p>이름: <span th:text="*{username}"></span></p>
-    <p>이메일: <span th:text="*{email}"></span></p>
-    <p th:if="${user.op}" >해당 유저는 관리자입니다.</p>
+    <p>이름: <span th:text="${user?.username}?: 'default value'"></span></p>
+    <p>이메일: <span th:text="${user?.email}?: 'default value'"></span></p>
+    <p th:if="${user?.op}" >해당 유저는 관리자입니다.</p>
 
-    <a th:unless="${!user.op}" href="banhammer">관리자 메뉴</a>
-    <a th:unless="${user.op}" href="profile">프로필 보기</a>
+    <div th:unless="${user?.op == null}">
+        <a th:unless="${!user.op}" href="banhammer">관리자 메뉴</a>
+        <a th:unless="${user.op}" href="profile">프로필 보기</a>
+    </div>
 </div>
 
 <form th:action="@{/logout}" method="post">
@@ -56,6 +58,11 @@
 <!--/*@thymesVar id="posts" type="java.util.ArrayList<>"*/-->
 <div th:object="${posts}">
     <h2>Board</h2>
+    <form th:action="@{/board}" method="get" >
+        <input type="text" value="" id="keyword" name="keyword"
+               placeholder="Enter search term..." required/>
+        <input type="submit" value="search"/>
+    </form>
     <table>
         <thead>
         <tr>
@@ -79,7 +86,9 @@
         </tr>
         </tbody>
     </table>
-    <a th:unless="${!user.op}" th:href="@{/new}">새 Product 작성</a>
+    <div th:unless="${user?.op == null}">
+        <a th:unless="${!user.op}" th:href="@{/new}">새 Product 작성</a>
+    </div>
 </div>
 
 </body>

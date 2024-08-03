@@ -55,6 +55,19 @@ public class PostController {
 	}
 
 	/**
+	 * 특정 게시글 조회: 게시글의 ID를 받아 해당 게시글 조회
+	 *
+	 * @author junhyun
+	 * @param keyword 조회할 게시글 제목 keyword
+	 * @return 조회된 게시글 정보, 없다면 Optional.empty
+	 */
+	@GetMapping()
+	public ResponseEntity<List<PostDto>> getPostByKeyword(@RequestParam("keyword") String keyword) {
+
+		return ResponseEntity.ok(postService.getPostByKeyword(keyword));
+	}
+
+	/**
 	 * 특정 유저의 게시글 조회: 유저의 ID를 받아 게시글 조회
 	 *
 	 * @author yuseok

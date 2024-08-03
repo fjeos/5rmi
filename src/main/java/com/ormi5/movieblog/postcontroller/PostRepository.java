@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends JpaRepository<Post, Long> {
 	// UserId에 해당하는 유저가 작성한 모든 게시글을 가져오는 쿼리 메서드
 	List<Post> findByUserId(Long userId);
+	List<Post> findByTitleContaining(String keyword);
 }
