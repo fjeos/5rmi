@@ -116,7 +116,7 @@ public class CommentController {
 		commentService.addComment(commentDto);
 
 		// 댓글을 생성 후 게시글 상세보기 페이지로 리다이렉트
-		return "redirect:/posts/" + commentDto.getPostId();
+		return "redirect:/posts/" + postId;
 	}
 
 	@GetMapping("/{commentId}/edit")
@@ -151,10 +151,10 @@ public class CommentController {
 		return "redirect:/posts/" + postId;
 	}
 
-	@GetMapping("/{commentId}")
+	@PostMapping("/{commentId}/delete")
 	public String deleteComment(@PathVariable("commentId") Long commentId,
-		@RequestParam Long postId,
-		@RequestParam Long userId) {
+		@RequestParam Long userId,
+		@RequestParam Long postId) {
 		commentService.deleteComment(commentId, userId);
 
 		return "redirect:/posts/" + postId;
