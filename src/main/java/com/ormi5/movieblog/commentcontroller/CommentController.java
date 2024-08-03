@@ -1,17 +1,24 @@
 package com.ormi5.movieblog.commentcontroller;
 
+import com.ormi5.movieblog.comment.Comment;
 import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/comments")
 public class CommentController {
 	private final CommentService commentService;
@@ -21,6 +28,8 @@ public class CommentController {
 		this.commentService = commentService;
 	}
 
+	/* --------------- api --------------- */
+
 	/**
 	 * 새로운 댓글 생성
 	 *
@@ -28,7 +37,7 @@ public class CommentController {
 	 * @param commentDto 댓글 DTO
 	 * @return 생성된 댓글 DTO
 	 */
-	@PostMapping
+	@PostMapping("/api")
 	public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto) {
 		CommentDto createComment = commentService.createComment(commentDto);
 
@@ -83,5 +92,71 @@ public class CommentController {
 		} catch (RuntimeException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	/* --------------- thymeleaf --------------- */
+
+	@GetMapping("/{postId}/add")
+	public String addCommentForm(@PathVariable("postId") Long postId, Model model) {
+		model.addAttribute("postId", postId);
+
+		return "/comment/add_comment";
+	}
+
+	@PostMapping("/{postId}/add")
+	public String addComment(@PathVariable("postId") Long postId,
+		@RequestParam("userId") Long userId,
+		@RequestParam("content") String content) {
+		CommentDto commentDto = CommentDto.builder()
+			.postId(postId)
+			.userId(userId)
+			.content(content)
+			.build();
+
+		commentService.addComment(commentDto);
+
+		// 댓글을 생성 후 게시글 상세보기 페이지로 리다이렉트
+		return "redirect:/posts/" + commentDto.getPostId();
+	}
+
+	@GetMapping("/{commentId}/edit")
+	public String editCommentForm(@PathVariable("commentId") Long commentId, Model model) {
+		CommentDto commentDto = commentService.getCommentById(commentId);
+
+		model.addAttribute("comment", commentDto);
+
+		return "comment/edit_comment";
+	}
+
+	@PostMapping("/{commentId}/edit")
+	public String editComment(@PathVariable("commentId") Long commentId,
+		@RequestParam String content,
+		@RequestParam Long postId,
+		@RequestParam Long userId,
+		@RequestParam int likes,
+		@RequestParam int dislikes,
+		@RequestParam Instant createAt) {
+		CommentDto commentDto = CommentDto.builder()
+			.commentId(commentId)
+			.content(content)
+			.postId(postId)
+			.userId(userId)
+			.likes(likes)
+			.dislikes(dislikes)
+			.createAt(createAt)
+			.build();
+
+		commentService.editComment(commentId, commentDto);
+
+		return "redirect:/posts/" + postId;
+	}
+
+	@GetMapping("/{commentId}")
+	public String deleteComment(@PathVariable("commentId") Long commentId,
+		@RequestParam Long postId,
+		@RequestParam Long userId) {
+		commentService.deleteComment(commentId, userId);
+
+		return "redirect:/posts/" + postId;
 	}
 }

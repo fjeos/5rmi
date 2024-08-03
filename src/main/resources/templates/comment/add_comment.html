@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>댓글 작성</title>
+</head>
+<body>
+    <h1>댓글 작성</h1>
+    <form th:action="@{/comments/{postId}/add(postId=${postId})}" method="post">
+        <div>
+            <label for="userId">UserID:</label>
+            <input type="number" name="userId" id="userId" required>
+        </div>
+        <div>
+            <label for="content">Comment:</label>
+            <textarea id="content" name="content" required></textarea>
+        </div>
+        <div>
+            <button type="submit">저장</button>
+        </div>
+    </form>
+</body>
+</html>

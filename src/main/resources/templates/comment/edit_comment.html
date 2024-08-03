@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>댓글 수정</title>
+</head>
+<body>
+    <h1>댓글 수정</h1>
+    <form th:action="@{/comments/{commentId}/edit(commentId=${comment.commentId})}" method="post">
+        <input type="hidden" name="commentId" th:value="${comment.commentId}"/>
+        <input type="hidden" name="postId" th:value="${comment.postId}"/>
+        <input type="hidden" name="userId" th:value="${comment.userId}"/>
+        <input type="hidden" name="likes" th:value="${comment.likes}"/>
+        <input type="hidden" name="dislikes" th:value="${comment.dislikes}"/>
+        <input type="hidden" name="createAt" th:value="${comment.createAt}"/>
+        <div>
+            <label for="content">Comment:</label>
+            <textarea id="content" name="content" required th:text="${comment.content}"></textarea>
+        </div>
+        <div>
+            <button type="submit">저장</button>
+        </div>
+    </form>
+</body>
+</html>

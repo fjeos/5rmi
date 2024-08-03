@@ -99,7 +99,6 @@ public class PostService {
 				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 
 		post.updatePost(postDto);
-
 	}
 
 	@Transactional
