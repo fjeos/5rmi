@@ -1,9 +1,8 @@
 package com.ormi5.movieblog.postcontroller;
 
-import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
-import com.ormi5.movieblog.post.PostUpdateDto;
+import com.ormi5.movieblog.post.PostResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.List;
 
 @Controller
@@ -154,7 +152,7 @@ public class PostController {
 	 * @return 기존 게시글 상세보기 페이지
 	 */
 	@PostMapping("/{postId}/edit")
-	public String edit(@PathVariable("postId") Integer postId, @ModelAttribute PostUpdateDto updatePost) {
+	public String edit(@PathVariable("postId") Integer postId, @ModelAttribute PostResponseDto updatePost) {
 		postService.updatePost(postId, updatePost);
 		return "redirect:/board";
 	}

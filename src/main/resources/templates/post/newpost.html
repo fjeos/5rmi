@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>게시글 추가</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.ormi5.movieblog.user.User"*/-->
+<!--/*@thymesVar id="post" type="com.ormi5.movieblog.post.Post"*/-->
+<div>
+    <h1>게시글 추가</h1>
+    <form th:action="@{'/newpost'}" method="post" role="form" th:object="${post}">
+        <label for="title">Title:</label>
+        <input th:field="*{title}" type="text" id="title" name="title" placeholder="Enter a title" required><br>
+
+        <label for="title">Content:</label>
+        <input th:field="*{content}" type="text" id="content" name="content" placeholder="Enter content" required><br>
+
+        <label for="title">Movie:</label>
+        <input type="text" id="movie" name="movie" placeholder="Enter movie id" required><br>
+
+        <label for="title">공개여부:</label>
+        <input th:field="*{isShared}" type="checkbox" id="is-shared" name="is-shared">
+
+        <button type="submit">추가</button>
+    </form>
+
+    <form th:action="@{'/board'}" method="get">
+        <button type="submit">취소</button>
+    </form>
+</div>
+</body>
+</html>

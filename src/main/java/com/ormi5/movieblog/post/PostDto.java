@@ -2,6 +2,7 @@ package com.ormi5.movieblog.post;
 
 import com.ormi5.movieblog.comment.Comment;
 import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.movie.MovieDto;
 import com.ormi5.movieblog.user.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,10 +27,12 @@ public class PostDto implements Serializable {
     String title;
     String content;
     Boolean isShared;
-    int likesCount;
+    Integer likesCount;
     Instant createAt;
     Instant updateAt;
     List<CommentDto> comments;
+    MovieDto movieId;
+
 
     public static PostDto toDto(Post post) {
         return PostDto.builder()
@@ -41,7 +44,7 @@ public class PostDto implements Serializable {
                 .likesCount(post.getLikesCount())
                 .createAt(post.getCreateAt())
                 .updateAt(post.getUpdateAt())
-                .comments(post.getComments().stream().map(CommentDto::toDto).collect(Collectors.toList()))
+                .comments(post.getComments() == null? null : post.getComments().stream().map(CommentDto::toDto).collect(Collectors.toList()))
                 .build();
     }
 
