@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.ormi5.movieblog.comment.Comment;
 
+import com.ormi5.movieblog.user.User;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class Post {
 	private Long postId;
 
 	@Column(name = "user_id", nullable = false)
-	private Long userId;
+	private User user;
 
 	@Column(name = "title", nullable = false)
 	private String title;

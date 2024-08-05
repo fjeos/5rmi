@@ -67,7 +67,6 @@ public class UserService {
 				.orElseThrow(() -> new IllegalArgumentException("회원 정보가 존재하지 않습니다."));
 
         List<Post> userPosts = postService.getUserPosts(userId);
-
 		return ProfileResponseDto.builder()
 				.level(findUser.getLevel())
 				.username(findUser.getUsername())

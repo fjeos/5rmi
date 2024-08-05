@@ -159,4 +159,16 @@ public class PostController {
 		boolean deleted = postService.deletePost(id);
 		return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
 	}
+
+	@GetMapping("/recent")
+	public ResponseEntity<List<PostDto>> getRecentPosts(@RequestParam User user, @RequestParam int limit) {
+		List<PostDto> posts = postService.getRecentPosts(user, limit);
+		return ResponseEntity.ok(posts);
+	}
+
+	@GetMapping("/all")
+	public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam User user) {
+		List<PostDto> posts = postService.getAllPosts(user);
+		return ResponseEntity.ok(posts);
+	}
 }

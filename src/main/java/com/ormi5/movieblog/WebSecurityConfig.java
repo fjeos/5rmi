@@ -1,6 +1,7 @@
 package com.ormi5.movieblog;
 
 import com.ormi5.movieblog.loginservice.LoginService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,13 +19,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
+
 public class WebSecurityConfig {
     private final LoginService loginService;
 
-    @Autowired
-    public WebSecurityConfig(LoginService loginService) {
-        this.loginService = loginService;
-    }
+//    @Autowired
+//    public WebSecurityConfig(LoginService loginService) {
+//        this.loginService = loginService;
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
