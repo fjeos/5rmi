@@ -2,12 +2,15 @@ package com.ormi5.movieblog.postcontroller;
 
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.post.Post;
-
 import com.ormi5.movieblog.post.PostResponseDto;
 import com.ormi5.movieblog.user.UserDto;
+import com.ormi5.movieblog.post.PostUpdateDto;
+import com.ormi5.movieblog.user.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import java.time.Instant;
 import java.util.List;
@@ -136,6 +139,24 @@ public class PostService {
 			.orElse(false);
 	}
 
+
+	//사용자 최근게시글 조회
+	@Transactional(readOnly = true)
+	public List<PostDto> getRecentPosts(User user, int limit) {
+		return postRepository.findTop5ByUserOrderByCreateAtDesc(user).stream()
+				.limit(limit)
+				.map(PostDto::toDto)
+				.collect(Collectors.toList());
+	}
+
+	//사용자 모든게시글 조회
+	@Transactional(readOnly = true)
+	public List<PostDto> getAllPosts(User user) {
+		return postRepository.findAllByUserOrderByCreateAtDesc(user).stream()
+				.map(PostDto::toDto)
+				.collect(Collectors.toList());
+	}
+
 	@Transactional
 	public List<PostDto> getPostByKeyword(String searchKeyword){
 		return postRepository.findByTitleContaining(searchKeyword)
@@ -152,4 +173,13 @@ public class PostService {
 				.map(PostDto::toDto)
 				.toList();
 	}
+
+
+	@Transactional
+	public void increaseLike(Long postId, Model model) {
+		Post post = postRepository.findById(postId)
+				.orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+		post.increaseLike();
+	}
 }
+

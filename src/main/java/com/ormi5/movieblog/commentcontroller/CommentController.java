@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -69,10 +70,10 @@ public class CommentController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteComment(@RequestBody Map<String, Long> request) {
+	public ResponseEntity<?> deleteComment(@RequestBody Map<String, Integer> request) {
 		try {
-			Long commentId = request.get("commentId");
-			Long userId = request.get("userId");
+			Integer commentId = request.get("commentId");
+			Integer userId = request.get("userId");
 
 			if (commentId == null || userId == null) {
 				return ResponseEntity.badRequest().body("'commentId'와 'userId' 모두 필요합니다");
@@ -83,5 +84,26 @@ public class CommentController {
 		} catch (RuntimeException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	/**
+	 * RequestBody에서 JSON 형식으로 postId와 commentId를 받아 옴
+	 * @param likeRequest postId와 commentId
+	 * @return 기존 post 상세 조회 화면
+	 */
+	@PostMapping("/like")
+	public String commentLike(@RequestBody Map<String, Integer> likeRequest) {
+		Integer postId = likeRequest.get("postId");
+		Integer commentId = likeRequest.get("commentId");
+		commentService.increaseLike(postId, commentId);
+		return "redirect:/post/{postId}";
+	}
+
+	@PostMapping("/dislike")
+	public String commentDislike(@RequestBody Map<String, Integer> likeRequest) {
+		Integer postId = likeRequest.get("postId");
+		Integer commentId = likeRequest.get("commentId");
+		commentService.decreaseLike(postId, commentId);
+		return "redirect:/post/{postId}";
 	}
 }

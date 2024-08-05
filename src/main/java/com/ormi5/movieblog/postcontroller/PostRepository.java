@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import com.ormi5.movieblog.user.User;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
@@ -25,4 +26,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
 	// 제목에 특정 키워드를 포함하는 모든 게시글을 대소문자 구분없이 가져오는 쿼리 메서드
 	List<Post> findByTitleContainingIgnoreCase(String keyword); // IgnoreCase: 대소문자 구분 없이 조회하는 쿼리 메서드 키워드
+
+	// 유저 최근 5개 게시글 조회 메서드
+	List<Post> findTop5ByUserOrderByCreateAtDesc(User user);
+
+	// 유저의 모든 게시글 조회 메서드
+	List<Post> findAllByUserOrderByCreateAtDesc(User user);
+
 }

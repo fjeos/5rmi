@@ -4,7 +4,11 @@ import java.time.Instant;
 import java.util.List;
 
 import com.ormi5.movieblog.comment.Comment;
+
+
+
 import com.ormi5.movieblog.movie.Movie;
+
 import com.ormi5.movieblog.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -57,5 +61,8 @@ public class Post {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
 		this.updateAt = Instant.now();
+	}
+	public void increaseLike() {
+		this.likesCount++;
 	}
 }

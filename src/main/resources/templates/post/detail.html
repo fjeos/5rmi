@@ -2,42 +2,99 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>게시글 상세보기</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
 </head>
 <body>
-<h1>게시글 상세보기</h1>
-<div class="post-detail">
-    <h2 th:text="${post.title}"></h2>
-    <p class="post-meta">
-        작성일: <span th:text="${post.createAt}"></span>
-    </p>
-    <div class="post-content" th:text="${post.content}"></div>
-    <hr>
-    <h3>댓글</h3>
-    <div class="post-comment" th:each="comment: ${post.comments}">
-        <p class="post-comment">
-            댓글 번호: <span class="post-comment" th:text="${comment.commentId}"></span>
-            작성자 Id: <span class="post-comment" th:text="${comment.user.id}"></span>
+    <h1>게시글 상세보기</h1>
+    <div class="post-detail">
+        <h2 th:text="${post.title}"></h2>
+        <p class="post-meta">
+            작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
         </p>
-        <p class="post-comment">
-            <span class="post-comment" th:text="${comment.content}"></span>
-        </p>
-        <p class="post-comment">
-            작성 시각: <span class="post-comment" th:text="${comment.createAt}"></span>
-        </p>
-        <p class="post-comment">
-            좋아요: <span class="post-comment" th:text="${comment.likes}"></span>
-            싫어요: <span class="post-comment" th:text="${comment.dislikes}"></span>
-        </p>
+        <div class="post-content" th:text="${post.content}"></div>
+        <button class="likeBtn" th:postId="${post.postId}" th:onclick="increaseLike(this.getAttribute('postId'))">좋아요</button>
+        <span th:text="${post.likesCount}"></span>
+        <hr>
+        <h3>댓글</h3>
+        <div id="commentStat" class="post-comment" th:each="postComment: ${post.comments}">
+            <p class="post-comment">
+                댓글 번호: <span class="post-comment" th:text="${postComment.commentId}"></span>
+                작성자 Id: <span class="post-comment" th:text="${postComment.userId}"></span>
+            </p>
+            <p class="post-comment">
+                <span class="post-comment" th:text="${postComment.content}"></span>
+            </p>
+            <p class="post-comment">
+                작성 시각: <span class="post-comment" th:text="${#temporals.format(postComment.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+            </p>
+            <p class="post-comment">
+                <button class="likeBtn" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
+                        th:onclick="increaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">좋아요</button>
+                <span id="commentLike" th:text="${postComment.likes}"></span>
+                <button class="likeBtn" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
+                        th:onclick="decreaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">싫어요</button>
+                <span id="commentDisLike" th:text="${postComment.dislikes}"></span>
+            </p>
+        </div>
+        <hr>
+        <div class="post-actions">
+            <a th:href="@{/posts}">목록으로</a>
+            <a th:href="@{/posts/{id}/edit(id=${post.postId})}" class="edit-btn">수정</a>
+            <form th:action="@{/posts/{id}/delete(id=${post.postId})}" method="post" class="delete-form">
+                <button type="submit">삭제</button>
+        </form>
+        </div>
     </div>
-    <hr>
-    <div class="post-actions">
-        <a th:href="@{/board}">목록으로</a>
-        <a th:href="@{'/posts/'+${post.postId}+'/edit'}" class="edit-btn">수정</a>
-        <form th:action="@{'/posts/'+${post.postId}+'/delete'}" method="post" class="delete-form">
-            <button type="submit">삭제</button>
-    </form>
-    </div>
-</div>
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script th:inline="javascript">
+    function increaseLike(postId) {
+        fetch(postId + "/like", {
+            headers: {
+                'header': document.querySelector('meta[name="_csrf_header"]').content,
+                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
+            },
+            method: "POST",
+        })
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
+    }
+
+    function increaseCommentLike(postId, commentId) {
+        fetch("/comments/like", {
+            headers: {
+                'header': document.querySelector('meta[name="_csrf_header"]').content,
+                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                postId: postId,
+                commentId: commentId
+            })
+        })
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
+
+    }
+
+    function decreaseCommentLike(postId, commentId) {
+        fetch("/comments/dislike", {
+            headers: {
+                'header': document.querySelector('meta[name="_csrf_header"]').content,
+                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                postId: postId,
+                commentId: commentId
+            })
+        })
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
+    }
+</script>
 </body>
 </html>
