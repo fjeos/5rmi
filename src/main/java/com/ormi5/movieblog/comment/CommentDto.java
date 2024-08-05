@@ -1,55 +1,46 @@
 package com.ormi5.movieblog.comment;
 
 import com.ormi5.movieblog.post.Post;
-import com.ormi5.movieblog.post.PostDto;
-import com.ormi5.movieblog.user.User;
-import com.ormi5.movieblog.user.UserDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Value;
 
-import java.io.Serializable;
+import lombok.*;
+
 import java.time.Instant;
 
-/**
- * DTO for {@link Comment}
- */
-@Value
-@AllArgsConstructor
+@Getter
 @Builder
-public class CommentDto implements Serializable {
-    Integer id;
-    UserDto user;
-    String content;
-    Integer likes;
-    Integer dislikes;
-    Instant createAt;
-    Instant updateAt;
-    PostDto post;
+public class CommentDto {
+	private Long commentId;
+	private Long postId;
+	private Long userId;
+	private String content;
+	private int likes;
+	private int dislikes;
+	private Instant createAt;
+	private Instant updateAt;
 
-    public static CommentDto toDto(Comment comment) {
-        return CommentDto.builder()
-                .id(comment.getId())
-                .post(PostDto.toDto(comment.getPost()))
-                .user(UserDto.fromEntity(comment.getUser()))
-                .content(comment.getContent())
-                .likes(comment.getLikes())
-                .dislikes(comment.getDislikes())
-                .createAt(comment.getCreateAt())
-                .updateAt(comment.getUpdateAt())
-                .build();
-    }
+	public static CommentDto toDto(Comment comment) {
+		return CommentDto.builder()
+			.commentId(comment.getCommentId())
+			.postId(comment.getPost().getPostId())
+			.userId(comment.getUserId())
+			.content(comment.getContent())
+			.likes(comment.getLikes())
+			.dislikes(comment.getDislikes())
+			.createAt(comment.getCreateAt())
+			.updateAt(comment.getUpdateAt())
+			.build();
+	}
 
-    public Comment toEntity() {
-        return Comment.builder()
-                .id(this.getId())
-                .post(this.post.toEntity())
-                .user(this.getUser().toEntity())
-                .content(this.getContent())
-                .likes(Math.max(this.getLikes(), 0))
-                .dislikes(Math.max(this.getDislikes(), 0))
-                .createAt(this.getId() == null ? Instant.now() : this.getCreateAt())
-                .updateAt(this.getId() == null ? null : Instant.now())
-                .build();
-    }
+	public static Comment toEntity(CommentDto commentDto, Post post) {
+		return Comment.builder()
+			.commentId(commentDto.getCommentId())
+			.post(post)
+			.userId(commentDto.getUserId())
+			.content(commentDto.getContent())
+			.likes(Math.max(commentDto.getLikes(), 0))
+			.dislikes(Math.max(commentDto.getDislikes(), 0))
+			.createAt(commentDto.getCommentId() == null ? Instant.now() : commentDto.getCreateAt())
+			.updateAt(commentDto.getCommentId() == null ? null : Instant.now())
+			.build();
+	}
 }

@@ -1,16 +1,20 @@
 package com.ormi5.movieblog.postcontroller;
 
+import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
+import com.ormi5.movieblog.post.PostUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/posts")
 public class PostController {
 	private final PostService postService;
@@ -44,14 +48,16 @@ public class PostController {
 	/**
 	 * 특정 게시글 조회: 게시글의 ID를 받아 해당 게시글 조회
 	 *
-	 * @author yuseok
-	 * @param id 조회할 게시글의 ID
-	 * @return 조회된 게시글 정보, 없다면 Optional.empty
+	 * @author yuseok, nayoung
+	 * @param postId 조회할 게시글의 ID
+	 * @return String, post/detail 링크로 이동
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<PostDto>> getPostById(@PathVariable("id") Long id) {
-		System.out.println(postService.getPostById(id));
-		return ResponseEntity.ok(postService.getPostById(id));
+	public String getPostById(@PathVariable("id") Long postId, Model model) {
+		PostDto post = postService.getPostById(postId);
+		model.addAttribute("post", post);
+
+		return "post/detail";
 	}
 
 	/**
@@ -68,7 +74,7 @@ public class PostController {
 	}
 
 	/**
-	 * 특정 유저의 게시글 조회: 유저의 ID를 받아 게시글 조회
+	 * 특정 유저의 게시글 조회: 유저의 ID를 받아 게시글 조회 (검색)
 	 *
 	 * @author yuseok
 	 * @param userId 원하는 유저의 User ID
@@ -76,15 +82,81 @@ public class PostController {
 	 */
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Long userId) {
-		System.out.println(postService.getPostsByUserId(userId));
 		List<PostDto> postDtoList = postService.getPostsByUserId(userId);
 
 		return ResponseEntity.ok(postDtoList);
 	}
 
-	@PutMapping("/{postId}")
-	public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostDto postDto) {
-		return ResponseEntity.ok(postService.updatePost(postId, postDto));
+	/**
+	 * 제목과 일치하는 게시글 찾기
+	 *
+	 * @author yuseok
+	 * @param title 검색할 제목
+	 * @return 검색어와 일치하는 게시물 DTO 목록, 없으면 빈 리스트 []
+	 */
+	@GetMapping("/title")
+	public ResponseEntity<List<PostDto>> getPostByTitle(@RequestParam String title) {
+		List<PostDto> postDtoList = postService.getPostsByTitle(title);
+
+		return ResponseEntity.ok(postDtoList);
+	}
+
+	/**
+	 * 제목에 키워드를 포함하는 게시글을 대소문자를 구분하여 찾기
+	 *
+	 * @author yuseok
+	 * @param keyword 검색할 키워드
+	 * @return 제목에 키워드를 포함하는 게시물 DTO 목록, 없으면 빈 리스트 []
+	 */
+	@GetMapping("/title/containing/case-sensitive") // case sensitive: 대소문자 구분
+	public ResponseEntity<List<PostDto>> getPostByContainingTitleCaseSensitive(@RequestParam String keyword) {
+		/*
+		현재 데이터베이스의 정렬 설정이 'utf8mb4_0900_ai_ci'
+		즉, 대소문자를 구분하지 않는(ci) 상태이기에 대소문자 구분없이 검색되는 상태 (대소문자 구분: cs)
+		DB에서 설정을 변경하기는 위험해서 PostService에서 contains()를 사용해 대소문자 구분
+		*/
+		List<PostDto> postDtoList = postService.getPostsByContainingTitleCaseSensitive(keyword);
+
+		return ResponseEntity.ok(postDtoList);
+	}
+
+	/**
+	 * 제목에 키워드를 포함하는 게시글을 대소문자 구분없이 찾기
+	 *
+	 * @author yuseok
+	 * @param keyword 검색할 키워드
+	 * @return 제목에 키워드를 포함하는 게시물 DTO 리스트, 없으면 빈 리스트 []
+	 */
+	@GetMapping("/title/containing/case-insensitive")
+	public ResponseEntity<List<PostDto>> getPostByContainingTitleCaseInsensitive(@RequestParam String keyword) {
+		List<PostDto> postDtoList = postService.getPostsByContainingTitleCaseInsensitive(keyword);
+
+		return ResponseEntity.ok(postDtoList);
+	}
+
+	/**
+	 * post 수정 form을 불러오는 메서드
+	 * @param postId 수정할 게시글 Id
+	 * @param model 게시글 정보를 담은 model
+	 * @return 수정 form
+	 */
+	@GetMapping("/{postId}/edit")
+	public String editForm(@PathVariable("postId") Long postId, Model model) {
+		PostDto post = postService.getPostById(postId);
+		model.addAttribute("post", post);
+		return "post/edit";
+	}
+
+	/**
+	 * 게시글 수정 요청이 들어왔을 때 실행되는 메서드
+	 * @param postId 수정할 게시글 Id
+	 * @param updatePost 수정 정보가 담긴 Dto
+	 * @return 기존 게시글 상세보기 페이지
+	 */
+	@PostMapping("/{postId}/edit")
+	public String edit(@PathVariable("postId") Long postId, @ModelAttribute PostUpdateDto updatePost) {
+		postService.updatePost(postId, updatePost);
+		return "redirect:/posts/{postId}";
 	}
 
 	/**

@@ -64,8 +64,6 @@ public class CommentService {
 	 */
 	@Transactional
 	public CommentDto updateComment(CommentDto commentDto) {
-		Comment comment = commentRepository.findById(Long.valueOf(commentDto.getId()))
-			.orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
 		comment.updateComment(commentDto);
 		return CommentDto.toDto(comment);
 	}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>게시글 상세보기</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>게시글 상세보기</h1>
+<div class="post-detail">
+    <h2 th:text="${post.title}"></h2>
+    <p class="post-meta">
+        작성일: <span th:text="${post.createAt}"></span>
+    </p>
+    <div class="post-content" th:text="${post.content}"></div>
+    <hr>
+    <h3>댓글</h3>
+    <div class="post-comment" th:each="comment: ${post.comments}">
+        <p class="post-comment">
+            댓글 번호: <span class="post-comment" th:text="${comment.commentId}"></span>
+            작성자 Id: <span class="post-comment" th:text="${comment.userId}"></span>
+        </p>
+        <p class="post-comment">
+            <span class="post-comment" th:text="${comment.content}"></span>
+        </p>
+        <p class="post-comment">
+            작성 시각: <span class="post-comment" th:text="${comment.createAt}"></span>
+        </p>
+        <p class="post-comment">
+            좋아요: <span class="post-comment" th:text="${comment.likes}"></span>
+            싫어요: <span class="post-comment" th:text="${comment.dislikes}"></span>
+        </p>
+    </div>
+    <hr>
+    <div class="post-actions">
+        <a th:href="@{/posts}">목록으로</a>
+        <a th:href="@{/posts/{id}/edit(id=${post.postId})}" class="edit-btn">수정</a>
+        <form th:action="@{/posts/{id}/delete(id=${post.postId})}" method="post" class="delete-form">
+            <button type="submit">삭제</button>
+    </form>
+    </div>
+</div>
+</body>
+</html>
