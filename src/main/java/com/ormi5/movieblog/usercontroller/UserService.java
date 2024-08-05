@@ -15,11 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import com.ormi5.movieblog.user.UserDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
 public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -31,10 +33,25 @@ public class UserService {
         this.postService = postService;
     }
 
+	@Transactional
+	public List<UserDto> getAllUsers() {
+		return userRepository.findAll()
+				.stream()
+				.map(UserDto::fromEntity)
+				.toList();
+	}
+
+	@Transactional
+	public Optional<User> findByUserId(int userId) {
+		return userRepository.findById(userId).map(user -> {return user;});
+	}
+
+	@Transactional
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
 
+	@Transactional
 	public List<UserDto> getUsersByUsername(String keyword) {
 		return userRepository.findByUsernameContaining(keyword)
 				.stream()
@@ -42,6 +59,7 @@ public class UserService {
 				.toList();
 	}
 
+	@Transactional
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
@@ -73,6 +91,7 @@ public class UserService {
 	 * @param userId 프로필 정보를 가져올 유저
 	 * @return 프로필 페이지에 나타낼 정보를 담은 Dto
 	 */
+	@Transactional
 	public ProfileResponseDto getUserProfile(Integer userId) {
 
 		User findUser = userRepository.findById(userId)
@@ -86,5 +105,13 @@ public class UserService {
 				.signupDate(findUser.getSignupDate())
 				.postList(userPosts.stream().map(ProfilePostResponseDto::toDto).toList())
 				.build();
+	}
+
+	@Transactional
+	public Optional<User> toggleBan(int userId) {
+		return userRepository.findById(userId).map(target -> {
+			target.updateStop(!target.getIsStop());
+			return target;
+		});
 	}
 }

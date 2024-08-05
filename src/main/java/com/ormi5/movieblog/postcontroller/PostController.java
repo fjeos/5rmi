@@ -8,7 +8,8 @@ import com.ormi5.movieblog.commentcontroller.CommentService;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
-import com.ormi5.movieblog.post.PostUpdateDto;
+import com.ormi5.movieblog.post.PostResponseDto;
+import com.ormi5.movieblog.user.User;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,7 +174,7 @@ public class PostController {
 	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/like")
-	public String increaseLike(@PathVariable("postId") Long postId, Model model) {
+	public String increaseLike(@PathVariable("postId") Integer postId, Model model) {
 		postService.increaseLike(postId, model);
 		model.addAttribute(model);
 		return "redirect:/posts/{postId}";
