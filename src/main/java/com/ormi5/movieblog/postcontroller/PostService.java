@@ -8,6 +8,7 @@ import com.ormi5.movieblog.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -147,4 +148,13 @@ public class PostService {
 				.map(PostDto::toDto)
 				.toList();
 	}
+
+
+	@Transactional
+	public void increaseLike(Long postId, Model model) {
+		Post post = postRepository.findById(postId)
+				.orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+		post.increaseLike();
+	}
 }
+

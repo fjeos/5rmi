@@ -1,9 +1,12 @@
 package com.ormi5.movieblog.postcontroller;
 
+import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.commentcontroller.CommentService;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
 import com.ormi5.movieblog.post.PostUpdateDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
 	private final PostService postService;
-
-	@Autowired
-	public PostController(PostService postService) {
-		this.postService = postService;
-	}
 
 	/**
 	 * 게시글 생성 메서드
@@ -139,6 +139,7 @@ public class PostController {
 	 * @param postId 수정할 게시글 Id
 	 * @param model 게시글 정보를 담은 model
 	 * @return 수정 form
+	 * @author nayoung
 	 */
 	@GetMapping("/{postId}/edit")
 	public String editForm(@PathVariable("postId") Integer postId, Model model) {
@@ -152,11 +153,26 @@ public class PostController {
 	 * @param postId 수정할 게시글 Id
 	 * @param updatePost 수정 정보가 담긴 Dto
 	 * @return 기존 게시글 상세보기 페이지
+	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/edit")
 	public String edit(@PathVariable("postId") Integer postId, @ModelAttribute PostUpdateDto updatePost) {
 		postService.updatePost(postId, updatePost);
 		return "redirect:/board";
+	}
+
+	/**
+	 * 게시글의 좋아요를 증가시키는 컨트롤러
+	 * @param postId 게시글 Id
+	 * @param model 게시글의 나머지 정보
+	 * @return 기존 게시글 화면으로 redirect
+	 * @author nayoung
+	 */
+	@PostMapping("/{postId}/like")
+	public String increaseLike(@PathVariable("postId") Long postId, Model model) {
+		postService.increaseLike(postId, model);
+		model.addAttribute(model);
+		return "redirect:/posts/{postId}";
 	}
 
 	/**
