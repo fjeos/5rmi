@@ -42,7 +42,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/posts/**").authenticated()
                         .requestMatchers("/comments/**").authenticated()
                         .requestMatchers("/announcement/**").authenticated()
-//                        .requestMatchers("/posts/**/edit").authenticated()
+                        .requestMatchers("/newpost").authenticated()
 //                        .requestMatchers("/posts/**/delete").authenticated()
 //                        .requestMatchers("/comments/**/edit").authenticated()
                 )

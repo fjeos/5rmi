@@ -1,5 +1,8 @@
 package com.ormi5.movieblog.postcontroller;
 
+import com.ormi5.movieblog.post.PostDto;
+import com.ormi5.movieblog.post.PostResponseDto;
+
 import com.ormi5.movieblog.comment.CommentDto;
 import com.ormi5.movieblog.commentcontroller.CommentService;
 import com.ormi5.movieblog.post.Post;
@@ -7,6 +10,7 @@ import com.ormi5.movieblog.post.PostDto;
 
 import com.ormi5.movieblog.post.PostUpdateDto;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -156,7 +160,7 @@ public class PostController {
 	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/edit")
-	public String edit(@PathVariable("postId") Integer postId, @ModelAttribute PostUpdateDto updatePost) {
+	public String edit(@PathVariable("postId") Integer postId, @ModelAttribute PostResponseDto updatePost) {
 		postService.updatePost(postId, updatePost);
 		return "redirect:/board";
 	}

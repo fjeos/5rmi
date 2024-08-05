@@ -97,7 +97,7 @@
         </tbody>
     </table>
     <div th:unless="${user?.op == null}">
-        <a th:unless="${!user.op}" th:href="@{/new}">새 Product 작성</a>
+        <a th:unless="${user.op}" th:href="@{/newpost}">새 게시글 작성</a>
     </div>
 </div>
 

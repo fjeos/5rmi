@@ -1,26 +1,30 @@
 package com.ormi5.movieblog.postboard;
 
 import com.ormi5.movieblog.announcementcontroller.AnnouncementService;
+import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.postcontroller.PostService;
 import com.ormi5.movieblog.user.User;
 import com.ormi5.movieblog.user.UserDto;
 import com.ormi5.movieblog.usercontroller.UserService;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class PostBoardController {
     private final PostService postService;
     private final UserService userService;
     private final AnnouncementService announcementService;
+//    private final MovieService movieService;
 
     public PostBoardController(PostService postService, UserService userService, AnnouncementService announcementService) {
         this.postService = postService;
@@ -32,31 +36,26 @@ public class PostBoardController {
     @GetMapping("/board")
     public String getBoard(Model model, Principal principal, String searchOption, String keyword) {
         User user = null;
-        if(principal != null) {
+        if (principal != null) {
             user = userService.findByUsername(principal.getName());
         }
 
         List<PostDto> posts = null;
-        if(keyword == null || searchOption == null) {
+        if (keyword == null || searchOption == null) {
             posts = postService.getAllPosts();
-        }
-        else {
-            if(searchOption.equals("title"))
+        } else {
+            if (searchOption.equals("title"))
                 posts = postService.getPostByKeyword(keyword);
-            else if(searchOption.equals("user"))
-            {
+            else if (searchOption.equals("user")) {
                 List<UserDto> user_search = userService.getUsersByUsername(keyword);
-                if(user_search != null)
-                {
+                if (user_search != null) {
                     posts = new ArrayList<>();
 
-                    for(UserDto u : user_search)
-                    {
+                    for (UserDto u : user_search) {
                         posts.addAll(postService.getPostsByUserId(u.getId()));
                     }
                 }
-            }
-            else if(searchOption.equals("movie"))
+            } else if (searchOption.equals("movie"))
                 posts = postService.getPostsByMovieName(keyword);
         }
 
@@ -70,12 +69,40 @@ public class PostBoardController {
         return "postboard";
     }
 
-    @ModelAttribute("searchOptions")
     public List<String> searchOptions() {
         List<String> searchOptions = new ArrayList<>();
         searchOptions.add("title");
         searchOptions.add("user");
         searchOptions.add("movie");
         return searchOptions;
+    }
+
+    @GetMapping("/newpost")
+    public String newPost(Model model, Principal principal) {
+        Post post = new Post();
+
+        model.addAttribute("post", post);
+        return "post/newpost";
+    }
+
+    @PostMapping("/newpost")
+    public String newPost(@ModelAttribute("post") PostDto postDto, Principal principal, Model model) {
+        User user = null;
+        if (principal != null) {
+            user = userService.findByUsername(principal.getName());
+
+            log.info("New post for {}", user.getUsername());
+//        Movie movie = (userDto.getEmail());
+//        if (emailuser != null) {
+//            model.addAttribute("", emailuser);
+//            return "post/newpost";
+//        }
+            // TODO Connect with movie service
+
+            postService.createPost(postDto, UserDto.fromEntity(user));
+            return "redirect:/board";
+        }
+
+        return "post/newpost";
     }
 }

@@ -2,14 +2,17 @@ package com.ormi5.movieblog.postcontroller;
 
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.post.Post;
-
+import com.ormi5.movieblog.post.PostResponseDto;
+import com.ormi5.movieblog.user.UserDto;
 import com.ormi5.movieblog.post.PostUpdateDto;
 import com.ormi5.movieblog.user.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,11 +28,34 @@ public class PostService {
 
 	@Transactional
 	public PostDto createPost(PostDto postDto) {
-		Post post = postDto.toEntity();
+		Post post = Post.builder()
+				.user(postDto.getUser().toEntity())
+				.title(postDto.getTitle())
+				.content(postDto.getContent())
+				.isShared(postDto.getIsShared())
+				.likesCount(0)
+				.createAt(Instant.now())
+				.updateAt(Instant.now())
+				.movieId(null) // TODO Implement movie dto
+				.build();
 
-		Post savePost = postRepository.save(post);
+		return PostDto.toDto(postRepository.save(post));
+	}
 
-		return PostDto.toDto(savePost);
+	@Transactional
+	public PostDto createPost(PostDto postDto, UserDto userDto) {
+		Post post = Post.builder()
+				.user(userDto.toEntity())
+				.title(postDto.getTitle())
+				.content(postDto.getContent())
+				.isShared(postDto.getIsShared())
+				.likesCount(0)
+				.createAt(Instant.now())
+				.updateAt(Instant.now())
+				.movieId(null) // TODO Implement movie dto
+				.build();
+
+		return PostDto.toDto(postRepository.save(post));
 	}
 
 	@Transactional
@@ -96,12 +122,11 @@ public class PostService {
 	}
 
 	@Transactional
-	public void updatePost(Integer postId, PostUpdateDto postDto) {
+	public void updatePost(Integer postId, PostResponseDto postDto) {
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 
 		post.updatePost(postDto);
-
 	}
 
 	@Transactional

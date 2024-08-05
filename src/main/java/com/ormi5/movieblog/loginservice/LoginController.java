@@ -54,6 +54,7 @@ public class LoginController {
             model.addAttribute("emailexist", emailuser);
             return "register";
         }
+        
         userService.addUser(userDto);
 
         return "redirect:/login?success";

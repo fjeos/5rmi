@@ -1,7 +1,6 @@
 package com.ormi5.movieblog.post;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.ormi5.movieblog.comment.Comment;
@@ -16,9 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
-import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -42,15 +38,12 @@ public class Post {
 	@Column(name = "content", nullable = false)
 	private String content;
 
-	@Builder.Default
 	@Column(name = "is_shared", nullable = false)
 	private Boolean isShared = false;
 
-	@Builder.Default
 	@Column(name = "likes_count", nullable = false)
-	private int likesCount = 0;
+	private Integer likesCount = 0;
 
-	@Builder.Default
 	@Column(name = "create_at", nullable = false, updatable = false) // 읽기 전용 필드
 	private Instant createAt = Instant.now();
 
@@ -60,11 +53,11 @@ public class Post {
 	@OneToMany(mappedBy = "post")
 	private List<Comment> comments;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "movie_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)//, optional = false)
+	@JoinColumn(name = "movie_id")
 	private Movie movieId;
 
-	public void updatePost(PostUpdateDto postDto) {
+	public void updatePost(PostResponseDto postDto) {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
 		this.updateAt = Instant.now();
