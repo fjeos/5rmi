@@ -1,9 +1,12 @@
 package com.ormi5.movieblog.postcontroller;
 
+import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.commentcontroller.CommentService;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
 import com.ormi5.movieblog.post.PostUpdateDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
 	private final PostService postService;
-
-	@Autowired
-	public PostController(PostService postService) {
-		this.postService = postService;
-	}
 
 	/**
 	 * 게시글 생성 메서드

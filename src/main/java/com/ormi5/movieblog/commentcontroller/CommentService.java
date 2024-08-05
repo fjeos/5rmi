@@ -9,20 +9,17 @@ import com.ormi5.movieblog.postcontroller.PostRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ormi5.movieblog.postcontroller.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 	private final CommentRepository commentRepository;
 	private final PostRepository postRepository;
-
-	@Autowired
-	public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
-		this.commentRepository = commentRepository;
-		this.postRepository = postRepository;
-	}
 
 	@Transactional
 	public CommentDto createComment(CommentDto commentDto) {
@@ -80,5 +77,17 @@ public class CommentService {
 		}
 
 		commentRepository.delete(comment);
+	}
+
+	@Transactional
+    public void increaseLike(Long postId, Long commentId) {
+		Comment findComment = commentRepository.findByPost_PostIdAndCommentId(postId, commentId);
+		findComment.increaseLike();
+	}
+
+	@Transactional
+	public void decreaseLike(Long postId, Long commentId) {
+		Comment findComment = commentRepository.findByPost_PostIdAndCommentId(postId, commentId);
+		findComment.decreaseLike();
 	}
 }

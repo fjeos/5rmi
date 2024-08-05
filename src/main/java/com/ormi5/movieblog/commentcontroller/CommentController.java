@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -83,5 +84,22 @@ public class CommentController {
 		} catch (RuntimeException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	@PostMapping("/like")
+	public String commentLike( @RequestBody Map<String, Long> likeRequest, Model model) {
+		Long postId = likeRequest.get("postId");
+		Long commentId = likeRequest.get("commentId");
+		commentService.increaseLike(postId, commentId);
+		model.addAttribute("commentLike", model);
+		return "redirect:/post/{postId}";
+	}
+
+	@PostMapping("/dislike")
+	public String commentDislike(@RequestBody Map<String, Long> likeRequest) {
+		Long postId = likeRequest.get("postId");
+		Long commentId = likeRequest.get("commentId");
+		commentService.decreaseLike(postId, commentId);
+		return "redirect:/post/{postId}";
 	}
 }

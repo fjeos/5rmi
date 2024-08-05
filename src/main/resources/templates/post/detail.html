@@ -14,26 +14,28 @@
             작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
         </p>
         <div class="post-content" th:text="${post.content}"></div>
-        <a th:href="@{/posts/{postId}(postId=${post.postId})}" style="padding: 0">
-        </a>
-            <button id="likeBtn" class="button" th:postId="${post.postId}" th:onclick="increaseLike(this.getAttribute('postId'))">좋아요</button>
-        <span id="likes" th:text="${post.likesCount}"></span>
+        <button class="likeBtn" th:postId="${post.postId}" th:onclick="increaseLike(this.getAttribute('postId'))">좋아요</button>
+        <span th:text="${post.likesCount}"></span>
         <hr>
         <h3>댓글</h3>
-        <div class="post-comment" th:each="comment: ${post.comments}">
+        <div id="commentStat" class="post-comment" th:each="postComment: ${post.comments}">
             <p class="post-comment">
-                댓글 번호: <span class="post-comment" th:text="${comment.commentId}"></span>
-                작성자 Id: <span class="post-comment" th:text="${comment.userId}"></span>
+                댓글 번호: <span class="post-comment" th:text="${postComment.commentId}"></span>
+                작성자 Id: <span class="post-comment" th:text="${postComment.userId}"></span>
             </p>
             <p class="post-comment">
-                <span class="post-comment" th:text="${comment.content}"></span>
+                <span class="post-comment" th:text="${postComment.content}"></span>
             </p>
             <p class="post-comment">
-                작성 시각: <span class="post-comment" th:text="${#temporals.format(comment.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+                작성 시각: <span class="post-comment" th:text="${#temporals.format(postComment.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
             </p>
             <p class="post-comment">
-                좋아요: <span class="post-comment" th:text="${comment.likes}"></span>
-                싫어요: <span class="post-comment" th:text="${comment.dislikes}"></span>
+                <button class="likeBtn" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
+                        th:onclick="increaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">좋아요</button>
+                <span id="commentLike" th:text="${postComment.likes}"></span>
+                <button class="likeBtn" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
+                        th:onclick="decreaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">싫어요</button>
+                <span id="commentDisLike" th:text="${postComment.dislikes}"></span>
             </p>
         </div>
         <hr>
@@ -45,19 +47,50 @@
         </form>
         </div>
     </div>
-<script th:inline="javascript">
-    const header = document.querySelector('meta[name="_csrf_header"]').content;
-    const token = document.querySelector('meta[name="_csrf"]').content;
-    console.log(header);
-    console.log(token);
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script th:inline="javascript">
     function increaseLike(postId) {
-        console.log(postId);
         fetch(postId + "/like", {
             headers: {
-                'header': header,
-                'X-CSRF-Token': token
+                'header': document.querySelector('meta[name="_csrf_header"]').content,
+                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
             },
-            method: "POST"
+            method: "POST",
+        })
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
+    }
+
+    function increaseCommentLike(postId, commentId) {
+        fetch("/comments/like", {
+            headers: {
+                'header': document.querySelector('meta[name="_csrf_header"]').content,
+                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                postId: postId,
+                commentId: commentId
+            })
+        })
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
+
+    }
+
+    function decreaseCommentLike(postId, commentId) {
+        fetch("/comments/dislike", {
+            headers: {
+                'header': document.querySelector('meta[name="_csrf_header"]').content,
+                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                postId: postId,
+                commentId: commentId
+            })
         })
             .then((response) => console.log(response))
             .catch((error) => console.log(error));

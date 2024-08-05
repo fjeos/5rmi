@@ -51,4 +51,12 @@ public class Comment {
 		this.content = commentDto.getContent();
 		this.updateAt = Instant.now();
 	}
+
+	public void increaseLike() {
+		this.likes++;
+	}
+
+	public void decreaseLike() {
+		this.dislikes++;
+	}
 }

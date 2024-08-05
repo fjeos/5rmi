@@ -31,12 +31,15 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
+                        //.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/home")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/hello")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/posts/**")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/comments/**")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
