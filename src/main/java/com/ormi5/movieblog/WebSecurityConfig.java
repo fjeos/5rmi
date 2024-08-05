@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,19 +30,19 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        //.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/home")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/hello")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/board")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/posts/**")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/comments/**")).authenticated()
-                        .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/hello", true)
+                        .defaultSuccessUrl("/board", true)
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());

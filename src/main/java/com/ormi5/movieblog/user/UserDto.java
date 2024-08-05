@@ -22,6 +22,7 @@ public class UserDto implements Serializable {
     Boolean isStop;
     Instant signupDate;
     String password;
+    Boolean op;
 
     public User toEntity() {
         return User.builder()
@@ -31,6 +32,21 @@ public class UserDto implements Serializable {
                 .level(this.level)
                 .isStop(this.isStop)
                 .signupDate(this.signupDate)
-                .password(this.password).build();
+                .password(this.password)
+                .op(this.op)
+                .build();
+    }
+
+    public static UserDto fromEntity(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .level(user.getLevel())
+                .isStop(user.getIsStop())
+                .signupDate(user.getSignupDate())
+                .password(user.getPassword())
+                .op(user.getOp())
+                .build();
     }
 }
