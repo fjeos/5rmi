@@ -33,15 +33,22 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/home")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/hello")).authenticated()
-                        .requestMatchers(new AntPathRequestMatcher("/posts")).authenticated()
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/home").permitAll()
+                        .requestMatchers("/hello").authenticated()
+                        .requestMatchers("/board").authenticated()
+                        .requestMatchers("/posts/**").authenticated()
+                        .requestMatchers("/comments/**").authenticated()
+                        .requestMatchers("/announcement/**").authenticated()
+//                        .requestMatchers("/posts/**/edit").authenticated()
+//                        .requestMatchers("/posts/**/delete").authenticated()
+//                        .requestMatchers("/comments/**/edit").authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/hello", true)
+                        .defaultSuccessUrl("/board", true)
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());

@@ -19,7 +19,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<ProfileResponseDto> getUserProfile(@PathVariable("userId") Long userId) {
+	public ResponseEntity<ProfileResponseDto> getUserProfile(@PathVariable("userId") Integer userId) {
 		return ResponseEntity.ok(userService.getUserProfile(userId));
 	}
 }

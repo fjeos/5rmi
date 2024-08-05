@@ -37,7 +37,7 @@ public class AnnouncementService {
     }
 
     @Transactional(readOnly = true)
-    public AnnouncementDto getAnnouncement(Long id) {
+    public AnnouncementDto getAnnouncement(Integer id) {
         Announcement announcement = announcementRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Announcement not found"));
         return convertToDto(announcement);
@@ -51,7 +51,7 @@ public class AnnouncementService {
     }
 
     @Transactional
-    public AnnouncementDto updateAnnouncement(Long id, AnnouncementDto announcementDto) {
+    public AnnouncementDto updateAnnouncement(Integer id, AnnouncementDto announcementDto) {
         Announcement announcement = announcementRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Announcement not found"));
 
@@ -61,7 +61,7 @@ public class AnnouncementService {
     }
 
     @Transactional
-    public void deleteAnnouncement(Long id) {
+    public void deleteAnnouncement(Integer id) {
         announcementRepository.deleteById(id);
     }
 

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>보드</h1>
+<span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+
+<!--/*@thymesVar id="user" type="com.ormi5.movieblog.user.User"*/-->
+<div th:object="${user}">
+    <p>이름: <span th:text="${user?.username}?: 'default value'"></span></p>
+    <p>이메일: <span th:text="${user?.email}?: 'default value'"></span></p>
+    <p th:if="${user?.op}" >해당 유저는 관리자입니다.</p>
+
+    <div th:unless="${user?.op == null}">
+        <a th:unless="${!user.op}" href="banhammer">관리자 메뉴</a>
+        <a th:unless="${user.op}" href="profile">프로필 보기</a>
+    </div>
+</div>
+
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+
+<!--/*@thymesVar id="announcements" type="java.util.ArrayList<>"*/-->
+<div th:object="${announcements}">
+    <h2>Announcement</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>소유자</th>
+            <th>게시</th>
+            <th>수정</th>
+            <th>중요</th>
+            <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="announcement" type="com.ormi5.movieblog.announcement.Announcement"*/-->
+        <tr th:each="announcement : ${announcements}">
+            <td th:text="${announcement.announcementId}"></td>
+            <td th:text="${announcement.adminId}"></td>
+            <td th:text="${announcement.createAt}"></td>
+            <td th:text="${announcement.updateAt}"></td>
+            <td th:text="${announcement.getIsImportant()}"></td>
+            <td th:text="${announcement.viewsCount}"></td>
+            <td><a th:href="@{'/announcement/'+${announcement.announcementId}}">링크</a></td>
+            </a>
+        </tr>
+        </tbody>
+    </table>
+    <div th:unless="${user?.op == null}">
+        <a th:unless="${!user.op}" th:href="@{/new}">새 Product 작성</a>
+    </div>
+</div>
+
+<!--/*@thymesVar id="posts" type="java.util.ArrayList<>"*/-->
+<div th:object="${posts}">
+    <h2>Board</h2>
+    <form th:action="@{/board}" method="get">
+        <select th:id="searchOption" th:name="searchOption">
+            <option th:each="searchOption : ${searchOptions}" th:value="${searchOption}" th:text="${searchOption}">title</option>
+        </select>
+        <input type="text" value="" id="keyword" name="keyword"
+               placeholder="Enter search term..." required/>
+        <input type="submit" value="search"/>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>소유자</th>
+            <th>게시</th>
+            <th>수정</th>
+            <th>좋아요</th>
+            <th>공개여부</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="post" type="com.ormi5.movieblog.post.Post"*/-->
+        <tr th:each="post : ${posts}">
+                <td th:text="${post.title}"></td>
+                <td th:text="${post.user.username}"></td>
+                <td th:text="${post.createAt}"></td>
+                <td th:text="${post.updateAt}"></td>
+                <td th:text="${post.likesCount}"></td>
+                <td th:text="${post.isShared}"></td>
+                <td><a th:href="@{'/posts/'+${post.postId}}">링크</a></td>
+            </a>
+        </tr>
+        </tbody>
+    </table>
+    <div th:unless="${user?.op == null}">
+        <a th:unless="${!user.op}" th:href="@{/new}">새 Product 작성</a>
+    </div>
+</div>
+
+</body>
+</html>

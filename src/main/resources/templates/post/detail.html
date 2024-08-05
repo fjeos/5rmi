@@ -17,7 +17,7 @@
     <div class="post-comment" th:each="comment: ${post.comments}">
         <p class="post-comment">
             댓글 번호: <span class="post-comment" th:text="${comment.commentId}"></span>
-            작성자 Id: <span class="post-comment" th:text="${comment.userId}"></span>
+            작성자 Id: <span class="post-comment" th:text="${comment.user.id}"></span>
         </p>
         <p class="post-comment">
             <span class="post-comment" th:text="${comment.content}"></span>
@@ -32,9 +32,9 @@
     </div>
     <hr>
     <div class="post-actions">
-        <a th:href="@{/posts}">목록으로</a>
-        <a th:href="@{/posts/{id}/edit(id=${post.postId})}" class="edit-btn">수정</a>
-        <form th:action="@{/posts/{id}/delete(id=${post.postId})}" method="post" class="delete-form">
+        <a th:href="@{/board}">목록으로</a>
+        <a th:href="@{'/posts/'+${post.postId}+'/edit'}" class="edit-btn">수정</a>
+        <form th:action="@{'/posts/'+${post.postId}+'/delete'}" method="post" class="delete-form">
             <button type="submit">삭제</button>
     </form>
     </div>
