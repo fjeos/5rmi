@@ -1,9 +1,12 @@
 package com.ormi5.movieblog.usercontroller;
 
 import com.ormi5.movieblog.post.Post;
+import com.ormi5.movieblog.post.PostDto;
+
 import com.ormi5.movieblog.post.ProfilePostResponseDto;
 import com.ormi5.movieblog.postcontroller.PostService;
 import com.ormi5.movieblog.user.ProfileResponseDto;
+
 import com.ormi5.movieblog.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import java.util.List;
 import com.ormi5.movieblog.user.UserDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,6 +33,13 @@ public class UserService {
 
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username);
+	}
+
+	public List<UserDto> getUsersByUsername(String keyword) {
+		return userRepository.findByUsernameContaining(keyword)
+				.stream()
+				.map(UserDto::fromEntity)
+				.toList();
 	}
 
 	public User findByEmail(String email) {
@@ -50,6 +61,7 @@ public class UserService {
 				.level(1)
 				.signupDate(Instant.now())
 				.isStop(false)
+				.op(false)
 				.build();
 
 		return userRepository.save(user);

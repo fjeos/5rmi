@@ -26,10 +26,10 @@ public class CommentService {
 
 	@Transactional
 	public CommentDto createComment(CommentDto commentDto) {
-		Post post = postRepository.findById(commentDto.getPostId())
+		Post post = postRepository.findById(commentDto.getPost().getPostId())
 			.orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
 
-		Comment comment = CommentDto.toEntity(commentDto, post);
+		Comment comment = commentDto.toEntity();
 
 		Comment savedComment = commentRepository.save(comment);
 
@@ -64,8 +64,6 @@ public class CommentService {
 	 */
 	@Transactional
 	public CommentDto updateComment(CommentDto commentDto) {
-		Comment comment = commentRepository.findById(commentDto.getCommentId())
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 댓글이 없습니다."));
 		comment.updateComment(commentDto);
 		return CommentDto.toDto(comment);
 	}
@@ -75,7 +73,7 @@ public class CommentService {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다"));
 
-		if (!comment.getUserId().equals(userId)) {
+		if (!comment.getUser().equals(userId)) {
 			throw new RuntimeException("댓글을 삭제할 권한이 없습니다");
 		}
 

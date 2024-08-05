@@ -23,7 +23,7 @@ public class PostService {
 
 	@Transactional
 	public PostDto createPost(PostDto postDto) {
-		Post post = PostDto.toEntity(postDto);
+		Post post = postDto.toEntity();
 
 		Post savePost = postRepository.save(post);
 
@@ -110,5 +110,22 @@ public class PostService {
 				return true;
 			})
 			.orElse(false);
+	}
+
+	@Transactional
+	public List<PostDto> getPostByKeyword(String searchKeyword){
+		return postRepository.findByTitleContaining(searchKeyword)
+				.stream()
+				.filter(Post::getIsShared)
+				.map(PostDto::toDto)
+				.toList();
+	}
+
+	public List<PostDto> getPostsByMovieName(String keyword) {
+		return postRepository.findByMovieNameContaining(keyword)
+				.stream()
+				.filter(Post::getIsShared)
+				.map(PostDto::toDto)
+				.toList();
 	}
 }
