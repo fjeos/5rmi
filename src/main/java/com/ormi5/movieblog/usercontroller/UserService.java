@@ -1,5 +1,7 @@
 package com.ormi5.movieblog.usercontroller;
 
+import com.ormi5.movieblog.post.Post;
+import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.user.User;
 import com.ormi5.movieblog.user.UserDto;
 import com.ormi5.movieblog.usercontroller.UserRepository;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,6 +26,13 @@ public class UserService {
 
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username);
+	}
+
+	public List<UserDto> getUsersByUsername(String keyword) {
+		return userRepository.findByUsernameContaining(keyword)
+				.stream()
+				.map(UserDto::fromEntity)
+				.toList();
 	}
 
 	public User findByEmail(String email) {

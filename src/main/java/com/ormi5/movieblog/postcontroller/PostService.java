@@ -85,4 +85,11 @@ public class PostService {
 				.toList();
 	}
 
+	public List<PostDto> getPostsByMovieName(String keyword) {
+		return postRepository.findByMovieNameContaining(keyword)
+				.stream()
+				.filter(Post::getIsShared)
+				.map(PostDto::toDto)
+				.toList();
+	}
 }

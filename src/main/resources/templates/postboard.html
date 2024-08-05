@@ -58,7 +58,10 @@
 <!--/*@thymesVar id="posts" type="java.util.ArrayList<>"*/-->
 <div th:object="${posts}">
     <h2>Board</h2>
-    <form th:action="@{/board}" method="get" >
+    <form th:action="@{/board}" method="get">
+        <select th:id="searchOption" th:name="searchOption">
+            <option th:each="searchOption : ${searchOptions}" th:value="${searchOption}" th:text="${searchOption}">title</option>
+        </select>
         <input type="text" value="" id="keyword" name="keyword"
                placeholder="Enter search term..." required/>
         <input type="submit" value="search"/>
