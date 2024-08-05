@@ -30,12 +30,15 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/home")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/hello")).authenticated()
-                        .requestMatchers(new AntPathRequestMatcher("/board")).authenticated()
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/home").permitAll()
+                        .requestMatchers("/hello").authenticated()
+                        .requestMatchers("/board").authenticated()
+                        .requestMatchers("/posts/**").authenticated()
+                        .requestMatchers("/comments/**").authenticated()
+                        .requestMatchers("/announcements/**").authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")

@@ -80,12 +80,14 @@
         <tbody>
         <!--/*@thymesVar id="post" type="com.ormi5.movieblog.post.Post"*/-->
         <tr th:each="post : ${posts}">
-            <td th:text="${post.title}"></td>
-            <td th:text="${post.user.username}"></td>
-            <td th:text="${post.createAt}"></td>
-            <td th:text="${post.updateAt}"></td>
-            <td th:text="${post.likesCount}"></td>
-            <td th:text="${post.isShared}"></td>
+                <td th:text="${post.title}"></td>
+                <td th:text="${post.user.username}"></td>
+                <td th:text="${post.createAt}"></td>
+                <td th:text="${post.updateAt}"></td>
+                <td th:text="${post.likesCount}"></td>
+                <td th:text="${post.isShared}"></td>
+                <td><a th:href="@{'/posts/'+${post.postId}}">링크</a></td>
+            </a>
         </tr>
         </tbody>
     </table>
