@@ -53,7 +53,7 @@ public class PostController {
 	 * @return String, post/detail 링크로 이동
 	 */
 	@GetMapping("/{id}")
-	public String getPostById(@PathVariable("id") Long postId, Model model) {
+	public String getPostById(@PathVariable("id") Integer postId, Model model) {
 		PostDto post = postService.getPostById(postId);
 		model.addAttribute("post", post);
 
@@ -81,7 +81,7 @@ public class PostController {
 	 * @return 조회된 게시글 정보, 없다면 빈 리스트 []
 	 */
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Long userId) {
+	public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Integer userId) {
 		List<PostDto> postDtoList = postService.getPostsByUserId(userId);
 
 		return ResponseEntity.ok(postDtoList);
@@ -142,7 +142,7 @@ public class PostController {
 	 * @author nayoung
 	 */
 	@GetMapping("/{postId}/edit")
-	public String editForm(@PathVariable("postId") Long postId, Model model) {
+	public String editForm(@PathVariable("postId") Integer postId, Model model) {
 		PostDto post = postService.getPostById(postId);
 		model.addAttribute("post", post);
 		return "post/edit";
@@ -156,9 +156,9 @@ public class PostController {
 	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/edit")
-	public String edit(@PathVariable("postId") Long postId, @ModelAttribute PostUpdateDto updatePost) {
+	public String edit(@PathVariable("postId") Integer postId, @ModelAttribute PostUpdateDto updatePost) {
 		postService.updatePost(postId, updatePost);
-		return "redirect:/posts/{postId}";
+		return "redirect:/board";
 	}
 
 	/**
@@ -183,9 +183,21 @@ public class PostController {
 	 * @since 0.0.1
 	 * @return result ResponseEntity
 	 */
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Optional<PostDto>> deletePostById(@PathVariable("id") Long id) {
+	@PostMapping("/{id}/delete")
+	public String deletePostById(@PathVariable("id") Integer id) {
 		boolean deleted = postService.deletePost(id);
-		return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+		return "redirect:/board";
+	}
+
+	@GetMapping("/recent")
+	public ResponseEntity<List<PostDto>> getRecentPosts(@RequestParam User user, @RequestParam int limit) {
+		List<PostDto> posts = postService.getRecentPosts(user, limit);
+		return ResponseEntity.ok(posts);
+	}
+
+	@GetMapping("/all")
+	public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam User user) {
+		List<PostDto> posts = postService.getAllPosts(user);
+		return ResponseEntity.ok(posts);
 	}
 }

@@ -4,6 +4,7 @@ import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.post.Post;
 
 import com.ormi5.movieblog.post.PostUpdateDto;
+import com.ormi5.movieblog.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,14 +43,14 @@ public class PostService {
 
 
 	@Transactional(readOnly = true)
-	public PostDto getPostById(Long id) {
+	public PostDto getPostById(Integer id) {
 		return postRepository.findById(id)
 				.map(PostDto::toDto)
 				.orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 	}
 
 	@Transactional
-	public List<PostDto> getPostsByUserId(Long userId) {
+	public List<PostDto> getPostsByUserId(Integer userId) {
 		return postRepository.findByUserId(userId) // UserID에 해당하는 유저의
 			.stream()
 			.filter(Post::getIsShared) // 공개 상태의 게시글만 조회
@@ -63,7 +64,7 @@ public class PostService {
 	 * @return userId의 유저가 작성한 게시글 List
 	 */
 	@Transactional
-	public List<Post> getUserPosts(Long userId) {
+	public List<Post> getUserPosts(Integer userId) {
 		return postRepository.findByUserId(userId);
 	}
 
@@ -95,7 +96,7 @@ public class PostService {
 	}
 
 	@Transactional
-	public void updatePost(Long postId, PostUpdateDto postDto) {
+	public void updatePost(Integer postId, PostUpdateDto postDto) {
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 
@@ -104,13 +105,31 @@ public class PostService {
 	}
 
 	@Transactional
-	public boolean deletePost(Long id) {
+	public boolean deletePost(Integer id) {
 		return postRepository.findById(id)
 			.map(post -> {
 				postRepository.delete(post);
 				return true;
 			})
 			.orElse(false);
+	}
+
+
+	//사용자 최근게시글 조회
+	@Transactional(readOnly = true)
+	public List<PostDto> getRecentPosts(User user, int limit) {
+		return postRepository.findTop5ByUserOrderByCreateAtDesc(user).stream()
+				.limit(limit)
+				.map(PostDto::toDto)
+				.collect(Collectors.toList());
+	}
+
+	//사용자 모든게시글 조회
+	@Transactional(readOnly = true)
+	public List<PostDto> getAllPosts(User user) {
+		return postRepository.findAllByUserOrderByCreateAtDesc(user).stream()
+				.map(PostDto::toDto)
+				.collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -130,6 +149,7 @@ public class PostService {
 				.toList();
 	}
 
+
 	@Transactional
 	public void increaseLike(Long postId, Model model) {
 		Post post = postRepository.findById(postId)
@@ -137,3 +157,4 @@ public class PostService {
 		post.increaseLike();
 	}
 }
+

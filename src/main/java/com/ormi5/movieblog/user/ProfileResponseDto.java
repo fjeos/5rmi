@@ -11,11 +11,10 @@ import java.util.List;
 @Getter
 @Builder
 public class ProfileResponseDto {
-
     private String username;
     private int level;
     private int reviewCount;
     private Instant signupDate;
     private List<ProfilePostResponseDto> postList;
-
 }
+

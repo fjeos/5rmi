@@ -12,8 +12,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 public class AnnouncementDto {
-    private Long announcementId;
-    private Long adminId;
+    private Integer announcementId;
+    private Integer adminId;
     private String title;
     private String content;
     private Boolean isImportant;

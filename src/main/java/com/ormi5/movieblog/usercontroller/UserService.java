@@ -73,13 +73,12 @@ public class UserService {
 	 * @param userId 프로필 정보를 가져올 유저
 	 * @return 프로필 페이지에 나타낼 정보를 담은 Dto
 	 */
-	public ProfileResponseDto getUserProfile(Long userId) {
+	public ProfileResponseDto getUserProfile(Integer userId) {
 
 		User findUser = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("회원 정보가 존재하지 않습니다."));
 
         List<Post> userPosts = postService.getUserPosts(userId);
-
 		return ProfileResponseDto.builder()
 				.level(findUser.getLevel())
 				.username(findUser.getUsername())

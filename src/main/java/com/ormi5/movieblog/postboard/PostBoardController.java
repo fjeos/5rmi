@@ -1,5 +1,6 @@
 package com.ormi5.movieblog.postboard;
 
+import com.ormi5.movieblog.announcementcontroller.AnnouncementService;
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.postcontroller.PostService;
 import com.ormi5.movieblog.user.User;
@@ -19,11 +20,12 @@ import java.util.List;
 public class PostBoardController {
     private final PostService postService;
     private final UserService userService;
-    //private final AnnouncementService announcementService;
+    private final AnnouncementService announcementService;
 
-    public PostBoardController(PostService postService, UserService userService) {
+    public PostBoardController(PostService postService, UserService userService, AnnouncementService announcementService) {
         this.postService = postService;
         this.userService = userService;
+        this.announcementService = announcementService;
     }
 
     // 모든 게시글을 조회하는 메서드
@@ -50,7 +52,7 @@ public class PostBoardController {
 
                     for(UserDto u : user_search)
                     {
-                        posts.addAll(postService.getPostsByUserId(Long.valueOf(u.getId())));
+                        posts.addAll(postService.getPostsByUserId(u.getId()));
                     }
                 }
             }
@@ -60,6 +62,7 @@ public class PostBoardController {
 
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
+        model.addAttribute("announcements", announcementService.getAllAnnouncements());
         //model.addAttribute("announcements", announcements);
 
         model.addAttribute("searchOptions", searchOptions());
