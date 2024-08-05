@@ -27,33 +27,38 @@
     <input type="submit" value="Sign Out"/>
 </form>
 
-<!--<div th:object="${announcements}">-->
-<div>
+<!--/*@thymesVar id="announcements" type="java.util.ArrayList<>"*/-->
+<div th:object="${announcements}">
     <h2>Announcement</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>소유자</th>
+            <th>게시</th>
+            <th>수정</th>
+            <th>중요</th>
+            <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="announcement" type="com.ormi5.movieblog.announcement.Announcement"*/-->
+        <tr th:each="announcement : ${announcements}">
+            <td th:text="${announcement.announcementId}"></td>
+            <td th:text="${announcement.adminId}"></td>
+            <td th:text="${announcement.createAt}"></td>
+            <td th:text="${announcement.updateAt}"></td>
+            <td th:text="${announcement.getIsImportant()}"></td>
+            <td th:text="${announcement.viewsCount}"></td>
+            <td><a th:href="@{'/announcement/'+${announcement.announcementId}}">링크</a></td>
+            </a>
+        </tr>
+        </tbody>
+    </table>
+    <div th:unless="${user?.op == null}">
+        <a th:unless="${!user.op}" th:href="@{/new}">새 Product 작성</a>
+    </div>
 </div>
-<!--    <h1>Product 목록</h1>-->
-<!--    <table>-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th>id</th>-->
-<!--            <th>이름</th>-->
-<!--            <th>가격</th>-->
-<!--            <th>소유자</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        &lt;!&ndash;/*@thymesVar id="products" type="java.util.ArrayList<>"*/&ndash;&gt;-->
-<!--        &lt;!&ndash;/*@thymesVar id="product" type="com.ormi5.movieblog."*/&ndash;&gt;-->
-<!--        <tr th:each="product : ${products}">-->
-<!--            <td th:text="${product.id}"></td>-->
-<!--            <td th:text="${product.name}"></td>-->
-<!--            <td th:text="${product.price}"></td>-->
-<!--            <td th:text="${product.owner.username}"></td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--    <a th:unless="${!user.admin}" th:href="@{/new}">새 Product 작성</a>-->
-<!--</div>-->
 
 <!--/*@thymesVar id="posts" type="java.util.ArrayList<>"*/-->
 <div th:object="${posts}">

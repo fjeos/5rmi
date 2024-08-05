@@ -41,14 +41,14 @@ public class PostService {
 
 
 	@Transactional(readOnly = true)
-	public PostDto getPostById(Long id) {
+	public PostDto getPostById(Integer id) {
 		return postRepository.findById(id)
 				.map(PostDto::toDto)
 				.orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 	}
 
 	@Transactional
-	public List<PostDto> getPostsByUserId(Long userId) {
+	public List<PostDto> getPostsByUserId(Integer userId) {
 		return postRepository.findByUserId(userId) // UserID에 해당하는 유저의
 			.stream()
 			.filter(Post::getIsShared) // 공개 상태의 게시글만 조회
@@ -62,7 +62,7 @@ public class PostService {
 	 * @return userId의 유저가 작성한 게시글 List
 	 */
 	@Transactional
-	public List<Post> getUserPosts(Long userId) {
+	public List<Post> getUserPosts(Integer userId) {
 		return postRepository.findByUserId(userId);
 	}
 
@@ -94,7 +94,7 @@ public class PostService {
 	}
 
 	@Transactional
-	public void updatePost(Long postId, PostUpdateDto postDto) {
+	public void updatePost(Integer postId, PostUpdateDto postDto) {
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 
@@ -103,7 +103,7 @@ public class PostService {
 	}
 
 	@Transactional
-	public boolean deletePost(Long id) {
+	public boolean deletePost(Integer id) {
 		return postRepository.findById(id)
 			.map(post -> {
 				postRepository.delete(post);

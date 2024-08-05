@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
@@ -40,7 +41,7 @@ public class PostDto implements Serializable {
                 .likesCount(post.getLikesCount())
                 .createAt(post.getCreateAt())
                 .updateAt(post.getUpdateAt())
-                .comments(post.getComments().stream().map(comment -> {return CommentDto.toDto(comment);}).collect(Collectors.toList()))
+                .comments(post.getComments().stream().map(CommentDto::toDto).collect(Collectors.toList()))
                 .build();
     }
 

@@ -10,9 +10,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Integer> {
 	// UserId에 해당하는 유저가 작성한 모든 게시글을 가져오는 쿼리 메서드
-	List<Post> findByUserId(Long userId);
+	List<Post> findByUserId(Integer userId);
 
 	@Query("SELECT p FROM Post p WHERE p.movieId.name LIKE %:keyword%")
 	List<Post> findByMovieNameContaining(@Param("keyword") String keyword);

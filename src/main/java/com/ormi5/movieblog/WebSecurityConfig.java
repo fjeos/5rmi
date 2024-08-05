@@ -38,7 +38,10 @@ public class WebSecurityConfig {
                         .requestMatchers("/board").authenticated()
                         .requestMatchers("/posts/**").authenticated()
                         .requestMatchers("/comments/**").authenticated()
-                        .requestMatchers("/announcements/**").authenticated()
+                        .requestMatchers("/announcement/**").authenticated()
+//                        .requestMatchers("/posts/**/edit").authenticated()
+//                        .requestMatchers("/posts/**/delete").authenticated()
+//                        .requestMatchers("/comments/**/edit").authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")

@@ -44,7 +44,7 @@ public class CommentService {
 
 	@Transactional
 	public List<CommentDto> getCommentsByPostId(PostDto postDto) {
-		Post post = postRepository.findById(Long.valueOf(postDto.getPostId()))
+		Post post = postRepository.findById(postDto.getPostId())
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
 
 		List<Comment> comments = commentRepository.findByPost(post);
