@@ -9,9 +9,7 @@ import com.ormi5.movieblog.postcontroller.PostRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.ormi5.movieblog.postcontroller.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,14 +56,14 @@ public class CommentService {
 	 */
 	@Transactional
 	public CommentDto updateComment(CommentDto commentDto) {
-		Comment comment = commentRepository.findById(Long.valueOf(commentDto.getCommentId()))
+		Comment comment = commentRepository.findById(commentDto.getCommentId())
 				.orElseThrow(() -> new IllegalArgumentException("해당하는 댓글이 없습니다."));
 		comment.updateComment(commentDto);
 		return CommentDto.toDto(comment);
 	}
 
 	@Transactional
-	public void deleteComment(Long commentId, Long userId) {
+	public void deleteComment(Integer commentId, Integer userId) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다"));
 
@@ -77,14 +75,14 @@ public class CommentService {
 	}
 
 	@Transactional
-    public void increaseLike(Long postId, Long commentId) {
-		Comment findComment = commentRepository.findByPost_PostIdAndCommentId(postId, commentId);
+    public void increaseLike(Integer postId, Integer commentId) {
+		Comment findComment = commentRepository.findByPost_PostIdAndId(postId, commentId);
 		findComment.increaseLike();
 	}
 
 	@Transactional
-	public void decreaseLike(Long postId, Long commentId) {
-		Comment findComment = commentRepository.findByPost_PostIdAndCommentId(postId, commentId);
+	public void decreaseLike(Integer postId, Integer commentId) {
+		Comment findComment = commentRepository.findByPost_PostIdAndId(postId, commentId);
 		findComment.decreaseLike();
 	}
 }
