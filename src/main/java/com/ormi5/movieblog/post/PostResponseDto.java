@@ -6,8 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PostResponseDto {
-
     private String title;
     private String content;
-    private boolean isShared;
+    private Boolean isShared;
 }
