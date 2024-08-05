@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class PostDto implements Serializable {
-    Long postId;
+    Integer postId;
     UserDto user;
     String title;
     String content;

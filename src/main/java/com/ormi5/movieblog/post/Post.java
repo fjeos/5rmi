@@ -26,7 +26,7 @@ public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "post_id", nullable = false)
-	private Long postId;
+	private Integer postId;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -60,7 +60,7 @@ public class Post {
 	@JoinColumn(name = "movie_id", nullable = false)
 	private Movie movieId;
 
-	public void updatePost(PostDto postDto) {
+	public void updatePost(PostUpdateDto postDto) {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
 		this.updateAt = Instant.now();

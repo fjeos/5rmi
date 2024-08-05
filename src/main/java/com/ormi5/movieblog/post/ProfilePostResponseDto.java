@@ -8,8 +8,8 @@ import java.time.Instant;
 @Getter
 @Builder
 public class ProfilePostResponseDto {
-    private Long postId;
-    private Long userId;
+    private int postId;
+    private int userId;
     private String title;
     private String content;
     private int likesCount;
@@ -18,7 +18,7 @@ public class ProfilePostResponseDto {
     public static ProfilePostResponseDto toDto(Post post) {
         return ProfilePostResponseDto.builder()
                 .postId(post.getPostId())
-                .userId(post.getUserId())
+                .userId(post.getUser().getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .likesCount(post.getLikesCount())
