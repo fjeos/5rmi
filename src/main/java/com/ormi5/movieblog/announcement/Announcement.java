@@ -14,10 +14,10 @@ public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "announcement_id", nullable = false)
-    private Long announcementId;
+    private Integer announcementId;
 
     @Column(name = "admin_id", nullable = false)
-    private Long adminId;
+    private Integer adminId;
 
     @Column(name = "title", nullable = false)
     private String title;

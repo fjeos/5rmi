@@ -23,10 +23,10 @@ public class User {
     @Column(name = "email", nullable = false, length = 256)
     private String email;
 
-    @Column(name = "level")
+    @Column(name = "level", nullable = false)
     private Integer level;
 
-    @Column(name = "is_stop")
+    @Column(name = "is_stop", nullable = false)
     private Boolean isStop;
 
     @Column(name = "signup_date")
@@ -34,4 +34,11 @@ public class User {
 
     @Column(name = "password", length = 64)
     private String password;
+
+    @Column(name = "op", nullable = false)
+    private Boolean op;
+
+    public void updateStop(boolean b) {
+        this.isStop = b;
+    }
 }

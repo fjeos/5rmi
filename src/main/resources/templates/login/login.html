@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Registration</title>
+    <title>Login</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -66,6 +66,8 @@
             color: #888;
         }
 
+        .error-message,
+        .logout-message,
         .success-message {
             background-color: #5e057e;
             color: #fff;
@@ -77,29 +79,41 @@
 </head>
 
 <body>
-<div class="form-container">
-    <h2>Registration</h2>
-    <form th:action="@{/register}" method="post" role="form" th:object="${user}">
-        <label for="email">Email:</label>
-        <input th:field="*{email}" type="text" id="email" name="email" placeholder="Enter your email"
-               required>
+<div class="container">
+    <div class="form-container">
 
-        <label for="username">Username:</label>
-        <input th:field="*{username}" type="text" id="username" name="username" placeholder="Enter your username"
-               required>
+        <div th:if="${param.error}">
+            <div class="error-message">
+                <p>Invalid Username or Password</p>
+            </div>
+        </div>
 
-        <label for="password">Password:</label>
-        <input th:field="*{password}" type="password" id="password" name="password"
-               placeholder="Enter your password" required>
+        <div th:if="${param.logout}">
+            <div class="logout-message">
+                <p>Logout Successful!</p>
+            </div>
+        </div>
 
-        <button type="submit">Register</button>
-    </form>
-    <div>
-        <span th:if="${userexist}" style="color: red;">Username is taken</span>
-        <span th:if="${emailexist}" style="color: red;">Email is already in use</span>
-    </div>
-    <div>
-        <span class="form-footer">Already have an account? <a th:href="@{/login}">Login</a>here.</span>
+        <div th:if="${param.success}">
+            <div class="success-message">
+                <p>Registration Successful!</p>
+            </div>
+        </div>
+
+        <h2>Login</h2>
+        <form th:action="@{/login}" method="post" role="form" th:object="${user}">
+
+            <label for="username">Username:</label>
+            <input th:field="*{username}" type="text" id="username" name="username"
+                   placeholder="Enter your Username" required>
+
+            <label for="password">Password:</label>
+            <input th:field="*{password}" type="password" id="password" name="password"
+                   placeholder="Enter your Password" required>
+
+            <button type="submit" value="Sign In">Login</button>
+        </form>
+        <p class="form-footer">Don't have an account? <a th:href="@{/register}">Register</a>here.</p>
     </div>
 </div>
 </body>

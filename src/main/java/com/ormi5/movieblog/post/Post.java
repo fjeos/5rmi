@@ -1,13 +1,16 @@
 package com.ormi5.movieblog.post;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.ormi5.movieblog.comment.Comment;
 
-import jakarta.persistence.*;
 
+
+import com.ormi5.movieblog.movie.Movie;
+
+import com.ormi5.movieblog.user.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +26,11 @@ public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "post_id", nullable = false)
-	private Long postId;
+	private Integer postId;
 
-	@Column(name = "user_id", nullable = false)
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
 	@Column(name = "title", nullable = false)
 	private String title;
@@ -34,15 +38,12 @@ public class Post {
 	@Column(name = "content", nullable = false)
 	private String content;
 
-	@Builder.Default
 	@Column(name = "is_shared", nullable = false)
 	private Boolean isShared = false;
 
-	@Builder.Default
 	@Column(name = "likes_count", nullable = false)
-	private int likesCount = 0;
+	private Integer likesCount = 0;
 
-	@Builder.Default
 	@Column(name = "create_at", nullable = false, updatable = false) // 읽기 전용 필드
 	private Instant createAt = Instant.now();
 
@@ -52,9 +53,16 @@ public class Post {
 	@OneToMany(mappedBy = "post")
 	private List<Comment> comments;
 
-	public void updatePost(PostUpdateDto postDto) {
+	@ManyToOne(fetch = FetchType.LAZY)//, optional = false)
+	@JoinColumn(name = "movie_id")
+	private Movie movieId;
+
+	public void updatePost(PostResponseDto postDto) {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
 		this.updateAt = Instant.now();
+	}
+	public void increaseLike() {
+		this.likesCount++;
 	}
 }

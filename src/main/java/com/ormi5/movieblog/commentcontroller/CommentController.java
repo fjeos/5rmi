@@ -12,13 +12,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/comments")
 public class CommentController {
 	private final CommentService commentService;
@@ -28,8 +29,6 @@ public class CommentController {
 		this.commentService = commentService;
 	}
 
-	/* --------------- api --------------- */
-
 	/**
 	 * 새로운 댓글 생성
 	 *
@@ -37,7 +36,7 @@ public class CommentController {
 	 * @param commentDto 댓글 DTO
 	 * @return 생성된 댓글 DTO
 	 */
-	@PostMapping("/api")
+	@PostMapping
 	public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto) {
 		CommentDto createComment = commentService.createComment(commentDto);
 
@@ -92,6 +91,27 @@ public class CommentController {
 		} catch (RuntimeException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	/**
+	 * RequestBody에서 JSON 형식으로 postId와 commentId를 받아 옴
+	 * @param likeRequest postId와 commentId
+	 * @return 기존 post 상세 조회 화면
+	 */
+	@PostMapping("/like")
+	public String commentLike(@RequestBody Map<String, Integer> likeRequest) {
+		Integer postId = likeRequest.get("postId");
+		Integer commentId = likeRequest.get("commentId");
+		commentService.increaseLike(postId, commentId);
+		return "redirect:/post/{postId}";
+	}
+
+	@PostMapping("/dislike")
+	public String commentDislike(@RequestBody Map<String, Integer> likeRequest) {
+		Integer postId = likeRequest.get("postId");
+		Integer commentId = likeRequest.get("commentId");
+		commentService.decreaseLike(postId, commentId);
+		return "redirect:/post/{postId}";
 	}
 
 	/* --------------- thymeleaf --------------- */

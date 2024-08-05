@@ -8,21 +8,25 @@ import java.time.Instant;
 @Getter
 @Builder
 public class ProfilePostResponseDto {
-    private Long postId;
-    private Long userId;
+    private Integer postId;
+    private Integer userId;
     private String title;
     private String content;
-    private int likesCount;
+    private Integer likesCount;
     private Instant createAt;
+    private Instant updateAt;
+    private Boolean isShared;
 
     public static ProfilePostResponseDto toDto(Post post) {
         return ProfilePostResponseDto.builder()
                 .postId(post.getPostId())
-                .userId(post.getUserId())
+                .userId(post.getUser().getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .likesCount(post.getLikesCount())
                 .createAt(post.getCreateAt())
+                .updateAt(post.getUpdateAt())
+                .isShared(post.getIsShared())
                 .build();
     }
 }

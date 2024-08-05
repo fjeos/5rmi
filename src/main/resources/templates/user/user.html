@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>프로필 보기</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
+</head>
+<body>
+    <!--/*@thymesVar id="user" type="com.ormi5.movieblog.post.PostResponseDto"*/-->
+    <div th:object="${user}">
+        <h1 th:text="*{username}"></h1>
+        <a th:href="@{/board}">돌아가기</a>
+        <div>
+            레벨: <span th:text="*{level}"></span><br>
+            계정 생성일: <span th:text="*{signupDate}"></span><br>
+            리뷰 갯수: <span th:text="*{reviewCount}"></span>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>게시</th>
+                <th>수정</th>
+                <th>좋아요</th>
+                <th>공개여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--/*@thymesVar id="user.postList" type="java.util.ArrayList<>"*/-->
+            <!--/*@thymesVar id="post" type="com.ormi5.movieblog.post.ProfilePostResponseDto"*/-->
+            <tr th:each="post : *{postList}">
+                <td th:text="${post.title}"></td>
+                <td th:text="${post.createAt}"></td>
+                <td th:text="${post.updateAt}"></td>
+                <td th:text="${post.likesCount}"></td>
+                <td th:text="${post.isShared}"></td>
+                <td><a th:href="@{'/posts/'+${post.postId}}">링크</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

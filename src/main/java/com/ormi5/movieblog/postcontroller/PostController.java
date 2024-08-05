@@ -1,9 +1,17 @@
 package com.ormi5.movieblog.postcontroller;
 
+import com.ormi5.movieblog.post.PostDto;
+import com.ormi5.movieblog.post.PostResponseDto;
+
+import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.commentcontroller.CommentService;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
-import com.ormi5.movieblog.post.PostUpdateDto;
+import com.ormi5.movieblog.post.PostResponseDto;
+import com.ormi5.movieblog.user.User;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +19,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
 	private final PostService postService;
-
-	@Autowired
-	public PostController(PostService postService) {
-		this.postService = postService;
-	}
 
 	/**
 	 * 게시글 생성 메서드
@@ -53,11 +58,24 @@ public class PostController {
 	 * @return String, post/detail 링크로 이동
 	 */
 	@GetMapping("/{id}")
-	public String getPostById(@PathVariable("id") Long postId, Model model) {
+	public String getPostById(@PathVariable("id") Integer postId, Model model) {
 		PostDto post = postService.getPostById(postId);
 		model.addAttribute("post", post);
 
 		return "post/detail";
+	}
+
+	/**
+	 * 특정 게시글 조회: 게시글의 ID를 받아 해당 게시글 조회
+	 *
+	 * @author junhyun
+	 * @param keyword 조회할 게시글 제목 keyword
+	 * @return 조회된 게시글 정보, 없다면 Optional.empty
+	 */
+	@GetMapping()
+	public ResponseEntity<List<PostDto>> getPostByKeyword(@RequestParam("keyword") String keyword) {
+
+		return ResponseEntity.ok(postService.getPostByKeyword(keyword));
 	}
 
 	/**
@@ -68,7 +86,7 @@ public class PostController {
 	 * @return 조회된 게시글 정보, 없다면 빈 리스트 []
 	 */
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Long userId) {
+	public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Integer userId) {
 		List<PostDto> postDtoList = postService.getPostsByUserId(userId);
 
 		return ResponseEntity.ok(postDtoList);
@@ -126,9 +144,10 @@ public class PostController {
 	 * @param postId 수정할 게시글 Id
 	 * @param model 게시글 정보를 담은 model
 	 * @return 수정 form
+	 * @author nayoung
 	 */
 	@GetMapping("/{postId}/edit")
-	public String editForm(@PathVariable("postId") Long postId, Model model) {
+	public String editForm(@PathVariable("postId") Integer postId, Model model) {
 		PostDto post = postService.getPostById(postId);
 		model.addAttribute("post", post);
 		return "post/edit";
@@ -139,10 +158,25 @@ public class PostController {
 	 * @param postId 수정할 게시글 Id
 	 * @param updatePost 수정 정보가 담긴 Dto
 	 * @return 기존 게시글 상세보기 페이지
+	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/edit")
-	public String edit(@PathVariable("postId") Long postId, @ModelAttribute PostUpdateDto updatePost) {
+	public String edit(@PathVariable("postId") Integer postId, @ModelAttribute PostResponseDto updatePost) {
 		postService.updatePost(postId, updatePost);
+		return "redirect:/board";
+	}
+
+	/**
+	 * 게시글의 좋아요를 증가시키는 컨트롤러
+	 * @param postId 게시글 Id
+	 * @param model 게시글의 나머지 정보
+	 * @return 기존 게시글 화면으로 redirect
+	 * @author nayoung
+	 */
+	@PostMapping("/{postId}/like")
+	public String increaseLike(@PathVariable("postId") Integer postId, Model model) {
+		postService.increaseLike(postId, model);
+		model.addAttribute(model);
 		return "redirect:/posts/{postId}";
 	}
 
@@ -154,9 +188,21 @@ public class PostController {
 	 * @since 0.0.1
 	 * @return result ResponseEntity
 	 */
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Optional<PostDto>> deletePostById(@PathVariable("id") Long id) {
+	@PostMapping("/{id}/delete")
+	public String deletePostById(@PathVariable("id") Integer id) {
 		boolean deleted = postService.deletePost(id);
-		return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+		return "redirect:/board";
+	}
+
+	@GetMapping("/recent")
+	public ResponseEntity<List<PostDto>> getRecentPosts(@RequestParam User user, @RequestParam int limit) {
+		List<PostDto> posts = postService.getRecentPosts(user, limit);
+		return ResponseEntity.ok(posts);
+	}
+
+	@GetMapping("/all")
+	public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam User user) {
+		List<PostDto> posts = postService.getAllPosts(user);
+		return ResponseEntity.ok(posts);
 	}
 }

@@ -1,54 +1,56 @@
 package com.ormi5.movieblog.comment;
 
 import com.ormi5.movieblog.post.Post;
-
+import com.ormi5.movieblog.user.User;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
 
-import jakarta.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-@Entity
-@Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Entity
 @Table(name = "comment")
 public class Comment {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "comment_id", nullable = false)
-	private Long commentId;
+    @Id
+    @Column(name = "comment_id", nullable = false)
+    private Integer id;
 
-	@Column(name = "user_id", nullable = false)
-	private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	@Column(name = "content", nullable = false)
-	private String content;
+    @Column(name = "content", length = 256)
+    private String content;
 
-	@Builder.Default
-	@Column(name = "likes", nullable = false)
-	private int likes = 0;
+    @Column(name = "likes")
+    private Integer likes;
 
-	@Builder.Default
-	@Column(name = "dislikes", nullable = false)
-	private int dislikes = 0;
+    @Column(name = "dislikes")
+    private Integer dislikes;
 
-	@Column(name = "create_at", nullable = false)
-	private Instant createAt = Instant.now();
+    @Column(name = "create_at")
+    private Instant createAt;
 
-	@Column(name = "update_at")
-	private Instant updateAt;
+    @Column(name = "update_at")
+    private Instant updateAt;
 
-	@ManyToOne
-	@JoinColumn(name = "post_id")
-	@JsonIgnore
-	private Post post;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
 
 	public void updateComment(CommentDto commentDto) {
 		this.content = commentDto.getContent();
 		this.updateAt = Instant.now();
+	}
+
+	public void increaseLike() {
+		this.likes++;
+	}
+
+	public void decreaseLike() {
+		this.dislikes++;
 	}
 }

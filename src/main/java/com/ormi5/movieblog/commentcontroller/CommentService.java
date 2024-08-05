@@ -9,27 +9,19 @@ import com.ormi5.movieblog.postcontroller.PostRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 	private final CommentRepository commentRepository;
 	private final PostRepository postRepository;
 
-	@Autowired
-	public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
-		this.commentRepository = commentRepository;
-		this.postRepository = postRepository;
-	}
-
 	@Transactional
 	public CommentDto createComment(CommentDto commentDto) {
-		Post post = postRepository.findById(commentDto.getPostId())
-			.orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
-
-		Comment comment = CommentDto.toEntity(commentDto, post);
+		Comment comment = commentDto.toEntity();
 
 		Comment savedComment = commentRepository.save(comment);
 
@@ -83,7 +75,7 @@ public class CommentService {
 	@Transactional
 	public CommentDto updateComment(CommentDto commentDto) {
 		Comment comment = commentRepository.findById(commentDto.getCommentId())
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 댓글이 없습니다."));
+				.orElseThrow(() -> new IllegalArgumentException("해당하는 댓글이 없습니다."));
 		comment.updateComment(commentDto);
 		return CommentDto.toDto(comment);
 	}
@@ -97,14 +89,26 @@ public class CommentService {
 	}
 
 	@Transactional
-	public void deleteComment(Long commentId, Long userId) {
+	public void deleteComment(Integer commentId, Integer userId) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다"));
 
-		if (!comment.getUserId().equals(userId)) {
+		if (!comment.getUser().equals(userId)) {
 			throw new RuntimeException("댓글을 삭제할 권한이 없습니다");
 		}
 
 		commentRepository.delete(comment);
+	}
+
+	@Transactional
+    public void increaseLike(Integer postId, Integer commentId) {
+		Comment findComment = commentRepository.findByPost_PostIdAndId(postId, commentId);
+		findComment.increaseLike();
+	}
+
+	@Transactional
+	public void decreaseLike(Integer postId, Integer commentId) {
+		Comment findComment = commentRepository.findByPost_PostIdAndId(postId, commentId);
+		findComment.decreaseLike();
 	}
 }
