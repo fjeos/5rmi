@@ -37,4 +37,8 @@ public class User {
 
     @Column(name = "op", nullable = false)
     private Boolean op;
+
+    public void updateStop(boolean b) {
+        this.isStop = b;
+    }
 }

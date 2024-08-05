@@ -7,12 +7,18 @@ import com.ormi5.movieblog.postcontroller.PostService;
 import com.ormi5.movieblog.user.User;
 import com.ormi5.movieblog.user.UserDto;
 import com.ormi5.movieblog.usercontroller.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -38,6 +44,12 @@ public class PostBoardController {
         User user = null;
         if (principal != null) {
             user = userService.findByUsername(principal.getName());
+
+            if(user.getIsStop())
+            {
+                new SecurityContextLogoutHandler().logout(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(), null, null);
+                return "login/banned";
+            }
         }
 
         List<PostDto> posts = null;
@@ -62,7 +74,6 @@ public class PostBoardController {
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
         model.addAttribute("announcements", announcementService.getAllAnnouncements());
-        //model.addAttribute("announcements", announcements);
 
         model.addAttribute("searchOptions", searchOptions());
 

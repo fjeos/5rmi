@@ -4,7 +4,7 @@ import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostResponseDto;
 import com.ormi5.movieblog.user.UserDto;
-import com.ormi5.movieblog.post.PostUpdateDto;
+import com.ormi5.movieblog.post.PostResponseDto;
 import com.ormi5.movieblog.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,7 +176,7 @@ public class PostService {
 
 
 	@Transactional
-	public void increaseLike(Long postId, Model model) {
+	public void increaseLike(Integer postId, Model model) {
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 		post.increaseLike();

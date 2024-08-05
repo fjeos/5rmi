@@ -18,8 +18,8 @@
     <p th:if="${user?.op}" >해당 유저는 관리자입니다.</p>
 
     <div th:unless="${user?.op == null}">
-        <a th:unless="${!user.op}" href="banhammer">관리자 메뉴</a>
-        <a th:unless="${user.op}" href="profile">프로필 보기</a>
+        <a th:unless="${!user.op}" th:href="@{/admin}">관리자 메뉴</a>
+        <a th:unless="${user.op}" th:href="@{'/user/'+${user.getId()}}">프로필 보기</a>
     </div>
 </div>
 
@@ -28,6 +28,10 @@
 </form>
 
 <!--/*@thymesVar id="announcements" type="java.util.ArrayList<>"*/-->
+<div th:unless="${user?.op == null}">
+    <a th:unless="${!user.op}" th:href="@{/newannouncement}">새 공지글 작성</a>
+    <a th:unless="${!user.op}" th:href="@{/newpost}">새 게시글 작성</a>
+</div>
 <div th:object="${announcements}">
     <h2>Announcement</h2>
     <table>
@@ -55,9 +59,6 @@
         </tr>
         </tbody>
     </table>
-    <div th:unless="${user?.op == null}">
-        <a th:unless="${!user.op}" th:href="@{/new}">새 Product 작성</a>
-    </div>
 </div>
 
 <!--/*@thymesVar id="posts" type="java.util.ArrayList<>"*/-->
@@ -96,9 +97,6 @@
         </tr>
         </tbody>
     </table>
-    <div th:unless="${user?.op == null}">
-        <a th:unless="${user.op}" th:href="@{/newpost}">새 게시글 작성</a>
-    </div>
 </div>
 
 </body>
