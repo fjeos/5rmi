@@ -57,7 +57,12 @@ public class PostBoardController {
 
         List<PostDto> posts = null;
         if (keyword == null || searchOption == null) {
-            posts = postService.getAllPosts();
+            if(user.getOp()){
+                posts = postService.getAllPosts();
+            }
+            else{
+                posts = postService.getSharedPosts();
+            }
         } else {
             if (searchOption.equals("title"))
                 posts = postService.getPostByKeyword(keyword);

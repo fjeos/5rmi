@@ -65,6 +65,15 @@ public class PostService {
 			.collect(Collectors.toList());
 	}
 
+	@Transactional
+	public List<PostDto> getSharedPosts() {
+		List<Post> posts = postRepository.findByIsSharedTrue();
+
+		return posts.stream()
+				.map(PostDto::toDto)
+				.collect(Collectors.toList());
+	}
+
 
 	@Transactional(readOnly = true)
 	public PostDto getPostById(Integer id) {

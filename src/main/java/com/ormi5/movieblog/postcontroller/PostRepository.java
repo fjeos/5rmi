@@ -1,6 +1,7 @@
 package com.ormi5.movieblog.postcontroller;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ormi5.movieblog.post.Post;
 
@@ -33,4 +34,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 	// 유저의 모든 게시글 조회 메서드
 	List<Post> findAllByUserOrderByCreateAtDesc(User user);
 
+	// 공개된 게시글만 조회
+	List<Post> findByIsSharedTrue();
 }

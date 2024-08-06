@@ -25,13 +25,12 @@
             </thead>
             <tbody>
             <tr th:each="announcement : ${announcements}">
-                <td th:text="${announcement.announcementId}"></td>
+                <td th:text="${announcement.title}"></td>
                 <td th:text="${announcement.adminId}"></td>
                 <td th:text="${announcement.createAt}"></td>
                 <td th:text="${announcement.updateAt}"></td>
                 <td th:text="${announcement.getIsImportant()}"></td>
                 <td th:text="${announcement.viewsCount}"></td>
-                <td><a th:href="@{'/announcement/'+${announcement.announcementId}}">링크</a></td>
             </tr>
             </tbody>
         </table>
