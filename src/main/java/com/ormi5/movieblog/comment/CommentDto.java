@@ -4,6 +4,7 @@ import com.ormi5.movieblog.post.Post;
 
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.user.UserDto;
+
 import lombok.*;
 
 import java.time.Instant;
@@ -23,7 +24,7 @@ public class CommentDto {
 	public static CommentDto toDto(Comment comment) {
 		return CommentDto.builder()
 			.commentId(comment.getId())
-			//.post(PostDto.toDto(comment.getPost()))
+			.post(PostDto.toDto(comment.getPost()))
 			.user(UserDto.fromEntity(comment.getUser()))
 			.content(comment.getContent())
 			.likes(comment.getLikes())
@@ -36,7 +37,7 @@ public class CommentDto {
 	public Comment toEntity() {
 		return Comment.builder()
 			.id(this.getCommentId())
-			//.post(this.getPost().toEntity())
+			.post(this.getPost().toEntity())
 			.user(this.getUser().toEntity())
 			.content(this.getContent())
 			.likes(Math.max(this.getLikes(), 0))

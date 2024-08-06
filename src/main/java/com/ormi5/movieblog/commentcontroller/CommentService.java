@@ -21,11 +21,24 @@ public class CommentService {
 
 	@Transactional
 	public CommentDto createComment(CommentDto commentDto) {
+		Post post = postRepository.findById(commentDto.getPost().getPostId())
+			.orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
+
 		Comment comment = commentDto.toEntity();
 
 		Comment savedComment = commentRepository.save(comment);
 
 		return CommentDto.toDto(savedComment);
+	}
+
+	@Transactional
+	public void addComment(CommentDto commentDto) {
+		Post post = postRepository.findById(commentDto.getPost().getPostId())
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
+
+		Comment comment = commentDto.toEntity();
+
+		Comment savedComment = commentRepository.save(comment);
 	}
 
 	@Transactional
@@ -49,6 +62,14 @@ public class CommentService {
 			.collect(Collectors.toList());
 	}
 
+	@Transactional
+	public CommentDto getCommentById(Integer commentId) {
+		Comment comment = commentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 댓글이 없습니다."));
+
+		return CommentDto.toDto(comment);
+	}
+
 	/**
 	 * 댓글 수정
 	 * @param commentDto 수정할 내용이 담겨있는 dto
@@ -60,6 +81,14 @@ public class CommentService {
 				.orElseThrow(() -> new IllegalArgumentException("해당하는 댓글이 없습니다."));
 		comment.updateComment(commentDto);
 		return CommentDto.toDto(comment);
+	}
+
+	@Transactional
+	public void editComment(Integer commentId, CommentDto commentDto) {
+		Comment comment = commentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 댓글이 없습니다."));
+
+		comment.updateComment(commentDto);
 	}
 
 	@Transactional
