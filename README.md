@@ -3,6 +3,13 @@
 
 ## 영화 블로그 서비스 (Spring Boot + Thymeleaf + AWS)
 
+### 팀 편성
+방준현 (팀장) - Frontend/Backend
+유나영 - Backend
+안유석 - Backend
+신재민 - Backend
+~~서민우~~ - Frontend
+
 ### 1단계
 프로젝트 관리: [Notion](https://www.notion.so/oreumi/5-5-f5b9276610cb4268984b88c988c744d5)
 - 칸반 보드: [Notion](https://www.notion.so/oreumi/2df5908f6b4c48a9b4d83df40d4face8?v=0083633ff69b49829b96d516f7f6f24c)
