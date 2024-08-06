@@ -38,9 +38,11 @@ public class Post {
 	@Column(name = "content", nullable = false)
 	private String content;
 
+	@Builder.Default
 	@Column(name = "is_shared", nullable = false)
 	private Boolean isShared = false;
 
+	@Builder.Default
 	@Column(name = "likes_count", nullable = false)
 	private Integer likesCount = 0;
 
