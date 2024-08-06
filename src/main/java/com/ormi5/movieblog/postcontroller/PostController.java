@@ -3,26 +3,18 @@ package com.ormi5.movieblog.postcontroller;
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.post.PostResponseDto;
 
-import com.ormi5.movieblog.comment.CommentDto;
-import com.ormi5.movieblog.commentcontroller.CommentService;
-import com.ormi5.movieblog.post.Post;
-import com.ormi5.movieblog.post.PostDto;
-
-import com.ormi5.movieblog.post.PostResponseDto;
 import com.ormi5.movieblog.user.User;
 import com.ormi5.movieblog.usercontroller.UserService;
+
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.Map;
-import java.util.Optional;
 import java.util.List;
 
 @Controller
@@ -38,12 +30,11 @@ public class PostController {
 	 * @author yuseok
 	 * @param postDto 생성할 게시글 정보가 담긴 DTO
 	 * @return 생성된 게시글 정보가 담긴 DTO
-	@PostMapping
-	public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
-		PostDto createdPost = postService.createPost(postDto);
+	 @PostMapping public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+	 PostDto createdPost = postService.createPost(postDto);
 
-		return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
-	}*/
+	 return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+	 }*/
 
 	// 모든 게시글을 조회하는 메서드
 	@GetMapping("/list")
@@ -60,8 +51,15 @@ public class PostController {
 	 * @return String, post/detail 링크로 이동
 	 */
 	@GetMapping("/{id}")
-	public String getPostById(@PathVariable("id") Integer postId, Model model) {
+	public String getPostById(@PathVariable("id") Integer postId, Model model, RedirectAttributes redirectAttributes) {
 		PostDto post = postService.getPostById(postId);
+
+		// 공개 여부 확인: 비공개 게시글은 조회 불가
+		if (!post.getIsShared()) {
+			System.out.println("이 게시글은 조회할 수 없습니다!");
+			return "redirect:/board";
+		}
+
 		model.addAttribute("post", post);
 
 		return "post/detail";
@@ -158,6 +156,7 @@ public class PostController {
 		}
 
 		model.addAttribute("post", post);
+
 		return "post/edit";
 	}
 
@@ -169,7 +168,8 @@ public class PostController {
 	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/edit")
-	public String edit(@PathVariable("postId") Integer postId, Principal principal, @ModelAttribute PostResponseDto updatePost) {
+	public String edit(@PathVariable("postId") Integer postId, Principal principal,
+		@ModelAttribute PostResponseDto updatePost) {
 		PostDto post = postService.getPostById(postId);
 		User user = userService.findByUsername(principal.getName());
 
@@ -178,6 +178,7 @@ public class PostController {
 		}
 
 		postService.updatePost(postId, updatePost);
+
 		return "redirect:/board";
 	}
 
