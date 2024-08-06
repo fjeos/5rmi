@@ -34,10 +34,10 @@
             <p class="post-comment">
                 <button class="button" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
                         th:onclick="increaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">좋아요</button>
-                <span id="commentLike" th:text="${postComment.likes}"></span>
+                <span th:id="c-like-+${postComment.commentId}" th:text="${postComment.likes}"></span>
                 <button class="button" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
                         th:onclick="decreaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">싫어요</button>
-                <span id="commentDisLike" th:text="${postComment.dislikes}"></span>
+                <span th:id="c-dislike-+${postComment.commentId}" th:text="${postComment.dislikes}"></span>
             </p>
             <a class="button" th:href="@{/comments/{commentId}/edit(commentId=${postComment.commentId}, postId=${post.getPostId()})}">수정하기</a>
             <form class="button" th:action="@{/comments/{commentId}/delete(commentId=${postComment.commentId})}" method="post" style="display: inline;">
@@ -90,7 +90,7 @@
         })
             .then((response) => {
                 console.log(response);
-                const counter = $('#commentLike')[0];
+                const counter = $('#c-like-' + commentId)[0];
                 let likeCount = parseInt(counter.innerHTML);
                 counter.innerHTML = likeCount + 1;
             })
@@ -113,7 +113,7 @@
         })
             .then((response) => {
                 console.log(response);
-                const counter = $('#commentDisLike')[0];
+                const counter = $('#c-dislike-' + commentId)[0];
                 let likeCount = parseInt(counter.innerHTML);
                 counter.innerHTML = likeCount + 1;
             })
