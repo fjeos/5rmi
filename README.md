@@ -42,7 +42,7 @@ Milestones:
 
 - 관리자 계정 정의 및 관리자 페이지 구현
 - 일반 유저 정지 가능
-- 관리자는 계정 권한 변경 가능 *구현 안됨*
+- 관리자는 계정 권한 변경 가능
 
 Milestones:
 1. [Banhammer](https://github.com/fjeos/5rmi/milestone/7?closed=1)
