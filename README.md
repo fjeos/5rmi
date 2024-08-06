@@ -26,9 +26,9 @@
 - Thymeleaf UI 구성
 
 Milestones:
-1. [Post featureset](https://github.com/fjeos/5rmi/milestone/1)
-1. [Comment featureset](https://github.com/fjeos/5rmi/milestone/2)
-2. [Board featureset](https://github.com/fjeos/5rmi/milestone/4))
+1. [Post featureset](https://github.com/fjeos/5rmi/milestone/1?closed=1)
+1. [Comment featureset](https://github.com/fjeos/5rmi/milestone/2?closed=1)
+2. [Board featureset](https://github.com/fjeos/5rmi/milestone/4?closed=1)
 
 ### 3단계
 기능 심화
@@ -37,16 +37,16 @@ Milestones:
 - DB로 통해 회원 정보 저장
 
 Milestones:
-1. [WebSecurity](https://github.com/fjeos/5rmi/milestone/6)
-2. [Profile Feature](https://github.com/fjeos/5rmi/milestone/5)
+1. [WebSecurity](https://github.com/fjeos/5rmi/milestone/6?closed=1)
+2. [Profile Feature](https://github.com/fjeos/5rmi/milestone/5?closed=1)
 
 - 관리자 계정 정의 및 관리자 페이지 구현
 - 일반 유저 정지 가능
 - 관리자는 계정 권한 변경 가능 *구현 안됨*
 
 Milestones:
-1. [Banhammer](https://github.com/fjeos/5rmi/milestone/7)
-2. [WebSecurity](https://github.com/fjeos/5rmi/milestone/6)
+1. [Banhammer](https://github.com/fjeos/5rmi/milestone/7?closed=1)
+2. [WebSecurity](https://github.com/fjeos/5rmi/milestone/6?closed=1)
 
 - 공지글 목록/상세/수정/삭제/추가
 - 공지글 최근 5개 까지만 조회
@@ -54,9 +54,9 @@ Milestones:
 - 정지된 회원 공지글 볼 수 있음
 
 Milestones:
-1. [Board featureset](https://github.com/fjeos/5rmi/milestone/4)
-2. [Banhammer](https://github.com/fjeos/5rmi/milestone/7)
-3. [WebSecurity](https://github.com/fjeos/5rmi/milestone/6)
+1. [Board featureset](https://github.com/fjeos/5rmi/milestone/4?closed=1)
+2. [Banhammer](https://github.com/fjeos/5rmi/milestone/7?closed=1)
+3. [WebSecurity](https://github.com/fjeos/5rmi/milestone/6?closed=1)
 
 ### 서비스 배포
 - AWS로 서비스 배포 **현제 develop 브랜치 Git clone 통해서 이루어짐**
