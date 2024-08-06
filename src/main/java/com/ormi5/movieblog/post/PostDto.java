@@ -4,10 +4,7 @@ import com.ormi5.movieblog.comment.Comment;
 import com.ormi5.movieblog.comment.CommentDto;
 import com.ormi5.movieblog.movie.MovieDto;
 import com.ormi5.movieblog.user.UserDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Value;
+import lombok.*;
 
 import javax.swing.text.html.parser.Entity;
 import java.io.Serializable;
@@ -19,6 +16,7 @@ import java.util.stream.Collectors;
  * DTO for {@link Post}
  */
 @Value
+@Getter
 @AllArgsConstructor
 @Builder
 public class PostDto implements Serializable {

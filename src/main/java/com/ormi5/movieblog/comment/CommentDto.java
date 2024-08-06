@@ -24,7 +24,7 @@ public class CommentDto {
 	public static CommentDto toDto(Comment comment) {
 		return CommentDto.builder()
 			.commentId(comment.getId())
-			.post(PostDto.toDto(comment.getPost()))
+			//.post(PostDto.toDto(comment.getPost()))
 			.user(UserDto.fromEntity(comment.getUser()))
 			.content(comment.getContent())
 			.likes(comment.getLikes())

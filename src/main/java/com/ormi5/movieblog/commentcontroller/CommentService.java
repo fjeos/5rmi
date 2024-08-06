@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -38,7 +40,7 @@ public class CommentService {
 
 		Comment comment = commentDto.toEntity();
 
-		Comment savedComment = commentRepository.save(comment);
+		commentRepository.save(comment);
 	}
 
 	@Transactional
@@ -96,7 +98,7 @@ public class CommentService {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다"));
 
-		if (!comment.getUser().equals(userId)) {
+		if (!comment.getUser().getId().equals(userId)) {
 			throw new RuntimeException("댓글을 삭제할 권한이 없습니다");
 		}
 

@@ -6,6 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
 </head>
 <body>
 <h1>보드</h1>

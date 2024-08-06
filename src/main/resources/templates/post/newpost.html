@@ -3,6 +3,8 @@
 <head>
     <title>게시글 추가</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.ormi5.movieblog.user.User"*/-->

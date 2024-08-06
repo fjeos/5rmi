@@ -1,32 +1,39 @@
 package com.ormi5.movieblog.commentcontroller;
 
 import com.ormi5.movieblog.comment.CommentDto;
+import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.postcontroller.PostService;
+import com.ormi5.movieblog.user.User;
 import com.ormi5.movieblog.user.UserDto;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+import com.ormi5.movieblog.usercontroller.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/comments")
 public class CommentController {
 	private final CommentService commentService;
-	PostService postService;
+	private final UserService userService;
+	private final PostService postService;
 
 	@Autowired
-	public CommentController(CommentService commentService, PostService postService) {
+	public CommentController(CommentService commentService, PostService postService, UserService userService, UserService userService1) {
 		this.commentService = commentService;
 		this.postService = postService;
-	}
+        this.userService = userService1;
+    }
 
 	/**
 	 * 새로운 댓글 생성
@@ -121,14 +128,15 @@ public class CommentController {
 	}
 
 	@PostMapping("/{postId}/add")
-	public String addComment(@PathVariable("postId") Integer postId, @AuthenticationPrincipal UserDetails userDetails,
-		@RequestParam("userId") UserDto userDto,
+	public String addComment(@PathVariable("postId") Integer postId, Principal principal,
 		@RequestParam("content") String content) {
 		PostDto postDto = postService.getPostById(postId);
 
+		User user = userService.findByUsername(principal.getName());
+
 		CommentDto commentDto = CommentDto.builder()
 			.post(postDto)
-			.user(userDto)
+			.user(UserDto.fromEntity(user))
 			.content(content)
 			.build();
 
