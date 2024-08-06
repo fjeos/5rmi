@@ -35,13 +35,12 @@ public class PostController {
 	 * @author yuseok
 	 * @param postDto 생성할 게시글 정보가 담긴 DTO
 	 * @return 생성된 게시글 정보가 담긴 DTO
-	 */
 	@PostMapping
 	public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
 		PostDto createdPost = postService.createPost(postDto);
 
 		return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
-	}
+	}*/
 
 	// 모든 게시글을 조회하는 메서드
 	@GetMapping("/list")

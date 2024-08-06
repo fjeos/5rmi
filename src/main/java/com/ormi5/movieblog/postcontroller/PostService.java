@@ -4,7 +4,6 @@ import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostResponseDto;
 import com.ormi5.movieblog.user.UserDto;
-import com.ormi5.movieblog.post.PostResponseDto;
 import com.ormi5.movieblog.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class PostService {
 		this.postRepository = postRepository;
 	}
 
-	@Transactional
+	/*@Transactional
 	public PostDto createPost(PostDto postDto) {
 		Post post = Post.builder()
 				.user(postDto.getUser().toEntity())
@@ -40,10 +39,10 @@ public class PostService {
 				.build();
 
 		return PostDto.toDto(postRepository.save(post));
-	}
+	}*/
 
 	@Transactional
-	public PostDto createPost(PostDto postDto, UserDto userDto) {
+	public void createPost(PostDto postDto, UserDto userDto) {
 		Post post = Post.builder()
 				.user(userDto.toEntity())
 				.title(postDto.getTitle())
@@ -51,11 +50,10 @@ public class PostService {
 				.isShared(postDto.getIsShared())
 				.likesCount(0)
 				.createAt(Instant.now())
-				.updateAt(Instant.now())
 				.movieId(null) // TODO Implement movie dto
 				.build();
 
-		return PostDto.toDto(postRepository.save(post));
+		postRepository.save(post);
 	}
 
 	@Transactional

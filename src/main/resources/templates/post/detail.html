@@ -49,7 +49,7 @@
         <a th:href="@{/comments/{postId}/add(postId=${post.postId})}">댓글 추가하기</a>
         <hr>
         <div class="post-actions">
-            <a th:href="@{/posts}">목록으로</a>
+            <a th:href="@{/board}">목록으로</a>
             <a th:href="@{/posts/{id}/edit(id=${post.postId})}" class="edit-btn">수정</a>
             <form th:action="@{/posts/{id}/delete(id=${post.postId})}" method="post" class="delete-form">
                 <button type="submit">삭제</button>
