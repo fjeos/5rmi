@@ -17,7 +17,7 @@
         </p>
         <div class="post-content" th:text="${post.content}"></div>
         <button class="likeBtn" th:postId="${post.postId}" th:onclick="increaseLike(this.getAttribute('postId'))">좋아요</button>
-        <span th:text="${post.likesCount}"></span>
+        <span class="like-counter" th:text="${post.likesCount}"></span>
         <hr>
         <h3>댓글</h3>
         <div id="commentStat" class="post-comment" th:each="postComment: ${post.comments}">
@@ -66,7 +66,12 @@
             },
             method: "POST",
         })
-            .then((response) => console.log(response))
+            .then((response) => {
+                console.log(response);
+                const counter = $('.like-counter')[0];
+                let likeCount = parseInt(counter.innerHTML);
+                counter.innerHTML = likeCount + 1;
+            })
             .catch((error) => console.log(error));
     }
 
@@ -83,7 +88,12 @@
                 commentId: commentId
             })
         })
-            .then((response) => console.log(response))
+            .then((response) => {
+                console.log(response);
+                const counter = $('#commentLike')[0];
+                let likeCount = parseInt(counter.innerHTML);
+                counter.innerHTML = likeCount + 1;
+            })
             .catch((error) => console.log(error));
 
     }
@@ -101,7 +111,12 @@
                 commentId: commentId
             })
         })
-            .then((response) => console.log(response))
+            .then((response) => {
+                console.log(response);
+                const counter = $('#commentDisLike')[0];
+                let likeCount = parseInt(counter.innerHTML);
+                counter.innerHTML = likeCount + 1;
+            })
             .catch((error) => console.log(error));
     }
 </script>
