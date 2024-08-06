@@ -103,19 +103,19 @@ public class CommentController {
 	 * @return 기존 post 상세 조회 화면
 	 */
 	@PostMapping("/like")
-	public String commentLike(@RequestBody Map<String, Integer> likeRequest, Model model) {
+	public ResponseEntity<CommentDto> commentLike(@RequestBody Map<String, Integer> likeRequest, Model model) {
 		Integer postId = likeRequest.get("postId");
 		Integer commentId = likeRequest.get("commentId");
 		commentService.increaseLike(postId, commentId);
-		return "redirect:/posts/" + postId;
+		return new ResponseEntity<>(commentService.getCommentById(commentId), HttpStatus.OK);
 	}
 
 	@PostMapping("/dislike")
-	public String commentDislike(@RequestBody Map<String, Integer> likeRequest, Model model) {
+	public ResponseEntity<CommentDto> commentDislike(@RequestBody Map<String, Integer> likeRequest, Model model) {
 		Integer postId = likeRequest.get("postId");
 		Integer commentId = likeRequest.get("commentId");
 		commentService.decreaseLike(postId, commentId);
-		return "redirect:/posts/" + postId;
+		return new ResponseEntity<>(commentService.getCommentById(commentId), HttpStatus.OK);
 	}
 
 	@GetMapping("/{postId}/add")

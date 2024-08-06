@@ -8,6 +8,7 @@ import com.ormi5.movieblog.usercontroller.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -191,10 +192,10 @@ public class PostController {
 	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/like")
-	public String increaseLike(@PathVariable("postId") Integer postId, Model model) {
+	public ResponseEntity<PostDto> increaseLike(@PathVariable("postId") Integer postId, Model model) {
 		postService.increaseLike(postId, model);
 		model.addAttribute(model);
-		return "redirect:/posts/{postId}";
+		return new ResponseEntity<>(postService.getPostById(postId), HttpStatus.OK);
 	}
 
 	/**
