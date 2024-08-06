@@ -146,8 +146,15 @@ public class CommentController {
 
 	@GetMapping("/{commentId}/edit")
 	public String editCommentForm(@PathVariable("commentId") Integer commentId,
-		@RequestParam Long postId, Model model) {
+		@RequestParam Long postId, Model model, Principal principal) {
 		CommentDto commentDto = commentService.getCommentById(commentId);
+
+		User user = userService.findByUsername(principal.getName());
+
+		if (!commentDto.getUser().getId().equals(user.getId())) {
+			System.out.println("수정 권한이 없습니다");
+			return "redirect:/posts/" + postId;
+		}
 
 		model.addAttribute("comment", commentDto);
 		model.addAttribute("postId", postId);
@@ -172,13 +179,23 @@ public class CommentController {
 
 		commentService.editComment(commentId, updatedComment);
 
-		return "redirect:/posts/" +postId;
+		return "redirect:/posts/" + postId;
 	}
 
 	@PostMapping("/{commentId}/delete")
 	public String deleteComment(@PathVariable("commentId") Integer commentId,
 		@RequestParam Integer userId,
-		@RequestParam Integer postId) {
+		@RequestParam Integer postId, Principal principal) {
+
+		CommentDto commentDto = commentService.getCommentById(commentId);
+
+		User user = userService.findByUsername(principal.getName());
+
+		if (!commentDto.getUser().getId().equals(user.getId())) {
+			System.out.println("삭제 권한이 없습니다");
+			return "redirect:/posts/" + postId;
+		}
+
 		commentService.deleteComment(commentId, userId);
 
 		return "redirect:/posts/" + postId;
