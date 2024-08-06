@@ -12,7 +12,8 @@
     <div class="post-detail">
         <h2 th:text="${post.title}"></h2>
         <p class="post-meta">
-            작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+            작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy.MM.dd HH:mm')}"></span>
+            작성자: <span th:text="${post.user.username}"></span>
         </p>
         <div class="post-content" th:text="${post.content}"></div>
         <button class="likeBtn" th:postId="${post.postId}" th:onclick="increaseLike(this.getAttribute('postId'))">좋아요</button>
@@ -22,31 +23,30 @@
         <div id="commentStat" class="post-comment" th:each="postComment: ${post.comments}">
             <p class="post-comment">
                 댓글 번호: <span class="post-comment" th:text="${postComment.commentId}"></span>
-                작성자 Id: <span class="post-comment" th:text="${postComment.user.getId()}"></span>
                 작성자 : <span class="post-comment" th:text="${postComment.user.username}"></span>
             </p>
             <p class="post-comment">
                 <span class="post-comment" th:text="${postComment.content}"></span>
             </p>
             <p class="post-comment">
-                작성 시각: <span class="post-comment" th:text="${#temporals.format(postComment.createAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+                작성 시각: <span class="post-comment" th:text="${#temporals.format(postComment.createAt, 'yyyy.MM.dd HH:mm')}"></span>
             </p>
             <p class="post-comment">
-                <button class="likeBtn" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
+                <button class="button" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
                         th:onclick="increaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">좋아요</button>
                 <span id="commentLike" th:text="${postComment.likes}"></span>
-                <button class="likeBtn" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
+                <button class="button" th:postId="${post.postId}" th:commentId="${postComment.commentId}"
                         th:onclick="decreaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">싫어요</button>
                 <span id="commentDisLike" th:text="${postComment.dislikes}"></span>
             </p>
-            <a th:href="@{/comments/{commentId}/edit(commentId=${postComment.commentId}, postId=${post.getPostId()})}">수정하기</a>
-            <form th:action="@{/comments/{commentId}/delete(commentId=${postComment.commentId})}" method="post" style="display: inline;">
+            <a class="button" th:href="@{/comments/{commentId}/edit(commentId=${postComment.commentId}, postId=${post.getPostId()})}">수정하기</a>
+            <form class="button" th:action="@{/comments/{commentId}/delete(commentId=${postComment.commentId})}" method="post" style="display: inline;">
                 <input type="hidden" name="userId" th:value="${postComment.user.getId()}"/>
                 <input type="hidden" name="postId" th:value="${post.postId}"/>
-                <button type="submit">댓글 삭제</button>
+                <button class="button" type="submit">댓글 삭제</button>
             </form>
         </div>
-        <a th:href="@{/comments/{postId}/add(postId=${post.postId})}">댓글 추가하기</a>
+        <a class="button" th:href="@{/comments/{postId}/add(postId=${post.postId})}">댓글 추가하기</a>
         <hr>
         <div class="post-actions">
             <a th:href="@{/board}">목록으로</a>
