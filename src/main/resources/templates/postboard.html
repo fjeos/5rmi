@@ -49,7 +49,7 @@
         <tbody>
         <!--/*@thymesVar id="announcement" type="com.ormi5.movieblog.announcement.Announcement"*/-->
         <tr th:each="announcement : ${announcements}">
-            <td th:text="${announcement.announcementId}"></td>
+            <td th:text="${announcement.title}"></td>
             <td th:text="${announcement.adminId}"></td>
             <td th:text="${announcement.createAt}"></td>
             <td th:text="${announcement.updateAt}"></td>

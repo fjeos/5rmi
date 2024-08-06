@@ -2,30 +2,27 @@ package com.ormi5.movieblog.announcementcontroller;
 
 import com.ormi5.movieblog.announcement.AnnouncementDto;
 import com.ormi5.movieblog.post.PostDto;
+import com.ormi5.movieblog.user.User;
+import com.ormi5.movieblog.usercontroller.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequestMapping("/announcement")
 public class AnnouncementController {
-
+    private final UserService userService;
     private final AnnouncementService announcementService;
 
     @Autowired
-    public AnnouncementController(AnnouncementService announcementService) {
+    public AnnouncementController(UserService userService, AnnouncementService announcementService) {
+        this.userService = userService;
         this.announcementService = announcementService;
-    }
-
-    @PostMapping
-    public ResponseEntity<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto announcementDto) {
-        AnnouncementDto createdAnnouncement = announcementService.createAnnouncement(announcementDto);
-        return new ResponseEntity<>(createdAnnouncement, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -57,15 +54,42 @@ public class AnnouncementController {
         return ResponseEntity.ok(announcements);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AnnouncementDto> updateAnnouncement(@PathVariable Integer id, @RequestBody AnnouncementDto announcementDto) {
-        AnnouncementDto updatedAnnouncement = announcementService.updateAnnouncement(id, announcementDto);
-        return ResponseEntity.ok(updatedAnnouncement);
+    @GetMapping("/{announcementId}/edit")
+    public String editAnnouncement(@PathVariable Integer announcementId, Principal principal, Model model) {
+        AnnouncementDto announcement = announcementService.getAnnouncement(announcementId);
+        User user = userService.findByUsername(principal.getName());
+
+        if (!user.getOp()) {
+            throw new RuntimeException("게시글을 수정할 권한이 없습니다");
+        }
+
+        model.addAttribute("announcement", announcement);
+        return "announcement/edit";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAnnouncement(@PathVariable Integer id) {
+    @PostMapping("/{announcementId}/edit")
+    public String updateAnnouncement(@PathVariable("announcementId") Integer id, Principal principal, @ModelAttribute AnnouncementDto updateAnnouncementDto) {
+        AnnouncementDto announcement = announcementService.getAnnouncement(id);
+        User user = userService.findByUsername(principal.getName());
+
+        if (!user.getOp()) {
+            throw new RuntimeException("게시글을 수정할 권한이 없습니다");
+        }
+
+        userService.updateAnnouncement(id, updateAnnouncementDto);
+        return "redirect:/board";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteAnnouncement(@PathVariable Integer id, Principal principal) {
+        AnnouncementDto announcement = announcementService.getAnnouncement(id);
+        User user = userService.findByUsername(principal.getName());
+
+        if (!user.getOp()) {
+            throw new RuntimeException("공지글을 삭제할 권한이 없습니다");
+        }
+
         announcementService.deleteAnnouncement(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/board";
     }
 }

@@ -9,21 +9,18 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.ormi5.movieblog.user.User"*/-->
-<!--/*@thymesVar id="post" type="com.ormi5.movieblog.post.Post"*/-->
+<!--/*@thymesVar id="announcement" type="com.ormi5.movieblog.announcement.Announcement"*/-->
 <div>
     <h1>게시글 추가</h1>
-    <form th:action="@{'/newpost'}" method="post" role="form" th:object="${post}">
+    <form th:action="@{'/newannouncement'}" method="post" role="form" th:object="${announcement}">
         <label for="title">Title:</label>
         <input th:field="*{title}" type="text" id="title" name="title" placeholder="Enter a title" required><br>
 
         <label for="title">Content:</label>
         <input th:field="*{content}" type="text" id="content" name="content" placeholder="Enter content" required><br>
 
-        <label for="title">Movie:</label>
-        <input type="text" id="movie" name="movie" placeholder="Enter movie id" required><br>
-
-        <label for="title">공개여부:</label>
-        <input th:field="*{isShared}" type="checkbox" id="is-shared" name="is-shared">
+        <label for="title">중요여부:</label>
+        <input th:field="*{isImportant}" type="checkbox" id="is-shared" name="is-shared">
 
         <button type="submit">추가</button>
     </form>

@@ -2,6 +2,9 @@ package com.ormi5.movieblog.announcementcontroller;
 
 import com.ormi5.movieblog.announcement.Announcement;
 import com.ormi5.movieblog.announcement.AnnouncementDto;
+import com.ormi5.movieblog.post.Post;
+import com.ormi5.movieblog.post.PostDto;
+import com.ormi5.movieblog.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +25,9 @@ public class AnnouncementService {
     }
 
     @Transactional
-    public AnnouncementDto createAnnouncement(AnnouncementDto announcementDto) {
+    public void createAnnouncement(AnnouncementDto announcementDto, UserDto userDto) {
         Announcement announcement = Announcement.builder()
-                .adminId(announcementDto.getAdminId())
+                .adminId(userDto.getId())
                 .title(announcementDto.getTitle())
                 .content(announcementDto.getContent())
                 .isImportant(announcementDto.getIsImportant())
@@ -32,15 +35,14 @@ public class AnnouncementService {
                 .createAt(Instant.now())
                 .build();
 
-        Announcement savedAnnouncement = announcementRepository.save(announcement);
-        return convertToDto(savedAnnouncement);
+        announcementRepository.save(announcement);
     }
 
     @Transactional(readOnly = true)
     public AnnouncementDto getAnnouncement(Integer id) {
-        Announcement announcement = announcementRepository.findById(id)
+       return announcementRepository.findById(id)
+                .map(AnnouncementDto::toDto)
                 .orElseThrow(() -> new RuntimeException("Announcement not found"));
-        return convertToDto(announcement);
     }
 
     @Transactional(readOnly = true)
@@ -51,13 +53,12 @@ public class AnnouncementService {
     }
 
     @Transactional
-    public AnnouncementDto updateAnnouncement(Integer id, AnnouncementDto announcementDto) {
+    public void updateAnnouncement(Integer id, AnnouncementDto announcementDto) {
         Announcement announcement = announcementRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Announcement not found"));
 
         announcement.updateAnnouncement(announcementDto);
-        Announcement updatedAnnouncement = announcementRepository.save(announcement);
-        return convertToDto(updatedAnnouncement);
+        announcementRepository.save(announcement);
     }
 
     @Transactional

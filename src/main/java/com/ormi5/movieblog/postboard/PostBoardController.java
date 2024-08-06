@@ -1,5 +1,7 @@
 package com.ormi5.movieblog.postboard;
 
+import com.ormi5.movieblog.announcement.Announcement;
+import com.ormi5.movieblog.announcement.AnnouncementDto;
 import com.ormi5.movieblog.announcementcontroller.AnnouncementService;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
@@ -17,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -114,5 +117,37 @@ public class PostBoardController {
         }
 
         return "post/newpost";
+    }
+
+    @GetMapping("/newannouncement")
+    public String createAnnouncement(Model model, Principal principal) {
+        Announcement announcement = new Announcement();
+        User user = null;
+        if(principal != null) {
+            user = userService.findByUsername(principal.getName());
+
+            if(!user.getOp()) {
+                throw new RuntimeException("게시글을 추가할 권한이 없습니다");
+            }
+        }
+
+
+        model.addAttribute("announcement", announcement);
+        return "announcement/newannouncement";
+    }
+
+    @PostMapping("/newannouncement")
+    public String createAnnouncement(@ModelAttribute("announcement") AnnouncementDto announcementDto,  Principal principal, Model model) {
+        User user = null;
+        if(principal != null) {
+            user = userService.findByUsername(principal.getName());
+
+            log.info("New announcement for {}", user.getUsername());
+
+            announcementService.createAnnouncement(announcementDto, UserDto.fromEntity(user));
+            return "redirect:/board";
+        }
+
+        return "announcement/newannouncement";
     }
 }

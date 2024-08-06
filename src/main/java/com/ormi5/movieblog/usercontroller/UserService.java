@@ -1,5 +1,10 @@
 package com.ormi5.movieblog.usercontroller;
 
+import com.ormi5.movieblog.announcement.Announcement;
+import com.ormi5.movieblog.announcement.AnnouncementDto;
+import com.ormi5.movieblog.announcementcontroller.AnnouncementController;
+import com.ormi5.movieblog.announcementcontroller.AnnouncementRepository;
+import com.ormi5.movieblog.announcementcontroller.AnnouncementService;
 import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 
@@ -26,12 +31,16 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final PostService postService;
+	private final AnnouncementService announcementService;
+	private final AnnouncementRepository announcementRepository;
 
-	public UserService(UserRepository userRepository, PostService postService, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository, PostService postService, PasswordEncoder passwordEncoder, AnnouncementService announcementService, AnnouncementRepository announcementRepository) {
 		this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.postService = postService;
-    }
+		this.announcementService = announcementService;
+		this.announcementRepository = announcementRepository;
+	}
 
 	@Transactional
 	public List<UserDto> getAllUsers() {
@@ -114,4 +123,12 @@ public class UserService {
 			return target;
 		});
 	}
+
+	@Transactional
+    public void updateAnnouncement(Integer id, AnnouncementDto updateAnnouncementDto) {
+		Announcement announcement = announcementRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+
+		announcement.updateAnnouncement(updateAnnouncementDto);
+    }
 }

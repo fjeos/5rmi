@@ -10,6 +10,7 @@ import com.ormi5.movieblog.post.PostDto;
 
 import com.ormi5.movieblog.post.PostResponseDto;
 import com.ormi5.movieblog.user.User;
+import com.ormi5.movieblog.usercontroller.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
 	private final PostService postService;
+	private final UserService userService;
 
 	/**
 	 * 게시글 생성 메서드
@@ -146,8 +149,14 @@ public class PostController {
 	 * @author nayoung
 	 */
 	@GetMapping("/{postId}/edit")
-	public String editForm(@PathVariable("postId") Integer postId, Model model) {
+	public String editForm(@PathVariable("postId") Integer postId, Principal principal, Model model) {
 		PostDto post = postService.getPostById(postId);
+		User user = userService.findByUsername(principal.getName());
+
+		if (!post.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("게시글을 수정할 권한이 없습니다");
+		}
+
 		model.addAttribute("post", post);
 		return "post/edit";
 	}
@@ -160,7 +169,14 @@ public class PostController {
 	 * @author nayoung
 	 */
 	@PostMapping("/{postId}/edit")
-	public String edit(@PathVariable("postId") Integer postId, @ModelAttribute PostResponseDto updatePost) {
+	public String edit(@PathVariable("postId") Integer postId, Principal principal, @ModelAttribute PostResponseDto updatePost) {
+		PostDto post = postService.getPostById(postId);
+		User user = userService.findByUsername(principal.getName());
+
+		if (!post.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("게시글을 수정할 권한이 없습니다");
+		}
+
 		postService.updatePost(postId, updatePost);
 		return "redirect:/board";
 	}
@@ -188,7 +204,14 @@ public class PostController {
 	 * @return result ResponseEntity
 	 */
 	@PostMapping("/{id}/delete")
-	public String deletePostById(@PathVariable("id") Integer id) {
+	public String deletePostById(@PathVariable("id") Integer id, Principal principal, Model model) {
+		PostDto post = postService.getPostById(id);
+		User user = userService.findByUsername(principal.getName());
+
+		if (!post.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("게시글을 삭제할 권한이 없습니다");
+		}
+
 		boolean deleted = postService.deletePost(id);
 		return "redirect:/board";
 	}

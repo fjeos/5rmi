@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
+    <meta charset="UTF-8">
     <title>공지글 상세보기</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
 </head>
 <body>
 <h1>공지글 상세보기</h1>
@@ -15,8 +18,8 @@
     <hr>
     <div class="announcement-actions">
         <a th:href="@{/board}">목록으로</a>
-        <a th:href="@{'/announcements/'+${announcement.announcementId}+'/edit'}" class="edit-btn">수정</a>
-        <form th:action="@{'/announcements/'+${announcement.announcementId}+'/delete'}" method="announcement" class="delete-form">
+        <a th:href="@{'/announcement/'+${announcement.announcementId}+'/edit'}" class="edit-btn">수정</a>
+        <form th:action="@{'/announcement/'+${announcement.announcementId}+'/delete'}" method="post" class="delete-form">
             <button type="submit">삭제</button>
     </form>
     </div>
