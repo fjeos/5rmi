@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.ZoneId;
 
 @Getter
 @NoArgsConstructor
@@ -44,7 +45,7 @@ public class Comment {
 
 	public void updateComment(CommentDto commentDto) {
 		this.content = commentDto.getContent();
-		this.updateAt = Instant.now();
+		this.updateAt = Instant.now().atZone(ZoneId.of("Asia/Seoul")).toInstant();
 	}
 
 	public void increaseLike() {

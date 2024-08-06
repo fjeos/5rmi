@@ -44,6 +44,7 @@
             <th>수정</th>
             <th>중요</th>
             <th>조회수</th>
+            <th>바로가기</th>
         </tr>
         </thead>
         <tbody>
@@ -51,7 +52,7 @@
         <tr th:each="announcement : ${announcements}">
             <td th:text="${announcement.title}"></td>
             <td th:text="${announcement.adminId}"></td>
-            <td th:text="${announcement.createAt}"></td>
+            <td th:text="${#temporals.format(announcement.createAt, 'yyyy.MM.dd HH:mm')}"></td>
             <td th:text="${announcement.updateAt}"></td>
             <td th:text="${announcement.getIsImportant()}"></td>
             <td th:text="${announcement.viewsCount}"></td>
@@ -85,6 +86,7 @@
             <th>수정</th>
             <th>좋아요</th>
             <th>공개여부</th>
+            <th>바로가기</th>
         </tr>
         </thead>
         <tbody>
@@ -92,8 +94,8 @@
         <tr th:each="post : ${posts}">
                 <td th:text="${post.title}"></td>
                 <td th:text="${post.user.username}"></td>
-                <td th:text="${post.createAt}"></td>
-                <td th:text="${post.updateAt}"></td>
+                <td th:text="${#temporals.format(post.createAt, 'yyyy.MM.dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(post.updateAt, 'yyyy.MM.dd HH:mm')}"></td>
                 <td th:text="${post.likesCount}"></td>
                 <td th:text="${post.isShared}"></td>
                 <td><a th:href="@{'/posts/'+${post.postId}}">링크</a></td>

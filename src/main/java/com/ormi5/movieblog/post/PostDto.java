@@ -9,6 +9,7 @@ import lombok.*;
 import javax.swing.text.html.parser.Entity;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,8 +58,8 @@ public class PostDto implements Serializable {
                 .likesCount(Math.max(this.getLikesCount(), 0))
                 // .likesCount(postDTO.getLikesCount() >=0 ? postDTO.getLikesCount() : 0)
                 /* postDTO.getId()의 값이 null이라는 건 게시글을 생성한다는 뜻 */
-                .createAt(this.getPostId() == null ? Instant.now() : this.getCreateAt())
-                .updateAt(this.getPostId() == null ? null : Instant.now())
+                .createAt(this.getPostId() == null ? Instant.now().atZone(ZoneId.of("Asia/Seoul")).toInstant() : this.getCreateAt())
+                .updateAt(this.getPostId() == null ? null : Instant.now().atZone(ZoneId.of("Asia/Seoul")).toInstant())
                 .build();
     }
 }

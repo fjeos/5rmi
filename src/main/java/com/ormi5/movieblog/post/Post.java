@@ -1,6 +1,7 @@
 package com.ormi5.movieblog.post;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
 import com.ormi5.movieblog.comment.Comment;
@@ -47,12 +48,12 @@ public class Post {
 	private Integer likesCount = 0;
 
 	@Column(name = "create_at", nullable = false, updatable = false) // 읽기 전용 필드
-	private Instant createAt = Instant.now();
+	private Instant createAt = Instant.now().atZone(ZoneId.of("Asia/Seoul")).toInstant();
 
 	@Column(name = "update_at")
 	private Instant updateAt;
 
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comment> comments;
 
 	@ManyToOne(fetch = FetchType.LAZY)//, optional = false)

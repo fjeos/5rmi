@@ -8,6 +8,7 @@ import com.ormi5.movieblog.user.UserDto;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.ZoneId;
 
 @Getter
 @Builder
@@ -42,8 +43,8 @@ public class CommentDto {
 			.content(this.getContent())
 			.likes(Math.max(this.getLikes(), 0))
 			.dislikes(Math.max(this.getDislikes(), 0))
-			.createAt(this.getCommentId() == null ? Instant.now() : this.getCreateAt())
-			.updateAt(this.getCommentId() == null ? null : Instant.now())
+			.createAt(this.getCommentId() == null ? Instant.now().atZone(ZoneId.of("Asia/Seoul")).toInstant() : this.getCreateAt())
+			.updateAt(this.getCommentId() == null ? null : Instant.now().atZone(ZoneId.of("Asia/Seoul")).toInstant())
 			.build();
 	}
 }
