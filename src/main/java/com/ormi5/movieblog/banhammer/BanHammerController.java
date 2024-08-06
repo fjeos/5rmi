@@ -28,7 +28,7 @@ public class BanHammerController {
 
     // 모든 게시글을 조회하는 메서드
     @GetMapping("/admin")
-    public String getBoard(Model model, Principal principal, @RequestParam(required = false) Integer userId) {
+    public String getBoard(Model model, Principal principal, @RequestParam(required = false) Integer userId, @RequestParam(required = false) Integer option) {
         User user = null;
         if (principal != null) {
             user = userService.findByUsername(principal.getName());
@@ -38,10 +38,18 @@ public class BanHammerController {
                 return "redirect:/board"; // workaround for when not using custom UserDetails for roles
             }
 
-            if(userId != null) {
+            if(option != null && userId != null) {
                 User targetUser = userService.findByUserId(userId).get();
-                log.info("Triggered ban toggle from {}", targetUser.getOp());
-                model.addAttribute("toggleReturn", userService.toggleBan(targetUser.getId()));
+
+                if(option == 0) {
+                    log.info("Triggered ban toggle from {}", targetUser.getIsStop());
+                    model.addAttribute("toggleReturn", userService.toggleStop(targetUser.getId()));
+                }
+                else if(option == 1)
+                {
+                    log.info("Triggered op toggle from {}", targetUser.getOp());
+                    model.addAttribute("toggleReturn", userService.toggleOp(targetUser.getId()));
+                }
             }
 
             model.addAttribute("users", userService.getAllUsers());

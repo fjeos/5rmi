@@ -6,6 +6,7 @@ import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +48,9 @@ public class AnnouncementService {
 
     @Transactional(readOnly = true)
     public List<AnnouncementDto> getAllAnnouncements() {
-        return announcementRepository.findAll().stream()
+        return announcementRepository.findAll(Sort.by(Sort.Direction.DESC, "createAt")).stream()
                 .map(this::convertToDto)
+                .limit(5)
                 .collect(Collectors.toList());
     }
 

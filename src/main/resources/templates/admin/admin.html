@@ -29,8 +29,11 @@
             <td th:text="${user.level}"></td>
             <td th:text="${user.isStop}"></td>
 
-            <td><a th:unless="${user.isStop}" th:href="@{/admin(userId=${user.id})}">정지</a></td>
-            <td><a th:unless="${!user.isStop}" th:href="@{/admin(userId=${user.id})}">정지 헤제</a></td>
+            <td><a th:unless="${user.isStop}" th:href="@{/admin(userId=${user.id}, option=0)}">정지</a></td>
+            <td><a th:unless="${!user.isStop}" th:href="@{/admin(userId=${user.id}, option=0)}">정지 헤제</a></td>
+
+            <td><a th:unless="${user.op}" th:href="@{/admin(userId=${user.id}, option=1)}">OP임영</a></td>
+            <td><a th:unless="${!user.op}" th:href="@{/admin(userId=${user.id}, option=1)}">OP 헤제</a></td>
             </a>
         </tr>
         </tbody>
