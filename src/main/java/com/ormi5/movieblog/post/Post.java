@@ -50,7 +50,7 @@ public class Post {
 	@Column(name = "update_at")
 	private Instant updateAt;
 
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comment> comments;
 
 	@ManyToOne(fetch = FetchType.LAZY)//, optional = false)
