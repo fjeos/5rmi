@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>게시글 상세보기</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
@@ -21,7 +22,8 @@
         <div id="commentStat" class="post-comment" th:each="postComment: ${post.comments}">
             <p class="post-comment">
                 댓글 번호: <span class="post-comment" th:text="${postComment.commentId}"></span>
-                작성자 Id: <span class="post-comment" th:text="${postComment.userId}"></span>
+                작성자 Id: <span class="post-comment" th:text="${postComment.user.getId()}"></span>
+                작성자 : <span class="post-comment" th:text="${postComment.user.username}"></span>
             </p>
             <p class="post-comment">
                 <span class="post-comment" th:text="${postComment.content}"></span>
@@ -37,7 +39,14 @@
                         th:onclick="decreaseCommentLike(this.getAttribute('postId'), this.getAttribute('commentId'))">싫어요</button>
                 <span id="commentDisLike" th:text="${postComment.dislikes}"></span>
             </p>
+            <a th:href="@{/comments/{commentId}/edit(commentId=${postComment.commentId})}">수정하기</a>
+            <form th:action="@{/comments/{commentId}/delete(commentId=${postComment.commentId})}" method="post" style="display: inline;">
+                <input type="hidden" name="userId" th:value="${postComment.user.getId()}"/>
+                <input type="hidden" name="postId" th:value="${post.postId}"/>
+                <button type="submit">댓글 삭제</button>
+            </form>
         </div>
+        <a th:href="@{/comments/{postId}/add(postId=${post.postId})}">댓글 추가하기</a>
         <hr>
         <div class="post-actions">
             <a th:href="@{/posts}">목록으로</a>

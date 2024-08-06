@@ -7,10 +7,6 @@
     <h1>댓글 작성</h1>
     <form th:action="@{/comments/{postId}/add(postId=${postId})}" method="post">
         <div>
-            <label for="userId">UserID:</label>
-            <input type="number" name="userId" id="userId" required>
-        </div>
-        <div>
             <label for="content">Comment:</label>
             <textarea id="content" name="content" required></textarea>
         </div>
