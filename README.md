@@ -1,5 +1,5 @@
 # ormi_5jo
-오르미 백엔드 양성 부트캠프/ 5기/ Java/SpringBoot 프로젝트/ 5조
+오르미 백엔드 양성 과정 / 5기 / Java/SpringBoot 프로젝트 / 5조
 
 ## 영화 블로그 서비스 (Spring Boot + Thymeleaf + AWS)
 
