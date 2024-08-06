@@ -51,11 +51,12 @@ public class PostController {
 	 * @return String, post/detail 링크로 이동
 	 */
 	@GetMapping("/{id}")
-	public String getPostById(@PathVariable("id") Integer postId, Model model, RedirectAttributes redirectAttributes) {
+	public String getPostById(@PathVariable("id") Integer postId, Principal principal, Model model, RedirectAttributes redirectAttributes) {
 		PostDto post = postService.getPostById(postId);
+		User user = userService.findByUsername(principal.getName());
 
 		// 공개 여부 확인: 비공개 게시글은 조회 불가
-		if (!post.getIsShared()) {
+		if (!post.getIsShared() && !post.getUser().getId().equals(user.getId())) {
 			System.out.println("이 게시글은 조회할 수 없습니다!");
 			return "redirect:/board";
 		}

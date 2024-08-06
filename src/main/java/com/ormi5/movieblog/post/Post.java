@@ -64,6 +64,7 @@ public class Post {
 		this.title = postDto.getTitle();
 		this.content = postDto.getContent();
 		this.updateAt = Instant.now();
+		this.isShared = postDto.getIsShared();
 	}
 	public void increaseLike() {
 		this.likesCount++;
