@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>댓글 수정</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
 </head>
 <body>
     <h1>댓글 수정</h1>

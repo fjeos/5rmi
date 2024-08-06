@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
+    <meta charset="UTF-8">
     <title>댓글 작성</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
 </head>
 <body>
     <h1>댓글 작성</h1>
