@@ -117,18 +117,26 @@ public class UserService {
 	}
 
 	@Transactional
-	public Optional<User> toggleBan(int userId) {
-		return userRepository.findById(userId).map(target -> {
-			target.updateStop(!target.getIsStop());
-			return target;
-		});
-	}
-
-	@Transactional
     public void updateAnnouncement(Integer id, AnnouncementDto updateAnnouncementDto) {
 		Announcement announcement = announcementRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 
 		announcement.updateAnnouncement(updateAnnouncementDto);
     }
+
+	@Transactional
+    public Optional<User> toggleStop(Integer id) {
+		return userRepository.findById(id).map(target -> {
+			target.updateStop(!target.getIsStop());
+			return target;
+		});
+    }
+
+	@Transactional
+	public Optional<User> toggleOp(Integer id) {
+		return userRepository.findById(id).map(target -> {
+			target.updateOp(!target.getOp());
+			return target;
+		});
+	}
 }

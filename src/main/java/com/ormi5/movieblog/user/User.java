@@ -41,4 +41,8 @@ public class User {
     public void updateStop(boolean b) {
         this.isStop = b;
     }
+
+    public void updateOp(boolean b) {
+        this.op = b;
+    }
 }
