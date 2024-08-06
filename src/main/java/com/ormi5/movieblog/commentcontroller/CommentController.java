@@ -1,7 +1,6 @@
 package com.ormi5.movieblog.commentcontroller;
 
 import com.ormi5.movieblog.comment.CommentDto;
-import com.ormi5.movieblog.post.Post;
 import com.ormi5.movieblog.post.PostDto;
 import com.ormi5.movieblog.postcontroller.PostService;
 import com.ormi5.movieblog.user.User;
@@ -12,13 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.ormi5.movieblog.usercontroller.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -29,11 +27,11 @@ public class CommentController {
 	private final PostService postService;
 
 	@Autowired
-	public CommentController(CommentService commentService, PostService postService, UserService userService, UserService userService1) {
+	public CommentController(CommentService commentService, PostService postService, UserService userService) {
 		this.commentService = commentService;
 		this.postService = postService;
-        this.userService = userService1;
-    }
+		this.userService = userService;
+	}
 
 	/**
 	 * 새로운 댓글 생성
@@ -147,18 +145,19 @@ public class CommentController {
 	}
 
 	@GetMapping("/{commentId}/edit")
-	public String editCommentForm(@PathVariable("commentId") Integer commentId, Model model) {
+	public String editCommentForm(@PathVariable("commentId") Integer commentId,
+		@RequestParam Long postId, Model model) {
 		CommentDto commentDto = commentService.getCommentById(commentId);
 
 		model.addAttribute("comment", commentDto);
+		model.addAttribute("postId", postId);
 
 		return "comment/edit_comment";
 	}
 
 	@PostMapping("/{commentId}/edit")
 	public String editComment(@PathVariable("commentId") Integer commentId,
-		@RequestParam String content
-	) {
+		@RequestParam Integer postId, @RequestParam String content) {
 		CommentDto commentDto = commentService.getCommentById(commentId);
 
 		CommentDto updatedComment = CommentDto.builder()
@@ -173,7 +172,7 @@ public class CommentController {
 
 		commentService.editComment(commentId, updatedComment);
 
-		return "redirect:/posts/" + commentDto.getPost().getPostId();
+		return "redirect:/posts/" +postId;
 	}
 
 	@PostMapping("/{commentId}/delete")
