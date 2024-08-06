@@ -13,7 +13,7 @@
         <a th:href="@{/board}">돌아가기</a>
         <div>
             레벨: <span th:text="*{level}"></span><br>
-            계정 생성일: <span th:text="*{signupDate}"></span><br>
+            계정 생성일: <span th:text="*{#temporals.format(signupDate, 'yyyy.MM.dd HH:mm')}"></span><br>
             리뷰 갯수: <span th:text="*{reviewCount}"></span>
         </div>
 
@@ -25,6 +25,7 @@
                 <th>수정</th>
                 <th>좋아요</th>
                 <th>공개여부</th>
+                <th>바로가기</th>
             </tr>
             </thead>
             <tbody>
@@ -32,8 +33,8 @@
             <!--/*@thymesVar id="post" type="com.ormi5.movieblog.post.ProfilePostResponseDto"*/-->
             <tr th:each="post : *{postList}">
                 <td th:text="${post.title}"></td>
-                <td th:text="${post.createAt}"></td>
-                <td th:text="${post.updateAt}"></td>
+                <td th:text="${#temporals.format(post.createAt, 'yyyy.MM.dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(post.updateAt, 'yyyy.MM.dd HH:mm')}"></td>
                 <td th:text="${post.likesCount}"></td>
                 <td th:text="${post.isShared}"></td>
                 <td><a th:href="@{'/posts/'+${post.postId}}">링크</a></td>
