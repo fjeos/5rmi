@@ -122,7 +122,7 @@ public class CommentController {
 	public String addCommentForm(@PathVariable("postId") Integer postId, Model model) {
 		model.addAttribute("postId", postId);
 
-		return "/comment/add_comment";
+		return "comment/add_comment";
 	}
 
 	@PostMapping("/{postId}/add")
