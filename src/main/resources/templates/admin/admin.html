@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 화면</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
+</head>
+<body>
+    <h1>관리자 화면</h1>
+    <a th:href="@{/board}">관리자 화면 나가기</a>
+    <table>
+        <thead>
+        <tr>
+            <th>유저 ID</th>
+            <th>유저 이름</th>
+            <th>생성 날짜</th>
+            <th>레벨</th>
+            <th>정지 여부</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="user" type="com.ormi5.movieblog.user.User"*/-->
+        <!--/*@thymesVar id="users" type="java.util.ArrayList<>"*/-->
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.signupDate}"></td>
+            <td th:text="${user.level}"></td>
+            <td th:text="${user.isStop}"></td>
+
+            <td><a th:unless="${user.isStop}" th:href="@{/admin(userId=${user.id})}">정지</a></td>
+            <td><a th:unless="${!user.isStop}" th:href="@{/admin(userId=${user.id})}">정지 헤제</a></td>
+            </a>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
