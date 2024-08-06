@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>로그인 실패</title>
@@ -10,6 +9,33 @@
 <div class="container">
     <h2>현제 계정은 정지 되어있습니다.</h2>
     <p>조치 신청은 관리자 문의하십시오.</p>
+
+    <div th:object="${announcements}">
+        <h2>Announcement</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>소유자</th>
+                <th>게시</th>
+                <th>수정</th>
+                <th>중요</th>
+                <th>조회수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="announcement : ${announcements}">
+                <td th:text="${announcement.announcementId}"></td>
+                <td th:text="${announcement.adminId}"></td>
+                <td th:text="${announcement.createAt}"></td>
+                <td th:text="${announcement.updateAt}"></td>
+                <td th:text="${announcement.getIsImportant()}"></td>
+                <td th:text="${announcement.viewsCount}"></td>
+                <td><a th:href="@{'/announcement/'+${announcement.announcementId}}">링크</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <a th:href="@{/login}">로그인 페이지로</a>
 

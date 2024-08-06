@@ -9,6 +9,7 @@ import com.ormi5.movieblog.user.UserDto;
 import com.ormi5.movieblog.usercontroller.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -26,22 +27,21 @@ import java.util.List;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class PostBoardController {
     private final PostService postService;
     private final UserService userService;
     private final AnnouncementService announcementService;
 //    private final MovieService movieService;
 
-    public PostBoardController(PostService postService, UserService userService, AnnouncementService announcementService) {
-        this.postService = postService;
-        this.userService = userService;
-        this.announcementService = announcementService;
-    }
-
     // 모든 게시글을 조회하는 메서드
     @GetMapping("/board")
     public String getBoard(Model model, Principal principal, String searchOption, String keyword) {
         User user = null;
+
+        // announcement를 출력하는 부분은 공통이기 때문에 상단부에 선언
+        model.addAttribute("announcements", announcementService.getAllAnnouncements());
+
         if (principal != null) {
             user = userService.findByUsername(principal.getName());
 
@@ -73,7 +73,6 @@ public class PostBoardController {
 
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
-        model.addAttribute("announcements", announcementService.getAllAnnouncements());
 
         model.addAttribute("searchOptions", searchOptions());
 
