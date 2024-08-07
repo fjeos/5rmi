@@ -2,6 +2,10 @@
 오르미 백엔드 양성 과정 / 5기 / Java/SpringBoot 프로젝트 / 5조
 
 ## 영화 블로그 서비스 (Spring Boot + Thymeleaf + AWS)
+현제 AWS 배표 링크
+http://3.38.190.229:8080/
+
+관리자 계정 (example): hello1 (비밀번호도 동일)
 
 ### 팀 편성
 1. 방준현 (팀장) - Frontend/Backend
