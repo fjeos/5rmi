@@ -19,6 +19,7 @@ http://3.38.190.229:8080/
 - 칸반 보드: [Notion](https://www.notion.so/oreumi/2df5908f6b4c48a9b4d83df40d4face8?v=0083633ff69b49829b96d516f7f6f24c)
 - 개인 일지: (프로젝트 관리 페이지 밑에 있음)
 - ERD: [ERD 클라우드](https://www.erdcloud.com/d/ni3wAtJFpCCPiQKL6)
+![image](https://github.com/user-attachments/assets/fbcaff8f-09f6-4bc1-b2e4-44b2210a70bd)
 - Figma: [5rmi-movie-web](https://www.figma.com/design/uWLSoP4hmhIA64YEcyNFpg/Untitled?node-id=1-457&t=YG88Gta83mmD56EG-1)
 - 이슈: [5rmi/issues](https://github.com/fjeos/5rmi/issues)
 - Git 개발 브랜치: [/develop](https://github.com/fjeos/5rmi/tree/develop)
