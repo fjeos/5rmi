@@ -7,7 +7,6 @@
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
 </head>
 <body>
-    <!--/*@thymesVar id="user" type="com.ormi5.movieblog.post.PostResponseDto"*/-->
     <div th:object="${user}">
         <h1 th:text="*{username}"></h1>
         <a th:href="@{/board}">돌아가기</a>
@@ -29,8 +28,6 @@
             </tr>
             </thead>
             <tbody>
-            <!--/*@thymesVar id="user.postList" type="java.util.ArrayList<>"*/-->
-            <!--/*@thymesVar id="post" type="com.ormi5.movieblog.post.ProfilePostResponseDto"*/-->
             <tr th:each="post : *{postList}">
                 <td th:text="${post.title}"></td>
                 <td th:text="${#temporals.format(post.createAt, 'yyyy.MM.dd HH:mm')}"></td>
@@ -41,6 +38,11 @@
             </tr>
             </tbody>
         </table>
+        <div>
+            <form th:action="@{'/user/delete'}" method="post">
+                <button type="submit">회원 탈퇴</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
