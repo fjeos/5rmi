@@ -11,7 +11,9 @@ import java.util.List;
 @Getter
 @Builder
 public class ProfileResponseDto {
+    private Integer id;
     private String username;
+    private String email;
     private int level;
     private int reviewCount;
     private Instant signupDate;

@@ -40,6 +40,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/home").permitAll()
                         .requestMatchers("/banned").permitAll()
                         .requestMatchers("/announcement/**").permitAll()
+                        .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/hello").authenticated()
                         .requestMatchers("/board").authenticated()
                         .requestMatchers("/posts/**").authenticated()

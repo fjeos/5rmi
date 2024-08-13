@@ -119,8 +119,9 @@ public class CommentController {
 	}
 
 	@GetMapping("/{postId}/add")
-	public String addCommentForm(@PathVariable("postId") Integer postId, Model model) {
+	public String addCommentForm(@PathVariable("postId") Integer postId, Model model, Principal principal) {
 		model.addAttribute("postId", postId);
+		model.addAttribute("user", userService.findByUsername(principal.getName()));
 
 		return "comment/add_comment";
 	}
@@ -158,6 +159,7 @@ public class CommentController {
 
 		model.addAttribute("comment", commentDto);
 		model.addAttribute("postId", postId);
+		model.addAttribute("user", user);
 
 		return "comment/edit_comment";
 	}

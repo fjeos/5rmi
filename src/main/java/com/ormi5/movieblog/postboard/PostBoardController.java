@@ -35,6 +35,7 @@ public class PostBoardController {
     private final PostService postService;
     private final UserService userService;
     private final AnnouncementService announcementService;
+    private Principal principal;
 //    private final MovieService movieService;
 
     // 모든 게시글을 조회하는 메서드
@@ -47,7 +48,6 @@ public class PostBoardController {
 
         if (principal != null) {
             user = userService.findByUsername(principal.getName());
-
             if(user.getIsStop())
             {
                 new SecurityContextLogoutHandler().logout(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(), null, null);
@@ -98,8 +98,9 @@ public class PostBoardController {
     @GetMapping("/newpost")
     public String newPost(Model model, Principal principal) {
         Post post = new Post();
-
+        User user = userService.findByUsername(principal.getName());
         model.addAttribute("post", post);
+        model.addAttribute("user", user);
         return "post/newpost";
     }
 
@@ -138,6 +139,7 @@ public class PostBoardController {
 
 
         model.addAttribute("announcement", announcement);
+        model.addAttribute("user", user);
         return "announcement/newannouncement";
     }
 

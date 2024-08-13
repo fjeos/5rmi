@@ -108,6 +108,8 @@ public class UserService {
 
         List<Post> userPosts = postService.getUserPosts(userId);
 		return ProfileResponseDto.builder()
+				.id(findUser.getId())
+				.email(findUser.getEmail())
 				.level(findUser.getLevel())
 				.username(findUser.getUsername())
 				.reviewCount(userPosts.size())

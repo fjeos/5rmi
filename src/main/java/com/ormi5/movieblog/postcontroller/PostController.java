@@ -62,7 +62,8 @@ public class PostController {
 			return "redirect:/board";
 		}
 
-		model.addAttribute("post", post);
+		model.addAttribute("user", user);
+	    model.addAttribute("post", post);
 
 		return "post/detail";
 	}
@@ -158,6 +159,7 @@ public class PostController {
 		}
 
 		model.addAttribute("post", post);
+		model.addAttribute("user", user);
 
 		return "post/edit";
 	}
