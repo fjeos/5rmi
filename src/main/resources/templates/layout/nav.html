@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<nav class="navbar" style="background-color: #e3f2fd;" th:fragment="nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/board}">5rmi</a>
+        <ul class="navbar-nav" style="flex-direction: row">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" th:href="@{/board}">게시판</a>
+            </li>
+            <li th:if="${user != null}" class="nav-item">
+                <a class="nav-link"  th:href="@{'user/'+${user.id}}">마이페이지</a>
+            </li>
+            <li class="nav-item" th:if="${user != null}" style="padding-top: 7px">
+                안녕하세요, <span th:text="${user.username}"></span>님!
+            </li>
+        </ul>
+    </div>
+</nav>
+</html>

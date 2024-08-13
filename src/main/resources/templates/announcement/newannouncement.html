@@ -2,32 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>게시글 추가</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <title>공지글 추가</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/minty/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
     <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
 </head>
 <body>
-<!--/*@thymesVar id="user" type="com.ormi5.movieblog.user.User"*/-->
-<!--/*@thymesVar id="announcement" type="com.ormi5.movieblog.announcement.Announcement"*/-->
-<div>
-    <h1>게시글 추가</h1>
-    <form th:action="@{'/newannouncement'}" method="post" role="form" th:object="${announcement}">
-        <label for="title">Title:</label>
-        <input th:field="*{title}" type="text" id="title" name="title" placeholder="Enter a title" required><br>
+    <nav th:replace="layout/nav::nav"></nav>
+    <!--/*@thymesVar id="user" type="com.ormi5.movieblog.user.User"*/-->
+    <!--/*@thymesVar id="announcement" type="com.ormi5.movieblog.announcement.Announcement"*/-->
+    <main>
+        <h2>공지글 추가</h2>
+        <div class="add-post">
+            <form th:action="@{'/newannouncement'}" method="post" role="form" th:object="${announcement}">
+                <label for="title" class="form-label mt-4">제목: </label>
+                <input class="form-control" id="title" th:field="*{title}" placeholder="제목을 입력하세요" required>
 
-        <label for="title">Content:</label>
-        <input th:field="*{content}" type="text" id="content" name="content" placeholder="Enter content" required><br>
+                <label class="col-form-label mt-4" for="content">내용: </label>
+                <textarea class="form-control" th:field="*{content}" placeholder="내용을 입력하세요" id="content" required></textarea><br>
 
-        <label for="title">중요여부:</label>
-        <input th:field="*{isImportant}" type="checkbox" id="is-shared" name="is-shared">
+                <label for="is-important">중요여부:</label>
+                <input class="form-check-input" th:field="*{isImportant}" type="checkbox" id="is-important" name="is-important" th:checked="checked"><br>
 
-        <button type="submit">추가</button>
-    </form>
-
-    <form th:action="@{'/board'}" method="get">
-        <button type="submit">취소</button>
-    </form>
-</div>
+                <div class="post-actions">
+                    <button class="btn btn-success" type="submit">완료</button>
+                    <a class="btn btn-danger" th:href="@{/board}">취소</a>
+                </div>
+            </form>
+        </div>
+    </main>
 </body>
 </html>

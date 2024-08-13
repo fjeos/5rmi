@@ -1,8 +1,10 @@
 package com.ormi5.movieblog.loginservice;
 
+import com.ormi5.movieblog.announcementcontroller.AnnouncementService;
 import com.ormi5.movieblog.user.User;
 import com.ormi5.movieblog.user.UserDto;
 import com.ormi5.movieblog.usercontroller.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,14 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class LoginController {
     private final UserService userService;
     private final LoginService loginService;
-
-    public LoginController(UserService userService, LoginService loginService) {
-        this.userService = userService;
-        this.loginService = loginService;
-    }
+    private final AnnouncementService announcementService;
 
     @GetMapping("/login")
     public String login(Model model, Principal principal, LoginRequest loginRequest){
@@ -58,6 +57,7 @@ public class LoginController {
 
     @GetMapping("/banned")
     public String banned(Model model){
+        model.addAttribute("announcements", announcementService.getAllAnnouncements());
         return "login/banned";
     }
 }

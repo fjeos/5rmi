@@ -1,142 +1,127 @@
-/* style.css */
+@font-face {
+    font-family: 'Freesentation-5Medium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-5Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
+    font-family: 'Freesentation-5Medium', serif;
+    font-size: large;
+    display: flex;
+    flex-direction: column;
 }
-
-h1 {
-    margin-bottom: 20px;
+h2, h3 {
+    font-family: 'Freesentation-5Medium', serif;
 }
-
-table {
+main {
+    display: flex;
+    flex-direction: column;
+    margin:0 250px 0 250px;
+    height: auto;
+    min-height:100%;
+    padding-bottom: 150px;
+}
+footer {
+    height: 150px;
+    position: relative;
+    transform: translateY(-100%);
+}
+.board-meta{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    border-collapse: collapse;
-}
-
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-}
-
-table th {
-    background-color: #f2f2f2;
-    text-align: left;
-}
-
-a {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-}
-
-form {
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-form div {
     margin-bottom: 20px;
 }
+.container-fluid {
+    width: 80%;
+}
+.navbar {
+    font-family: 'Freesentation-5Medium', serif;
+    font-size: 26px;
+    height: 100px;
+    padding: 0 40px 0 60px;
+}
+.nav-item{
+    padding-right: 10px;
+}
+h2 {
+    margin : 20px 0;
+}
 
-form label {
-    display: block;
+.navbar-brand{
     font-weight: bold;
-    margin-bottom: 5px;
+    font-size: 40px;
 }
 
-form input[type="text"],
-form textarea {
+.nav-item{
+    margin: 10px;
+}
+
+.btn {
+    font-family: 'Freesentation-5Medium', serif;
+    font-size: 15px;
+}
+
+tr, td{
+    text-align: center;
+}
+.function{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    padding: 10px;
+    margin-bottom: 20px;
+}
+.post-list {
+    margin-top: 50px;
+}
+.post-detail, .announcement-detail, .add-post{
+    padding: 30px 50px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin: 0 50px;
 }
 
-form textarea {
-    height: 200px;
-}
-
-form button[type="submit"] {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.post-detail {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.post-meta {
+.post-meta, .announcement-meta {
     color: #888;
     margin-bottom: 20px;
+    font-size: 18px;
 }
 
-.post-content {
+.post-content, .announcement-content {
     line-height: 1.6;
+    font-size: 25px;
     margin-bottom: 20px;
 }
-
-.post-actions {
-    margin-top: 20px;
-}
-
-.delete-form {
-    display: inline-block;
-    margin-left: 10px;
-}
-
-.delete-form button {
-    padding: 5px 10px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.delete-form button:hover {
-    background-color: #d32f2f;
-}
-.edit-btn {
-    display: inline-block;
-    padding: 5px 10px;
-    background-color: #2196F3;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-.edit-btn:hover {
-    background-color: #1976D2;
-}
-
-.post-comment {
-    background-color: lightgray;
-    font-size: 14px;
+.comment-stat {
     margin: 10px;
     border-radius: 15px;
-    padding: 1px;
+    border-color: #f0f0f0;
+    padding: 20px;
+    border-style: solid;
+    font-size: 15px;
+}
+.post-comment {
+    font-size: 20px;
 }
 
-.likeBtn {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.profile-meta {
+    margin-top: 50px;
+}
+.post-actions{
+    padding-top: 25px;
+}
+.post-actions > form {
+    display: inline;
+}
 
+.admin-meta {
+    margin: 50px 0 30px 0;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.add-btn{
+    margin-top: 20px;
 }

@@ -26,9 +26,16 @@ public class AnnouncementController {
     }
 
     @GetMapping("/{id}")
-    public String getAnnouncement(@PathVariable("id") Integer announcementId, Model model) {
+    public String getAnnouncement(@PathVariable("id") Integer announcementId, Model model, Principal principal) {
         AnnouncementDto announcement = announcementService.getAnnouncement(announcementId);
+        User user = null;
+
+        if (principal != null) {
+            user = userService.findByUsername(principal.getName());
+        }
+
         model.addAttribute("announcement", announcement);
+        model.addAttribute("user", user);
 
         return "announcement/detail";
     }
@@ -64,6 +71,7 @@ public class AnnouncementController {
         }
 
         model.addAttribute("announcement", announcement);
+        model.addAttribute("user", user);
         return "announcement/edit";
     }
 

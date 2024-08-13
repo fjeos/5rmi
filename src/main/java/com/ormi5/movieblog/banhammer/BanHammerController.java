@@ -52,6 +52,7 @@ public class BanHammerController {
                 }
             }
 
+            model.addAttribute("user", user);
             model.addAttribute("users", userService.getAllUsers());
 
             return "admin/admin";
