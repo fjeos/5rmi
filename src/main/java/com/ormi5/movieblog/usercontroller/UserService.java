@@ -139,4 +139,14 @@ public class UserService {
 			return target;
 		});
 	}
+
+	/**
+	 * 데이터베이스에서 User 정보를 삭제함
+	 * @param username 삭제할(현재 로그인중인) username
+	 */
+	@Transactional
+	public void leaveMember(String username) {
+		User user = userRepository.findByUsername(username);
+		userRepository.delete(user);
+	}
 }
