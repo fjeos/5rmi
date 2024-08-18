@@ -1,24 +1,25 @@
-# ormi_5jo
+# ormi_5jo: 영화 블로그 서비스
 오르미 백엔드 양성 과정 / 5기 / Java/SpringBoot 프로젝트 / 5조
 
-## 영화 블로그 서비스 (Spring Boot + Thymeleaf + AWS)
-현제 AWS 배표 링크
-http://3.38.190.229:8080/
+![image](https://github.com/user-attachments/assets/90380d34-9ad0-4dea-aa79-0155d708057e)
 
-관리자 계정 (example): hello1 (비밀번호도 동일)
+## 프로젝트 소개
+~~[현제 AWS 배표 링크](http://3.38.190.229:8080/)~~ / ~~관리자 계정 (example): hello1 (비밀번호도 동일)~~
 
 ### 팀 편성
-1. 방준현 (팀장) - Frontend/Backend
-2. 유나영 - Backend
-3. 안유석 - Backend
-4. 신재민 - Backend
-5. ~~서민우~~ - Frontend
+| 방준현 | 유나영 | 안유석 | 신재민 | ~~서민우~~ |
+|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|
+| 팀장 (Frontend/Backend) | Frontend/Backend | Backend | Backend | Frontend |
+| <img src="https://github.com/bindingflare.png" width="60px;"/> | <img src="https://github.com/fjeos.png" width="60px;"/> | <img src="https://github.com/duys2.png" width="60px;"/> | <img src="https://github.com/Freddieshin.png" width="60px;"/> | |
+| Thymeleaf, Figma | Thymeleaf |  |  | Figma |
+| WebSecurity, 게시판, 관리자 | 게시글, 커멘트, 관리자 | 게시글, 커멘트 | 유저, 공지글 | |
 
 ### 1단계
 프로젝트 관리: [Notion](https://www.notion.so/oreumi/5-5-f5b9276610cb4268984b88c988c744d5)
 - 칸반 보드: [Notion](https://www.notion.so/oreumi/2df5908f6b4c48a9b4d83df40d4face8?v=0083633ff69b49829b96d516f7f6f24c)
 - 개인 일지: (프로젝트 관리 페이지 밑에 있음)
 - ERD: [ERD 클라우드](https://www.erdcloud.com/d/ni3wAtJFpCCPiQKL6)
+
 ![image](https://github.com/user-attachments/assets/fbcaff8f-09f6-4bc1-b2e4-44b2210a70bd)
 - Figma: [5rmi-movie-web](https://www.figma.com/design/uWLSoP4hmhIA64YEcyNFpg/Untitled?node-id=1-457&t=YG88Gta83mmD56EG-1)
 - 이슈: [5rmi/issues](https://github.com/fjeos/5rmi/issues)
@@ -37,7 +38,7 @@ Milestones:
 
 ### 3단계
 기능 심화
-- 회원 가입, 탈퇴, 로그인 - *회원 탈퇴 구현 안됨*
+- 회원 가입, 탈퇴, 로그인
 - 게시판 수정/삭제 권한 제한 (자기거만)
 - DB로 통해 회원 정보 저장
 
