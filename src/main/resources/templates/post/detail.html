@@ -20,7 +20,7 @@
                 작성자: <span th:text="${post.user.username}"></span>
                 작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy.MM.dd HH:mm')}"></span>
             </p>
-            <div class="post-content" th:text="${post.content}"></div>
+            <div th:id="post-content" class="post-content" th:text="${post.content}"></div>
             <button class="btn btn-secondary" th:postId="${post.postId}" th:onclick="increaseLike(this.getAttribute('postId'))">좋아요</button>
             <span class="like-counter" th:text="${post.likesCount}"></span>
             <hr>
@@ -61,67 +61,72 @@
     </main>
     <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script th:inline="javascript">
-    function increaseLike(postId) {
-        fetch(postId + "/like", {
-            headers: {
-                'header': document.querySelector('meta[name="_csrf_header"]').content,
-                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
-            },
-            method: "POST",
-        })
-            .then((response) => {
-                console.log(response);
-                const counter = $('.like-counter')[0];
-                let likeCount = parseInt(counter.innerHTML);
-                counter.innerHTML = likeCount + 1;
-            })
-            .catch((error) => console.log(error));
-    }
+        // convert all enter symbols to <br>
+        const postContent = $('#post-content');
+        let result = postContent[0].innerHTML.replace(/(?:\r\n|\r|\n)/g, "<br>");
+        postContent[0].innerHTML = result;
 
-    function increaseCommentLike(postId, commentId) {
-        fetch("/comments/like", {
-            headers: {
-                'header': document.querySelector('meta[name="_csrf_header"]').content,
-                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
-                "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify({
-                postId: postId,
-                commentId: commentId
+        function increaseLike(postId) {
+            fetch(postId + "/like", {
+                headers: {
+                    'header': document.querySelector('meta[name="_csrf_header"]').content,
+                    'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
+                },
+                method: "POST",
             })
-        })
-            .then((response) => {
-                console.log(response);
-                const counter = $('#c-like-' + commentId)[0];
-                let likeCount = parseInt(counter.innerHTML);
-                counter.innerHTML = likeCount + 1;
-            })
-            .catch((error) => console.log(error));
+                .then((response) => {
+                    console.log(response);
+                    const counter = $('.like-counter')[0];
+                    let likeCount = parseInt(counter.innerHTML);
+                    counter.innerHTML = likeCount + 1;
+                })
+                .catch((error) => console.log(error));
+        }
 
-    }
+        function increaseCommentLike(postId, commentId) {
+            fetch("/comments/like", {
+                headers: {
+                    'header': document.querySelector('meta[name="_csrf_header"]').content,
+                    'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+                    "Content-Type": "application/json"
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    postId: postId,
+                    commentId: commentId
+                })
+            })
+                .then((response) => {
+                    console.log(response);
+                    const counter = $('#c-like-' + commentId)[0];
+                    let likeCount = parseInt(counter.innerHTML);
+                    counter.innerHTML = likeCount + 1;
+                })
+                .catch((error) => console.log(error));
 
-    function decreaseCommentLike(postId, commentId) {
-        fetch("/comments/dislike", {
-            headers: {
-                'header': document.querySelector('meta[name="_csrf_header"]').content,
-                'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
-                "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify({
-                postId: postId,
-                commentId: commentId
+        }
+
+        function decreaseCommentLike(postId, commentId) {
+            fetch("/comments/dislike", {
+                headers: {
+                    'header': document.querySelector('meta[name="_csrf_header"]').content,
+                    'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+                    "Content-Type": "application/json"
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    postId: postId,
+                    commentId: commentId
+                })
             })
-        })
-            .then((response) => {
-                console.log(response);
-                const counter = $('#c-dislike-' + commentId)[0];
-                let likeCount = parseInt(counter.innerHTML);
-                counter.innerHTML = likeCount + 1;
-            })
-            .catch((error) => console.log(error));
-    }
-</script>
+                .then((response) => {
+                    console.log(response);
+                    const counter = $('#c-dislike-' + commentId)[0];
+                    let likeCount = parseInt(counter.innerHTML);
+                    counter.innerHTML = likeCount + 1;
+                })
+                .catch((error) => console.log(error));
+        }
+    </script>
 </body>
 </html>
