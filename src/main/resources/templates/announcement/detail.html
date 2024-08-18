@@ -19,7 +19,7 @@
             <p class="post-meta">
                 작성일: <span th:text="${announcement.createAt}"></span>
             </p>
-            <div class="post-content" th:text="${announcement.content}"></div>
+            <div th:id="post-content" class="post-content" th:text="${announcement.content}"></div>
             <hr>
             <div class="post-actions">
                 <a class="btn btn-primary" th:if="${user != null}" th:href="@{/board}">목록으로</a>
@@ -31,5 +31,11 @@
             </div>
         </div>
     </main>
+    <script th:inline="javascript">
+        // convert all enter symbols to <br>
+        const postContent = $('#post-content');
+        let result = postContent[0].innerHTML.replace(/(?:\r\n|\r|\n)/g, "<br>");
+        postContent[0].innerHTML = result;
+    </script>
 </body>
 </html>
